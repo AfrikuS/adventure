@@ -132,27 +132,21 @@ CREATE TABLE IF NOT EXISTS `sea_travel_orders` (
 --ALTER TABLE `sea_travel_orders` CHANGE `user_id` `sender_user_id` INT UNSIGNED NOT NULL; + foreign
 
 
-
+-- geo locations
 CREATE TABLE IF NOT EXISTS `geo_locations` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `title` varchar(255) NOT NULL,
     PRIMARY KEY(`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `geo_locations_rels` (
+CREATE TABLE IF NOT EXISTS `geo_location_paths` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `from_id` INT UNSIGNED NOT NULL,
     `to_id` INT UNSIGNED NOT NULL,
+    PRIMARY KEY(`id`),
     FOREIGN KEY (from_id) REFERENCES geo_locations(id),
     FOREIGN KEY (to_id) REFERENCES geo_locations(id),
     UNIQUE KEY `unique_from_id_to_id` (`from_id`,`to_id`)
-);
-
-CREATE TABLE IF NOT EXISTS `geo_islands` (
-    `user_id` INT UNSIGNED NOT NULL,
-    `title` varchar(255) NOT NULL,
-    `date_time` DATETIME NOT NULL,
-    PRIMARY KEY (`user_id`),
-    FOREIGN KEY (`user_id`) REFERENCES users(id)
 );
 
 -- хранит данные о последних боях между двмя игроками (данные динамические, могут исп-ться).

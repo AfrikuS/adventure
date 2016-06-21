@@ -116,24 +116,27 @@ Route::group(['middleware' => 'app_auth'], function () {
     Route::post('/admin/edit_orderdraft_1', 'Admin\OrderBuilder\TeamOrderBuilderController@editOrderDraftAction_1')->name('admin_edit_orderdraft_1_action');
     Route::post('/admin/edit_orderdraft_2', 'Admin\OrderBuilder\TeamOrderBuilderController@editOrderDraftAction_2')->name('admin_edit_orderdraft_2_action');
     Route::post('/admin/accept_orderdraft', 'Admin\OrderBuilder\TeamOrderBuilderController@acceptOrderDraft')->name('admin_accept_orderdraft_action');
-
     
     
-    
-    
+    // mass-actions on socket.io
     Route::get('/maxovik', 'Mass\MaxovikController@index')->name('maxovik_page');
     Route::get('/boss', 'Mass\BossController@index')->name('boss_page');
     Route::post('/boss_create', 'Mass\BossController@boss_create')->name('boss_create_action');
     Route::post('/boss_join', 'Mass\BossController@boss_join')->name('boss_join_action');
     Route::post('/boss_kick', 'Mass\BossController@boss_kick')->name('boss_kick_action');
 
-    Route::get('/geo', 'Geo\LocationController@index');
-    Route::get('/geo/locations', 'Geo\LocationController@index');
-    Route::get('/geo/location/{id}', 'Geo\LocationController@show');
-    Route::post('/geo/bind_locations', 'Geo\LocationController@bind');
+    
+    // geo-module
+    
+    Route::get('/geo', 'Geo\LocationController@index')->name('geo_map_page');
+    Route::get('/geo/location/{id}', 'Geo\LocationController@show')->name('geo_location_page');
+    Route::post('/geo/bind_locations', 'Geo\LocationController@bind')->name('geo_bind_locations_action');
+    Route::post('/geo/add_location', 'Geo\LocationController@add')->name('geo_add_location_action');
 
-    Route::resource('islands', 'Geo\IslandsController');
+//    Route::resource('islands', 'Geo\IslandsController');
 
+    
+    // battle-module
     Route::get('/search', 'AttackController@searchPage')->name('search_page');
     Route::post('/search', 'AttackController@searchOpponent')->name('search_enemy_action');
     Route::post('/attack', 'AttackController@attack')->name('attack_enemy_action');
