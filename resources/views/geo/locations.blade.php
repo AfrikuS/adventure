@@ -9,6 +9,8 @@
 
     <div class="row row-offcanvas">
         <div class="col-lg-12">
+            {{--{{ link_to_route('geo_routebuilder_page', 'Route-constructor') }}--}}
+            <p></p>
             <h4>Список локаций и путей между ними</h4>
             <p></p>
             @if(count($locsView) > 0)
@@ -28,7 +30,7 @@
                                 <td>{{ $locationData['title'] }}</td>
                                 <td>
                                     <ul>
-                                        @foreach($locationData['next_ids'] as $path_id)
+                                        @foreach($locationData['next_locations_title'] as $path_id)
                                             <li>{{ $path_id }}</li>
                                         @endforeach
                                     </ul>
@@ -73,8 +75,28 @@
     </div>
 
     <div class="row row-offcanvas">
-        <div class="col-lg-12">
-            
+        <div class="col-lg-4">
+            <h4>Создать Route</h4>
+            <p>{!! Form::open(['route' => 'geo_add_route_action', 'class' => '']) !!}
+            <p>{!! Form::text('title', 'Маршрут_') !!}
+            <p>{!! Form::label('start_location', 'Пункт отправления') !!}
+            <p>{!! Form::select('start_location_id', $locationsSelect) !!}
+            <p>{!! Form::submit('Add route') !!}
+            {!! Form::close() !!}
+            <p></p>
+
+        </div>
+        <div class="col-lg-4">
+            Маршруты
+            <p>
+            <ul>
+                @foreach($routes as $route)
+                    <li>{{ link_to_route('geo_route_build_page', $route->title, ['id' => $route->id]) }}</li>
+                @endforeach
+            </ul>
+        </div>
+
+        <div class="col-lg-4">
         </div>
     </div>
 

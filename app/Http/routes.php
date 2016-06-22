@@ -131,7 +131,13 @@ Route::group(['middleware' => 'app_auth'], function () {
     Route::get('/geo', 'Geo\LocationController@index')->name('geo_map_page');
     Route::get('/geo/location/{id}', 'Geo\LocationController@show')->name('geo_location_page');
     Route::post('/geo/bind_locations', 'Geo\LocationController@bind')->name('geo_bind_locations_action');
-    Route::post('/geo/add_location', 'Geo\LocationController@add')->name('geo_add_location_action');
+    Route::post('/geo/add_location', 'Geo\LocationController@addLocation')->name('geo_add_location_action');
+
+    Route::get('/geo/routebuilder', 'Geo\TravelRouteController@index')->name('geo_routebuilder_page');
+    Route::get('/geo/build_route/{id}', 'Geo\TravelRouteController@buildRoute')->name('geo_route_build_page');
+    Route::post('/geo/add_route', 'Geo\TravelRouteController@addRoute')->name('geo_add_route_action');
+    Route::post('/geo/add_routepoint', 'Geo\TravelRouteController@addRoutePoint')->name('geo_add_routepoint_action');
+    Route::post('/geo/delete_lastpoint', 'Geo\TravelRouteController@deleteLastpoint')->name('geo_delete_lastpoint_action');
 
 //    Route::resource('islands', 'Geo\IslandsController');
 

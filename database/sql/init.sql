@@ -149,6 +149,26 @@ CREATE TABLE IF NOT EXISTS `geo_location_paths` (
     UNIQUE KEY `unique_from_id_to_id` (`from_id`,`to_id`)
 );
 
+CREATE TABLE IF NOT EXISTS `geo_travel_routes` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `user_id` INT UNSIGNED NOT NULL,
+    `title` varchar(255) NOT NULL,
+    PRIMARY KEY(`id`),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS `geo_travel_route_points` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `route_id` INT UNSIGNED NOT NULL,
+    `location_id` INT UNSIGNED NOT NULL,
+    `status` varchar(255) NOT NULL,
+    `number` INT UNSIGNED NOT NULL,
+    PRIMARY KEY(`id`),
+    FOREIGN KEY (location_id) REFERENCES geo_locations(id),
+    FOREIGN KEY (route_id) REFERENCES geo_travel_routes(id)
+);
+
+
 -- хранит данные о последних боях между двмя игроками (данные динамические, могут исп-ться).
 -- статика обо всех рез-тах сейчас не нужна
 CREATE TABLE IF NOT EXISTS `event_attacks` (
