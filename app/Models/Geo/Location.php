@@ -30,4 +30,15 @@ class Location extends Model
         return $this->belongsToMany(Location::class, 'geo_location_paths',
             'to_id', 'from_id');
     }
+    
+    public function nextLocations()
+    {
+        return $this->hasManyThrough(Location::class, LocationPath::class);
+    }
+
+    public function paths()
+    {
+        return $this->hasMany(LocationPath::class, 'from_id', 'id');
+    }
+
 }

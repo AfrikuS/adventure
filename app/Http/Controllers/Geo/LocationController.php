@@ -2,78 +2,32 @@
 
 namespace App\Http\Controllers\Geo;
 
-use App\Models\Geo\Location;
-use App\Models\Geo\RoutePoint;
-use App\Models\Geo\TravelRoute;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Requests;
+use App\Models\Geo\Location;
+use App\Models\Geo\TravelRoute;
+use App\Repositories\Geo\LocationsRepository;
+use App\Repositories\Geo\TravelRoutesRepository;
+use App\Repositories\Geo\VoyagesRepository;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use App\ViewModel\Geo\LocationsViewModel;
 
 class LocationController extends Controller
 {
     public function index()
     {
-        $locs = Location::with('locationsTo')->get();
+        $locations = LocationsRepository::getLocationsWithNexts();
+        $routes = TravelRoutesRepository::getRoutes();
+        $voyages = VoyagesRepository::getVoyagesWithPointLocation();
 
-        $locsView = [];
-        
-        foreach ($locs as $loc) {
-
-            $locationsTo = $loc->locationsTo;
-            $locationsToArr = [];
-            foreach ($locationsTo as $loc1) {
-                $locationsToArr[] = $loc1->pivot->to_id;
-            }
-
-//            $locationsSelect = $locs->filter(function ($location) use($loc) {
-//                $currLoc = $loc;
-//                return $location->id != $currLoc && !$currLoc->locationsTo->search($location);
-//            })-> pluck('title', 'id');
-
-            $locationsSelect = Location::where('id', '<>', $loc->id)
-                ->whereNotIn('id', $locationsToArr)
-                ->get()->pluck('title', 'id');
-            
-            $nextLocationsTitles = $loc->locationsTo()->lists('title')->toArray();
-                
-                
-            $data = [
-                'title' => $loc->title,
-                'next_ids' => $locationsToArr,
-                'next_locations_title' => $nextLocationsTitles,
-                'locs_select' => $locationsSelect,
-            ];
-            $locsView[$loc->id] = $data;
-        }
-
-        $routes = TravelRoute::with('points')->get();
-
-        $routePoints = $routes->first()->points;
-        $lastPoint = $routePoints->last();
-        $possibleLocationsSelect = Location::get()->pluck('title', 'id');
-
-        if ($lastPoint != null) {
-
-            $lastLocation = Location::with('locationsTo')->find($lastPoint->location_id);
-
-            $possibleLocationsSelect = $lastLocation->locationsTo()->get()->pluck('title', 'id');
-
-        }
-
-
-
-        $locationsSelect = Location::get()->pluck('title', 'id')->toArray();
-
-
+        $locationsTableRows = LocationsViewModel::geoListLocationsPage($locations);
+        $locationsSelect = $locations->pluck('title', 'id')->toArray();
         
         return $this->view('geo.locations', [
-            'locations' => $locs,
-            'locsView'  => $locsView,
+            'locationsTableRows'  => $locationsTableRows,
             'routes'  => $routes,
-            'routePoints'  => $routePoints,
-            'possibleLocationsSelect'  => $possibleLocationsSelect,
+            'voyages'  => $voyages,
             'locationsSelect'  => $locationsSelect,
         ]);
     }

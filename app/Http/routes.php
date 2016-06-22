@@ -138,7 +138,11 @@ Route::group(['middleware' => 'app_auth'], function () {
     Route::post('/geo/add_route', 'Geo\TravelRouteController@addRoute')->name('geo_add_route_action');
     Route::post('/geo/add_routepoint', 'Geo\TravelRouteController@addRoutePoint')->name('geo_add_routepoint_action');
     Route::post('/geo/delete_lastpoint', 'Geo\TravelRouteController@deleteLastpoint')->name('geo_delete_lastpoint_action');
+    Route::post('/geo/final_route', 'Geo\TravelRouteController@finalRoute')->name('geo_final_route_action');
 
+    Route::post('/geo/create_voyage', 'Geo\VoyageController@createVoyage')->name('geo_create_voyage_action');
+    Route::post('/geo/voyage_start_sail', 'Geo\VoyageController@startSail')->name('geo_voyage_start_sail_action');
+    Route::post('/geo/voyage_moor', 'Geo\VoyageController@moor')->name('geo_voyage_moor_action');
 //    Route::resource('islands', 'Geo\IslandsController');
 
     

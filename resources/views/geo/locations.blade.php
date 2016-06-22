@@ -13,7 +13,7 @@
             <p></p>
             <h4>Список локаций и путей между ними</h4>
             <p></p>
-            @if(count($locsView) > 0)
+            @if(count($locationsTableRows) > 0)
                 <table class="table table-condensed">
                     <table class="table table-bordered table-hover">
                         <thead>
@@ -25,21 +25,21 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($locsView as $locId => $locationData)
+                        @foreach($locationsTableRows as $locId => $locationColumns)
                             <tr>
-                                <td>{{ $locationData['title'] }}</td>
+                                <td>{{ $locationColumns['title'] }}</td>
                                 <td>
                                     <ul>
-                                        @foreach($locationData['next_locations_title'] as $path_id)
-                                            <li>{{ $path_id }}</li>
+                                        @foreach($locationColumns['nextLocationsTitles'] as $nextTitle)
+                                            <li>{{ $nextTitle }}</li>
                                         @endforeach
                                     </ul>
                                 </td>
-                                @if (count($locationData['locs_select']) > 0)
+                                @if (count($locationColumns['otherLocations']) > 0)
                                     <td>
                                         {!! Form::open(['route' => 'geo_bind_locations_action', 'class' => '']) !!}
                                         {!! Form::hidden('location_id', $locId) !!}
-                                        {!! Form::select('next_location_id', $locationData['locs_select']) !!}
+                                        {!! Form::select('next_location_id', $locationColumns['otherLocations']) !!}
                                     </td>
                                     <td>
                                         {!! Form::submit('Add') !!}
@@ -79,7 +79,7 @@
             <h4>Создать Route</h4>
             <p>{!! Form::open(['route' => 'geo_add_route_action', 'class' => '']) !!}
             <p>{!! Form::text('title', 'Маршрут_') !!}
-            <p>{!! Form::label('start_location', 'Пункт отправления') !!}
+            <p>{!! Form::label('start_location', 'Начальный пункт') !!}
             <p>{!! Form::select('start_location_id', $locationsSelect) !!}
             <p>{!! Form::submit('Add route') !!}
             {!! Form::close() !!}
@@ -97,6 +97,27 @@
         </div>
 
         <div class="col-lg-4">
+            <p><p>
+                Рейсы \ Voyages
+            <p>
+            <ul>
+                @foreach($voyages as $voyage)
+                    <li>
+                        {{ $voyage->id }} - {{ $voyage->route->title }} - {{ $voyage->status }}
+                        ->  {{ $voyage->point->location->title }}
+
+                    {!! Form::open(['route' => 'geo_voyage_start_sail_action', 'class' => '']) !!}
+                    {!! Form::hidden('voyage_id', $voyage->id) !!}
+                    {!! Form::submit('Start sail') !!}
+                    {!! Form::close() !!}
+                    {!! Form::open(['route' => 'geo_voyage_moor_action', 'class' => '']) !!}
+                    {!! Form::hidden('voyage_id', $voyage->id) !!}
+                    {!! Form::submit('Причалить') !!}
+                    {!! Form::close() !!}
+
+                </li>
+                @endforeach
+            </ul>
         </div>
     </div>
 

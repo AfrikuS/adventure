@@ -13,7 +13,7 @@
             <p></p>
             <h4>Список локаций и путей между ними</h4>
             <p></p>
-            @if(count($locsView) > 0)
+            @if(count($locationsTableRows) > 0)
                 <table class="table table-condensed">
                     <table class="table table-bordered table-hover">
                         <thead>
@@ -23,7 +23,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($locsView as $locId => $locationData)
+                        @foreach($locationsTableRows as $locId => $locationData)
                             <tr>
                                 <td>{{ $locationData['title'] }}</td>
                                 <td>
@@ -50,13 +50,29 @@
             <p>{!! Form::open(['route' => 'geo_delete_lastpoint_action', 'class' => '']) !!}
             <p>{!! Form::hidden('route_id', $route->id) !!}
             <p>{!! Form::submit('Delete last point') !!}
-            {!! Form::close() !!}
+            <p>{!! Form::close() !!}
+
+            <p></p><p></p>
+
+            <p>{!! Form::open(['route' => 'geo_final_route_action', 'class' => '']) !!}
+            <p>{!! Form::hidden('route_id', $route->id) !!}
+            <p>{!! Form::submit('Final Route') !!}
+            <p>{!! Form::close() !!}
+
+            <p></p><p></p>
+
+            <p>{!! Form::open(['route' => 'geo_create_voyage_action', 'class' => '']) !!}
+            <p>{!! Form::hidden('route_id', $route->id) !!}
+            <p>{!! Form::submit('Create Voyage by this Route') !!}
+            <p>{!! Form::close() !!}
+
+
 
         </div>
 
         <div class="col-lg-8">
             Points
-            @if(count($routePoints) > 0)
+            @if($route->points->count() > 0)
                 <table class="table table-condensed">
                     <table class="table table-bordered table-hover">
                         <thead>
@@ -67,7 +83,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($routePoints as $point)
+                        @foreach($route->points as $point)
                             <tr>
                                 <td>{{ $point->location->title }}</td>
                                 <td>{{ $point->number }}</td>

@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `mass_bosses` (
     `owner_id` INT UNSIGNED NOT NULL,
     `users_count` INT UNSIGNED NOT NULL DEFAULT 0,
     `kicks` INT UNSIGNED NOT NULL DEFAULT 0,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (owner_id) REFERENCES users(id)
 );
 ALTER TABLE `mass_bosses` CHANGE `owner_id` `user_id` INT UNSIGNED NOT NULL;
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `hero_resources` (
     `oil` INT UNSIGNED NOT NULL DEFAULT 0,
     `gold` INT UNSIGNED NOT NULL DEFAULT 0,
     `water` INT UNSIGNED NOT NULL DEFAULT 0,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (id) REFERENCES users(id)
 );
 
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `hero_resource_channels` (
     `to_user_id` INT UNSIGNED NOT NULL,
     `resource` varchar(255) NOT NULL,
     `tax_percent` INT UNSIGNED NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (from_user_id) REFERENCES users(id),
     FOREIGN KEY (to_user_id) REFERENCES users(id),
     UNIQUE KEY `unique_channel` (`from_user_id`,`to_user_id`,`resource`)
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `sea_travel_ships` (
     `destination` varchar(255) NOT NULL,
     `resource_code` varchar(255) NOT NULL,
     `date_sending` DATETIME NOT NULL,
-    PRIMARY KEY(`id`)
+    PRIMARY KEY (`id`)
 );
 
 CREATE TABLE IF NOT EXISTS `sea_travel_orders` (
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `sea_travel_orders` (
     `destination` varchar(255) NOT NULL,
     `resource_code` varchar(255) NOT NULL,
     `date_time` DATETIME NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (travel_id) REFERENCES sea_travel_ships(id)
 );
@@ -136,14 +136,14 @@ CREATE TABLE IF NOT EXISTS `sea_travel_orders` (
 CREATE TABLE IF NOT EXISTS `geo_locations` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `title` varchar(255) NOT NULL,
-    PRIMARY KEY(`id`)
+    PRIMARY KEY (`id`)
 );
 
 CREATE TABLE IF NOT EXISTS `geo_location_paths` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `from_id` INT UNSIGNED NOT NULL,
     `to_id` INT UNSIGNED NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (from_id) REFERENCES geo_locations(id),
     FOREIGN KEY (to_id) REFERENCES geo_locations(id),
     UNIQUE KEY `unique_from_id_to_id` (`from_id`,`to_id`)
@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS `geo_travel_routes` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `user_id` INT UNSIGNED NOT NULL,
     `title` varchar(255) NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
@@ -163,11 +163,21 @@ CREATE TABLE IF NOT EXISTS `geo_travel_route_points` (
     `location_id` INT UNSIGNED NOT NULL,
     `status` varchar(255) NOT NULL,
     `number` INT UNSIGNED NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (location_id) REFERENCES geo_locations(id),
     FOREIGN KEY (route_id) REFERENCES geo_travel_routes(id)
 );
 
+CREATE TABLE IF NOT EXISTS `geo_travel_voyages` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `route_id` INT UNSIGNED NOT NULL,
+    `point_id` INT UNSIGNED NOT NULL,
+    `status` varchar(255) NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (route_id) REFERENCES geo_travel_routes(id),
+    FOREIGN KEY (point_id) REFERENCES geo_travel_route_points(id),
+    FOREIGN KEY (route_id) REFERENCES geo_travel_routes(id)
+);
 
 -- хранит данные о последних боях между двмя игроками (данные динамические, могут исп-ться).
 -- статика обо всех рез-тах сейчас не нужна
@@ -191,7 +201,7 @@ CREATE TABLE IF NOT EXISTS `macro_resources` (
     `tree` INT UNSIGNED NOT NULL,
     `water` INT UNSIGNED NOT NULL,
     `free_people` INT UNSIGNED NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (id) REFERENCES users(id)
 );
 
@@ -202,7 +212,7 @@ CREATE TABLE IF NOT EXISTS `macro_timers` (
     `people_count` INT UNSIGNED NOT NULL,
     `date_time` DATETIME NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES users(id)
 );
 
@@ -213,7 +223,7 @@ CREATE TABLE IF NOT EXISTS `macro_buildings` (
     `user_id` INT UNSIGNED NOT NULL,
     `kind` varchar(255) NOT NULL,
     `count` INT UNSIGNED NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES users(id)
 );
 ALTER TABLE `macro_buildings` ADD COLUMN `concrete_building_id` INT UNSIGNED AFTER `count`;
@@ -226,7 +236,7 @@ CREATE TABLE IF NOT EXISTS `macro_buildings_smiths` (
     `building_id` INT UNSIGNED NOT NULL,
     `title` varchar(255) NOT NULL,
     `level` INT UNSIGNED NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES users(id),
     FOREIGN KEY (`building_id`) REFERENCES macro_buildings(id)
 );
@@ -239,7 +249,7 @@ CREATE TABLE IF NOT EXISTS `macro_buildings_farms` (
     `building_id` INT UNSIGNED NOT NULL,
     `title` varchar(255) NOT NULL,
     `level` INT UNSIGNED NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES users(id),
     FOREIGN KEY (`building_id`) REFERENCES macro_buildings(id)
 );
@@ -266,7 +276,7 @@ CREATE TABLE IF NOT EXISTS `work_skills` (
     `single_works_times` INT UNSIGNED NOT NULL DEFAULT 0,
     `mass_works_partner_times` INT UNSIGNED NOT NULL DEFAULT 0,
     `mass_works_leader_times` INT UNSIGNED NOT NULL DEFAULT 0,
-    PRIMARY KEY(`user_id`),
+    PRIMARY KEY (`user_id`),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 -- //////////////////////////////////////////
@@ -275,7 +285,7 @@ CREATE TABLE IF NOT EXISTS `work_team_workers` (
     `id` INT UNSIGNED NOT NULL,
     `team_id` INT UNSIGNED,
     `status` varchar(255) NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (id) REFERENCES users(id),
     FOREIGN KEY (team_id) REFERENCES work_privateteams(id)
 );
@@ -287,7 +297,7 @@ CREATE TABLE IF NOT EXISTS `work_privateteams` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `leader_worker_id` INT UNSIGNED NOT NULL,
     `status` varchar(255) NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (leader_worker_id) REFERENCES work_team_workers(id)
 );
 -- add unique (leader_worker_id) - воркер может быть лидером только в одной команде
@@ -304,7 +314,7 @@ CREATE TABLE IF NOT EXISTS `work_orders` (
     `price` INT UNSIGNED NOT NULL,
     `acceptor_user_id` INT UNSIGNED,
     `status` varchar(255) NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (acceptor_user_id) REFERENCES users(id)
 );
 -- //////////////////////////////////////
@@ -312,7 +322,7 @@ CREATE TABLE IF NOT EXISTS `work_catalog_materials` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `code` varchar(255) NOT NULL,
     `title` varchar(255) NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     UNIQUE KEY `unique_material_code` (`code`)
 );
 
@@ -322,7 +332,7 @@ CREATE TABLE IF NOT EXISTS `work_order_materials` (
     `code` varchar(255) NOT NULL,
     `need` INT UNSIGNED NOT NULL,
     `stock` INT UNSIGNED NOT NULL DEFAULT 0,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (order_id) REFERENCES work_orders(id),
     UNIQUE KEY `unique_order_material` (`code`,`order_id`)
 );
@@ -332,7 +342,7 @@ CREATE TABLE IF NOT EXISTS `work_shop_materials` (
     `code` varchar(255) NOT NULL,
     `material_id` INT UNSIGNED NOT NULL,
     `price` INT UNSIGNED NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (material_id) REFERENCES work_catalog_materials(id),
     UNIQUE KEY `unique_material_code` (`code`)
 );
@@ -342,7 +352,7 @@ CREATE TABLE IF NOT EXISTS `work_user_materials` (
     `user_id` INT UNSIGNED NOT NULL,
     `code` varchar(255) NOT NULL,
     `value` INT UNSIGNED NOT NULL DEFAULT 0,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (user_id) REFERENCES users(id),
     UNIQUE KEY `unique_user_material` (`code`,`user_id`)
 );
@@ -352,7 +362,7 @@ CREATE TABLE IF NOT EXISTS `work_catalog_skills` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `code` varchar(255) NOT NULL,
     `title` varchar(255) NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     UNIQUE KEY `unique_skill_code` (`code`)
 );
 
@@ -362,7 +372,7 @@ CREATE TABLE IF NOT EXISTS `work_worker_skills` (
     `worker_id` INT UNSIGNED NOT NULL,
     `code` varchar(255) NOT NULL,
     `value` INT UNSIGNED NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (worker_id) REFERENCES work_team_workers(id),
     UNIQUE KEY `unique_worker_skill` (`code`,`worker_id`)
 );
@@ -371,7 +381,7 @@ CREATE TABLE IF NOT EXISTS `work_catalog_instruments` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `code` varchar(255) NOT NULL,
     `title` varchar(255) NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     UNIQUE KEY `unique_instrument_code` (`code`)
 );
 
@@ -380,7 +390,7 @@ CREATE TABLE IF NOT EXISTS `work_worker_instruments` (
     `worker_id` INT UNSIGNED NOT NULL,
     `code` varchar(255) NOT NULL,
     `skill_level` INT UNSIGNED NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (worker_id) REFERENCES work_team_workers(id),
     UNIQUE KEY `unique_worker_instrument` (`code`,`worker_id`)
 );
@@ -390,7 +400,7 @@ CREATE TABLE IF NOT EXISTS `work_shop_instruments` (
     `code` varchar(255) NOT NULL,
     `instrument_id` INT UNSIGNED NOT NULL,
     `price` INT UNSIGNED NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (instrument_id) REFERENCES work_catalog_instruments(id),
     UNIQUE KEY `unique_instrument_code` (`code`)
 );
@@ -404,7 +414,7 @@ CREATE TABLE IF NOT EXISTS `work_teamorders` (
     `price` INT UNSIGNED NOT NULL,
     `acceptor_team_id` INT UNSIGNED,
     `status` varchar(255) NOT NULL,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (acceptor_team_id) REFERENCES work_privateteams(id)
 );
 
@@ -414,7 +424,7 @@ CREATE TABLE IF NOT EXISTS `work_teamorder_materials` (
     `code` varchar(255) NOT NULL,
     `need` INT UNSIGNED NOT NULL,
     `stock` INT UNSIGNED NOT NULL DEFAULT 0,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (teamorder_id) REFERENCES work_teamorders(id),
     UNIQUE KEY `unique_teamorder_material` (`code`,`teamorder_id`)
 );
@@ -425,7 +435,7 @@ CREATE TABLE IF NOT EXISTS `work_teamorder_skills` (
     `code` varchar(255) NOT NULL,
     `need_times` INT UNSIGNED NOT NULL DEFAULT 0,
     `stock_times` INT UNSIGNED NOT NULL DEFAULT 0,
-    PRIMARY KEY(`id`),
+    PRIMARY KEY (`id`),
     FOREIGN KEY (teamorder_id) REFERENCES work_teamorders(id),
     UNIQUE KEY `unique_teamorder_skill` (`code`,`teamorder_id`)
 );
