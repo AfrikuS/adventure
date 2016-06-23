@@ -26,7 +26,7 @@
                     <dt>Дела внешней торговли</dt>
                     <dd><a href="/boss">Босс</a></dd>
                     <dd><a href="/npc/offers">Актуальные предложения</a></dd>
-                    <dd>{{ link_to_route('battle_page', 'В атаку!', []) }}</dd>
+                    {{--<dd>{{ link_to_route('battle_page', 'В атаку!', []) }}</dd>--}}
                     <dd></dd>
                     <dt>Служебные</dt>
                     <dd>{{ link_to_route('work_index_page', 'Работа!', []) }}</dd>

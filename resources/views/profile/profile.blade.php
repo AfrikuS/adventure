@@ -5,15 +5,6 @@
     @parent
 @endsection
 
-@section('left_column')
-    <dl>
-        <dt>Profile LINKS</dt>
-        <dd><a href="/profile">Страница профиля</a></dd>
-        <dd><a href="/profile/channels">Ресурсные каналы</a></dd>
-    </dl>
-
-@endsection
-
 @section('center')
 
 Страница профиля\базы\штаба\ со всеми вещами\оборудованием
@@ -27,6 +18,10 @@
                 @endforeach
             </ul>
         @endif
+
+    <p></p>
+    {{ link_to_route('profile_channels_page', 'Ресурсные каналы')  }}
+
 
 @endsection
 

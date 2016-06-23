@@ -13,8 +13,8 @@
 
 Route::group(['middleware' => 'app_auth'], function () {
 
-    Route::get('/profile', 'ProfileController@index')->name('profile_page');
-    Route::get('/profile/channels', 'Profile\ResourceChannelsController@index')->name('profile_channels_page');
+    Route::get('/profile', 'Profile\ProfileController@index')->name('profile_page');
+    Route::get('/profile/channels', 'Profile\ProfileController@channels')->name('profile_channels_page');
 
 
 //    Route::get('/work/mine', 'Work\MineController@index')->name('work_mine_page');
@@ -120,10 +120,6 @@ Route::group(['middleware' => 'app_auth'], function () {
     
     // mass-actions on socket.io
     Route::get('/maxovik', 'Mass\MaxovikController@index')->name('maxovik_page');
-    Route::get('/boss', 'Mass\BossController@index')->name('boss_page');
-    Route::post('/boss_create', 'Mass\BossController@boss_create')->name('boss_create_action');
-    Route::post('/boss_join', 'Mass\BossController@boss_join')->name('boss_join_action');
-    Route::post('/boss_kick', 'Mass\BossController@boss_kick')->name('boss_kick_action');
 
     
     // geo-module
@@ -158,16 +154,17 @@ Route::group(['middleware' => 'app_auth'], function () {
     Route::post('/search', 'AttackController@searchOpponent')->name('search_enemy_action');
     Route::post('/attack', 'AttackController@attack')->name('attack_enemy_action');
 
-    Route::get('/battle', 'BattleController@index')->name('battle_page');
-    Route::post('/battle', 'BattleController@form');
-
     Route::get('/bodalka', 'BodalkaController@index')->name('bodalka_page');
     Route::post('/bodalka', 'BodalkaController@start')->name('bodalka_start_action');
 
+    Route::get('/boss', 'Mass\BossController@index')->name('boss_page');
+    Route::post('/boss_create', 'Mass\BossController@boss_create')->name('boss_create_action');
+    Route::post('/boss_join', 'Mass\BossController@boss_join')->name('boss_join_action');
+    Route::post('/boss_kick', 'Mass\BossController@boss_kick')->name('boss_kick_action');
 
 
 
-
+    // trading module
     Route::get('/auction', 'AuctionController@index')->name('auction_page');
     Route::post('/auction/add_lot', 'AuctionController@addLot')->name('auction_add_lot_action');
     Route::post('/auction/buy', 'AuctionController@buy')->name('auction_buy_lot_action');

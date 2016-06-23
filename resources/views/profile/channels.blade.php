@@ -1,6 +1,6 @@
-@extends('profile.profile')
+@extends('layouts.app')
 
-@section('title', 'Profile Page')
+@section('title', 'Profile - Channels Page')
 @section('head')
     @parent
 @endsection
