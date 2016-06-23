@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models\Mass;
+namespace App\Models\Battle;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Boss extends Model
@@ -12,6 +13,6 @@ class Boss extends Model
 
     public function users()
     {
-        return $this->belongsToMany('App\Models\User', 'mass_boss_users_rels', 'boss_id', 'user_id');
+        return $this->belongsToMany(User::class, 'mass_boss_users_rels', 'boss_id', 'user_id');
     }
 }

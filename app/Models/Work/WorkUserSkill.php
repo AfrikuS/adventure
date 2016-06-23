@@ -8,7 +8,7 @@ class WorkUserSkill extends Model
 {
     protected $table      = 'work_worker_skills';
     protected $primaryKey = 'id';
-    public    $timestamps = false;
+    public $timestamps    = false;
     protected $fillable   = ['worker_id', 'code', 'value'];
 
 }

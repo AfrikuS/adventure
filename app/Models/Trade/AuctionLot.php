@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Trade;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +13,6 @@ class AuctionLot extends Model
 
     public function thing() // todo check
     {
-        return $this->hasOne('App\Models\HeroThing', 'id', 'thing_id');
+        return $this->hasOne(HeroThing::class, 'id', 'thing_id');
     }
 }

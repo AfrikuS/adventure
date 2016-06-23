@@ -3,6 +3,10 @@
 namespace App\Models;
 
 use App\Concerns\Auth\AppAuthenticatableTrait;
+use App\Models\Battle\Boss;
+use App\Models\Battle\ResourceChannel;
+use App\Models\Macro\Building;
+use App\Models\Work\Team\TeamWorker;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,32 +21,32 @@ class User extends Model implements Authenticatable
 
     public function boss()
     {
-        return $this->belongsToMany('App\Models\Mass\Boss', 'mass_boss_users_rels',
+        return $this->belongsToMany(Boss::class, 'mass_boss_users_rels',
             'user_id', 'boss_id');
     }
     
     public function resources()
     {
-        return $this->hasOne('App\Models\HeroResources', 'id', 'id');
+        return $this->hasOne(HeroResources::class, 'id', 'id');
     }
 
     public function worker()
     {
-        return $this->belongsTo('App\Models\Work\Team', 'id');
+        return $this->belongsTo(TeamWorker::class, 'id');
     }
 
     public function buildings()
     {
-        return $this->hasMany('App\Models\Macro\Building', 'user_id', 'id');
+        return $this->hasMany(Building::class, 'user_id', 'id');
     }
 
     public function plusChannels()
     {
-        return $this->hasMany('App\Models\ResourceChannel', 'to_user_id', 'id');
+        return $this->hasMany(ResourceChannel::class, 'to_user_id', 'id');
     }
 
     public function lossChannels()
     {
-        return $this->hasMany('App\Models\ResourceChannel', 'from_user_id', 'id');
+        return $this->hasMany(ResourceChannel::class, 'from_user_id', 'id');
     }
 }

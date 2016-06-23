@@ -12,9 +12,4 @@ class LocationsRepository
                     $query->select('geo_locations.title', 'geo_locations.id');
                 }])->get();
     }
-    
-    public static function createLocation()
-    {
-        
-    }
 }

@@ -12,8 +12,8 @@ class AttackRepository
     {
         $attacks = DB::table('event_attacks')
             ->select(['defense_user_id', 'defenser_user_name', 'attack_user_id'])
-//            ->leftJoin('users', 'event_attacks.defense_user_id', '=', 'users.id')
-            ->where('attack_user_id', '=', $user_id)
+//            ->leftJoin('users', 'event_attacks.defense_user_id', 'users.id')
+            ->where('attack_user_id', $user_id)
 //            ->addSelect('users.name AS user_name')
             ->addSelect(DB::raw('TIMESTAMPDIFF(SECOND, now(), event_attacks.attack_moment) AS duration_seconds'))
             ->get();
@@ -29,15 +29,15 @@ class AttackRepository
 
                 $query->select(DB::raw(1))
                     ->from('event_attacks')
-                    ->where("defense_user_id", "=", $defenser->id)
-                    ->where("attack_user_id", "=", $atacker_id);
+                    ->where('defense_user_id', $defenser->id)
+                    ->where('attack_user_id', $atacker_id);
             })
             ->get();
 
         if ($attackExist) {
             DB::table('event_attacks')
-                ->where("attack_user_id", "=", $atacker_id)
-                ->where("defense_user_id", "=", $defenser->id)
+                ->where('attack_user_id', $atacker_id)
+                ->where('defense_user_id', $defenser->id)
                 ->update(['attack_moment' => $moment->toDateTimeString()]);
         }
         else {
@@ -59,7 +59,7 @@ class AttackRepository
     {
         $attackedUsersIds = DB::table('event_attacks')
             ->select('defense_user_id')
-            ->where('attack_user_id', '=', $user_id)
+            ->where('attack_user_id', $user_id)
             ->where(DB::raw('TIMESTAMPDIFF(SECOND, now(), event_attacks.attack_moment)'), '>', 0)
 //            ->addSelect(DB::raw('TIMESTAMPDIFF(SECOND, now(), event_attacks.attack_moment) AS duration_seconds'))
 //            ->havingRaw('duration_seconds > 0')

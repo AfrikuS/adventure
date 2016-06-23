@@ -2,26 +2,14 @@
 
 namespace App\Http\Controllers\Geo;
 
-use App\Domain\SeaActions;
-use App\Http\Requests\SeaCreateOrderRequest;
-use App\Models\AuctionLot;
-use App\Models\HeroResources;
-use App\Models\Sea\TravelOrder;
-use App\Models\Sea\TravelShip;
-use App\Models\User;
-use App\Models\Work\Order;
-use App\Repositories\Geo\VoyagesRepository;
-use App\Repositories\SeaRepository;
-use App\Repositories\TravelRepository;
-use Carbon\Carbon;
-use Faker\Factory;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
+use App\Http\Requests;
+use App\Http\Requests\SeaCreateOrderRequest;
+use App\Models\Geo\TravelShip;
+use App\Models\Work\Order;
+use App\Repositories\Geo\SeaRepository;
+use App\Repositories\Geo\VoyagesRepository;
+use App\Repositories\Geo\TravelRepository;
 use Illuminate\Support\Facades\Session;
 
 class TravelController extends Controller
@@ -33,7 +21,7 @@ class TravelController extends Controller
         
         $voyages = VoyagesRepository::getVoyagesWithPointLocation();
 
-        return $this->view('geo/travel', [
+        return $this->view('geo.travel', [
             'travelShips'=>$travelShips,
             'ordersTimers' => $ordersTimers,
             'voyages' => $voyages,
@@ -49,7 +37,7 @@ class TravelController extends Controller
             return redirect()->route('geo_travels_page');
         }
         
-        return $this->view('geo/travel_order', [
+        return $this->view('geo.travel_order', [
             'travel'=>$travel,
         ]);
     }
@@ -66,7 +54,7 @@ class TravelController extends Controller
             return redirect()->route('geo_travels_page');
         }
 
-        SeaRepository::createOrderOnTravel($travel, $timeMinutes);
+        SeaRepository::createOrderOnTravel(\Auth::user(), $travel, $timeMinutes);
         Session::flash('message', 'Travel Order is created!');
 
         return redirect()->route('geo_travels_page');

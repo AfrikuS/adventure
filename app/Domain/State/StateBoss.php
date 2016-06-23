@@ -2,8 +2,8 @@
 
 namespace App\Domain\State;
 
-use App\Repositories\Mass\BossRepository;
-use App\Repositories\Mass\BossTimerRepository;
+use App\Repositories\Battle\BossRepository;
+use App\Repositories\Battle\BossTimerRepository;
 
 class StateBoss //implements IState
 {

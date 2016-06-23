@@ -40,5 +40,4 @@ class Location extends Model
     {
         return $this->hasMany(LocationPath::class, 'from_id', 'id');
     }
-
 }

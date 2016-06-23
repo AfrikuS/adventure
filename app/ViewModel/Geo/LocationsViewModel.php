@@ -41,19 +41,19 @@ class LocationsViewModel
 
     public static function geoBuildRoutePage(Collection $locations)
     {
-        $locsView = [];
+        $rows = [];
 
-        foreach ($locations as $loc) {
-
-            $nextLocationsTitles = $loc->locationsTo->lists('title')->toArray();
+        foreach ($locations as $location) {
+            $nextLocationsTitles = $location->locationsTo->lists('title')->toArray();
 
             $data = [
-                'title' => $loc->title,
+                'title' => $location->title,
                 'next_locations_title' => $nextLocationsTitles,
             ];
-            $locsView[$loc->id] = $data;
+
+            $rows[$location->id] = $data;
         }
 
-        return $locsView;
+        return $rows;
     }
 }

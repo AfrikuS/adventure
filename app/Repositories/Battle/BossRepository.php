@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repositories\Mass;
+namespace App\Repositories\Battle;
 
-use App\Models\Mass\Boss;
+use App\Models\Battle\Boss;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 

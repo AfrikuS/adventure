@@ -36,9 +36,7 @@ class LocationController extends Controller
     {
         $title = Input::get('title');
 
-        Location::create([
-            'title' => $title,
-        ]);
+        Location::create($title);
 
         return \Redirect::route('geo_map_page');
     }
@@ -53,27 +51,5 @@ class LocationController extends Controller
         $location->locationsTo()->attach($nextLocation_id);
 
         return \Redirect::route('geo_map_page');
-    }
-
-
-    /** @deprecated  node */
-    public function show(Request $request, $location_id)
-    {
-        $location = Location::find($location_id);
-
-        $locationsTo = $location->locationsTo;
-        $locationsToArr = [];
-        foreach ($locationsTo as $loc) {
-            $locationsToArr[] = $loc->pivot->to_id;
-        }
-        $locationsSelect = Location::where('id', '<>', $location_id)
-            ->whereNotIn('id', $locationsToArr)
-            ->get()->pluck('title', 'id');
-
-        return $this->view('geo.location_show', [
-            'currLocation' => $location,
-            'locationsTo' => $locationsTo,
-            'locationsSelect' => $locationsSelect,
-        ]);
     }
 }

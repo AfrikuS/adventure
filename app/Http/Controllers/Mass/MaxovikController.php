@@ -11,6 +11,6 @@ class MaxovikController extends Controller
 {
     public function index()
     {
-        return $this->view('mass/maxovik', []);
+        return $this->view('other.maxovik', []);
     }
 }

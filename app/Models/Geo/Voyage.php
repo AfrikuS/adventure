@@ -14,7 +14,6 @@ class Voyage extends Model
     public function route()
     {
         return $this->belongsTo(TravelRoute::class, 'route_id', 'id');
-
     }
 
     public function point()

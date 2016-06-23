@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserMaterial extends Model
 {
     protected $table      = 'work_user_materials';
-    public $timestamps = false;
     protected $primaryKey = 'id';
+    public $timestamps    = false;
     protected $fillable   = ['user_id', 'code', 'value'];
 }

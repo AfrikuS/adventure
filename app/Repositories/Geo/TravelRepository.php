@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Geo;
 
-use App\Models\Sea\TravelOrder;
-use App\Models\Sea\TravelShip;
+use App\Models\Geo\TravelOrder;
+use App\Models\Geo\TravelShip;
 use Illuminate\Support\Facades\DB;
 
 class TravelRepository

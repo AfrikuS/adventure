@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Mass;
+namespace App\Models\Battle;
 
 use Illuminate\Database\Eloquent\Model;
 

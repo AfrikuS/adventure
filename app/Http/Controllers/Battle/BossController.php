@@ -4,17 +4,12 @@ namespace App\Http\Controllers\Battle;
 
 use App\Domain\MassActions;
 use App\Domain\State\StateBoss;
-use App\Http\Requests\MassBossJoinRequest;
-use App\Models\Mass\BossTimer;
-use App\Repositories\Mass\BossRepository;
-use App\Repositories\Mass\BossTimerRepository;
-use Exception;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Requests;
+use App\Http\Requests\MassBossJoinRequest;
+use App\Repositories\Battle\BossRepository;
+use App\Repositories\Battle\BossTimerRepository;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 
 class BossController extends Controller

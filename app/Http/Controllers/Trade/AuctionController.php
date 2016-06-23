@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Trade;
 
 use App\Domain\AuctionActions;
+use App\Factories\AuctionFactory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Requests\AuctionAddLotRequest;
@@ -10,8 +11,10 @@ use App\Http\Requests\AuctionBuyLotRequest;
 use App\Models\AuctionLot;
 use App\Models\HeroThing;
 use App\Repositories\AuctionRepository;
+use App\Repositories\HeroRepository;
 use App\Repositories\HeroResourcesRepository;
 use App\Serializers\RedisAuctionLot;
+use App\Transactions\Trade\AuctionTransactions;
 use DB;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +25,7 @@ class AuctionController extends Controller
     public function index()
     {
         $lots = AuctionRepository::getActiveLots();
-        $heroThings = HeroThing::where('owner_id', $this->user_id)->get(['id', 'title', 'status']);
+        $heroThings = HeroRepository::getHeroThings(\Auth::user());
 
         $thingsForSale = $heroThings->filter(function ($thing) {
             return $thing->status === 'free';
@@ -43,10 +46,9 @@ class AuctionController extends Controller
 
     public function addLot(AuctionAddLotRequest $request)
     {
-        $data = $request->all();
-        $thing = HeroThing::select(['id', 'title', 'status'])->find($data['thing_id']);
+        $thing = HeroRepository::findHeroThingById($request->thing_id);
 
-        $lot =  AuctionRepository::createLotFromThing($thing, auth()->user(), $data['bid']);
+        $lot = AuctionFactory::createLotByThing($thing, auth()->user(), $request->bid);
         $thing->lock();
 
         RedisAuctionLot::saveLotInRedis($lot);
@@ -63,25 +65,13 @@ class AuctionController extends Controller
         $lot = AuctionLot::find($lot_id, ['id', 'owner_id', 'thing_id','bid']);
         $purchaser = auth()->user();
 
-        try {
-            DB::transaction(function () use ($purchaser, $lot) {
-                HeroResourcesRepository::transferGoldBetweenUsers($purchaser->id, $lot->owner_id, $lot->bid);
-
-                HeroThing::
-                    where('id', '=', $lot->thing_id)
-                    ->update([
-                        'owner_id' => $purchaser->id,
-                        'status' => 'free',
-                    ]);
-
-                RedisAuctionLot::deleteLot($lot->id);
-                $lot->delete();
-            });
+        if ($lot != null) {
+            AuctionTransactions::commitPurchasing($lot, $purchaser);
         }
-        catch (\Exception $e) {
+        else {
             Session::flash('message', 'Lot is bought yet!');
         }
-
+        
         return redirect()->route('auction_page');
     }
 }
