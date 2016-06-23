@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Geo;
 
+use App\Factories\GeoFactory;
 use App\Http\Controllers\Controller;
 use App\Models\Geo\Location;
 use App\Models\Geo\RoutePoint;
@@ -11,6 +12,7 @@ use App\ViewModel\Geo\LocationsViewModel;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 
+// todo review -> add fsm
 class TravelRouteController extends Controller
 {
     public function buildRoute($id)
@@ -27,14 +29,14 @@ class TravelRouteController extends Controller
             ->find($id);
 
         $locationsTableRows = LocationsViewModel::geoBuildRoutePage($locs);
-
-
+        
         $lastPoint = $route->points->last();
 
         $lastLocation = Location::with(['locationsTo' => function($query) {
             $query->select('geo_locations.title', 'geo_locations.id');
         }])
-        ->select('id', 'title')->find($lastPoint->location_id);
+        ->select('id', 'title')
+        ->find($lastPoint->location_id);
 
         $possibleLocationsSelect = $lastLocation->locationsTo->pluck('title', 'id');
 
@@ -49,12 +51,10 @@ class TravelRouteController extends Controller
     public function addRoute()
     {
         $title = Input::get('title');
-        $user_id = \Auth::id();
+        $startLocation_id = Input::get('start_location_id');
+        $user = \Auth::user();
 
-        $route = TravelRoute::create([
-            'title' => $title,
-            'user_id' => $user_id,
-        ]);
+        $route = GeoFactory::createRoute($user, $title, $startLocation_id);
 
         return \Redirect::route('geo_route_build_page', ['id' => $route->id]);
     }
@@ -68,20 +68,11 @@ class TravelRouteController extends Controller
 
         $route = TravelRoute::with('points')->find($route_id);
 
-        if ($route->status == 'commited') {
+        if ($route->status == 'commited') { // todo replace == 'forming'
             Session::flash('message', 'Route is commited yet!!!');
         }
         else {
-
-            $pointsCount = $route->points->count();
-
-
-            RoutePoint::create([
-                'route_id' => $route_id,
-                'location_id' => $location_id,
-                'status' => 'normal',
-                'number' => $pointsCount + 1,
-            ]);
+            GeoFactory::createRoutePoint($route, $location_id); 
         }
 
         return \Redirect::route('geo_route_build_page', ['id' => $route->id]);
@@ -101,8 +92,7 @@ class TravelRouteController extends Controller
             $lastPoint = $route->points->last();
             $lastPoint->update(['status' => 'final']);
         }
-
-
+        
         return \Redirect::route('geo_route_build_page', ['id' => $route->id]);
     }
 
@@ -116,12 +106,11 @@ class TravelRouteController extends Controller
         if ($route->status == 'commited') {
             Session::flash('message', 'Route is commited yet!!!');
         }
+        elseif ($route->points->count() < 2) {
+            Session::flash('message', 'Route must include > 1 points!!!');
+        }
         else {
-
-//        $pointsCount = $route->points->count();
             $route->points->last()->delete();
-
-
         }
 
         return \Redirect::route('geo_route_build_page', ['id' => $route->id]);

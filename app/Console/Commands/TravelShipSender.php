@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Domain\SeaActions;
 use App\Models\Sea\TravelShip;
+use App\Repositories\Generate\EntityGenerator;
 use Carbon\Carbon;
 use Faker\Factory;
 use Illuminate\Console\Command;
@@ -44,6 +45,6 @@ class TravelShipSender extends Command
      */
     public function handle()
     {
-        SeaActions::generateRandomTravel();
+        EntityGenerator::createSeaTravel();
     }
 }

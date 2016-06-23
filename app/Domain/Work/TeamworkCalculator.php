@@ -2,7 +2,7 @@
 
 namespace App\Domain\Work;
 
-use App\Models\Work\PrivateTeam;
+use App\Models\Work\Team\PrivateTeam;
 
 class TeamworkCalculator
 {

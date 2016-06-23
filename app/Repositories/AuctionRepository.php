@@ -28,7 +28,7 @@ class AuctionRepository
     public static function getExpiredLots()
     {
         $lots = AuctionLot::
-            select(['id', 'title', 'date_time', 'owner_id', 'bid'])
+            select(['id', 'title', 'date_time', 'owner_id', 'bid', 'thing_id'])
             ->whereRaw('TIMESTAMPDIFF(SECOND, now(), auction_lot.date_time) < 0')
             ->get();
 

@@ -3,9 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Domain\AuctionActions;
-use App\Models\AuctionLot;
-use App\Models\HeroResources;
-use App\Models\HeroThing;
+use App\Models\Trade\AuctionLot;
+use App\Models\User;
+use App\Repositories\AuctionRepository;
+use App\Transactions\Trade\AuctionTransactions;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -42,26 +43,18 @@ class AuctionPurchases extends Command
      */
     public function handle()
     {
-//        $expiredLots = AuctionLot::where(DB::raw('TIMESTAMPDIFF(SECOND, now(), auction_lot.date_time)'), '<', 0)
-//            ->get();
-        $expiredLots = AuctionLot::where(DB::raw('TIMESTAMPDIFF(SECOND, now(), auction_lot.date_time)'), '<', 0)
-            ->select('id', 'thing_id')->get();
-
+        $expiredLots = AuctionRepository::getExpiredLots();
 
         foreach ($expiredLots as $lot) {
             if (isset($lot->purchaser_id)) {
 
-                DB::beginTransaction();
-                
-                AuctionActions::commitPurchase($lot);
+                $purchaser = User::find($lot->purchaser_id);
 
-                DB::commit();
+                AuctionTransactions::commitPurchasing($lot, $purchaser);
             }
             else {
-                AuctionActions::rollbackLot($lot);
+                $lot->delete(); // todo review thing-status = free?
             }
         }
-
-
     }
 }

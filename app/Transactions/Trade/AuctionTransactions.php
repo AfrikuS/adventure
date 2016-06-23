@@ -2,10 +2,9 @@
 
 namespace App\Transactions\Trade;
 
-use App\Models\AuctionLot;
 use App\Models\HeroThing;
+use App\Models\Trade\AuctionLot;
 use App\Models\User;
-use App\Repositories\HeroResourcesRepository;
 use App\Serializers\RedisAuctionLot;
 use App\Transactions\ResourcesTransactions;
 

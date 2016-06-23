@@ -2,9 +2,9 @@
 
 namespace App\Domain;
 
-use App\Models\Mass\Boss;
-use App\Repositories\Mass\BossRepository;
-use App\Repositories\Mass\BossTimerRepository;
+use App\Models\Battle\Boss;
+use App\Repositories\Battle\BossRepository;
+use App\Repositories\Battle\BossTimerRepository;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +15,7 @@ class MassActions
     {
         $userId = Auth::user()->id;
 
-        DB::beginTransaction();
+        \DB::beginTransaction();
         try {
             $boss = BossRepository::create($userId);
             BossRepository::joinUserToAttackBoss($userId, $boss->id);
@@ -23,9 +23,9 @@ class MassActions
         }
         catch (Exception $e) {
 
-            DB::rollback();
+            \DB::rollback();
         }
-        DB::commit();
+        \DB::commit();
     }
 
     public static function joinToBoss($bossId)

@@ -204,7 +204,7 @@
                 nodeStyle: {
                     "all": {
                         "width": 5,
-                        "radius": 14,
+                        "radius": 8,
                     }
                 },
                 fixNodes: true,
@@ -212,8 +212,8 @@
                 directedEdges: true,
                 edgeCaption: "relatedness",
                 nodeCaptionsOnByDefault: true,
-                graphHeight: function(){ return 600; },
-                graphWidth: function(){ return 600; },
+                graphHeight: function(){ return 300; },
+                graphWidth: function(){ return 300; },
                 linkDistance: function(){ return 170; },
                 nodeTypes: {"node_type":[ "Maintainer",
                 "Contributor"]}
