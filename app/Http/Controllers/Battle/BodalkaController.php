@@ -21,7 +21,7 @@ class BodalkaController extends Controller
             $timer = null;
         }
 
-        return $this->view('mini/bodalka', [
+        return $this->view('battle.bodalka', [
             'timer'  => $timer,
         ]);
     }

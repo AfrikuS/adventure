@@ -23,7 +23,7 @@ class AttackController extends Controller
         /** @var  Collection $lastAttacks */
         $lastAttacks = AttackRepository::getLastAttacks($user_id);
 
-        return $this->view('attack/search', [
+        return $this->view('battle.attack.search', [
             'attacks' => $lastAttacks,
         ]);
     }
@@ -41,7 +41,7 @@ class AttackController extends Controller
         
         PlayersOperations::addResourceChannel($atacker, $defenser);
 
-        return $this->view('attack/attack_result', [
+        return $this->view('battle.attack.attack_result', [
             'atacker' => $atacker,
             'defenser' => $defenser,
         ]);
@@ -73,7 +73,7 @@ class AttackController extends Controller
         }
 
 
-        return $this->view('attack/search_result', [
+        return $this->view('battle.attack.search_result', [
             'user' => $user,
             'users_ids' => $validUsers_ids,
         ]);

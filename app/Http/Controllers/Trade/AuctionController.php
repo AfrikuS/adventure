@@ -32,7 +32,7 @@ class AuctionController extends Controller
         
         $userJson = json_encode(['id' => $this->user_id, 'name' => auth()->user()->name]);
 
-        return $this->view('auction/auction', [
+        return $this->view('trade.auction.auction', [
             'lots' => $lots,
             'heroThings' => $heroThings,
             'thingsForSale' => $thingsForSale,

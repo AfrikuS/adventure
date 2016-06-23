@@ -39,7 +39,7 @@ class BossController extends Controller
                     BossRepository::delete($boss->id);
                     \DB::commit();
 
-                    return $this->view('mass/boss/boss_end', [
+                    return $this->view('battle.boss.boss_end', [
                         'mass_work' => $boss,
                         'workers'   => $workers,
                     ]);
@@ -49,7 +49,7 @@ class BossController extends Controller
                     $timer = BossTimerRepository::getTimerBoss($boss->id);
                     $workers = BossRepository::getUsers($boss->id);
 
-                    return $this->view('mass/boss/boss_process', [
+                    return $this->view('battle.boss.boss_process', [
                         'timer'   => $timer,
                         'workers' => $workers,
                         'boss'    => $boss,
@@ -59,7 +59,7 @@ class BossController extends Controller
                     $bosses = BossRepository::getAll();
 
 
-                    return $this->view('mass/boss/index', [
+                    return $this->view('battle.boss.index', [
                         'bosses' => $bosses,
                     ]);
                 }
