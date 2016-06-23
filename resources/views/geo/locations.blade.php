@@ -15,7 +15,6 @@
                 <li>{{ link_to_route('geo_live_voyage_page', 'Live Travels (new)') }}</li>
             </ul>
 
-            {{--{{ link_to_route('geo_routebuilder_page', 'Route-constructor') }}--}}
             <p></p>
             <h4>Список локаций и путей между ними</h4>
             <p></p>

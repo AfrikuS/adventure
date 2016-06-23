@@ -17,20 +17,6 @@
         @endif
         <div class="row row-offcanvas row-offcanvas-right">
             <div class="col-lg-2">
-                <dl>
-                    <dt>Служебные</dt>
-                    <dd>{{ link_to_route('maxovik_page', 'Maxovik', []) }}</dd>
-                    <dd>{{ link_to_route('admin_page', 'Админка (сделать что-то)', []) }}</dd>
-                    <dd>{{ link_to_route('auction_page', 'Аукцион', []) }}</dd>
-                    <dd>{{ link_to_route('geo_travels_page', 'В порт', []) }}</dd>
-                    <dt>Дела внешней торговли</dt>
-                    <dd><a href="/boss">Босс</a></dd>
-                    <dd><a href="/npc/offers">Актуальные предложения</a></dd>
-                    {{--<dd>{{ link_to_route('battle_page', 'В атаку!', []) }}</dd>--}}
-                    <dd></dd>
-                    <dt>Служебные</dt>
-                    <dd>{{ link_to_route('work_index_page', 'Работа!', []) }}</dd>
-                </dl>
 
                 @yield('left_column')
             </div>

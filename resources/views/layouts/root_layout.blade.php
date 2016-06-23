@@ -68,9 +68,15 @@
                     <ul class="dropdown-menu">
                         <li>{{ link_to_route('geo_map_page', 'Локации \ Карта мира') }}</li>
                         <li>{{ link_to_route('geo_live_voyage_page', 'Live Travels (new)') }}</li>
-                        <li><a href="#">Something else here</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li class="dropdown-header">Nav header</li>
+                        <li>{{ link_to_route('geo_travels_page', 'Travels \ Orders') }}</li>
+                    </ul>
+                </li>
+                <li class="active">{{ link_to_route('admin_page', 'Admin', []) }}</li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Other<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>{{ link_to_route('maxovik_page', 'Maxovik') }}</li>
                     </ul>
                 </li>
             </ul>

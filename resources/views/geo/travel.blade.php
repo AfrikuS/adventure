@@ -10,12 +10,17 @@
     <ul>
         <li>{{ link_to_route('geo_travels_page', 'Рейсы \ Отправления') }}</li>
         <li>{{ link_to_route('geo_map_page', 'Локации \ Карта') }}</li>
-        <li>{{ link_to_route('geo_live_travel_page', 'Live Travels (new)') }}</li>
+        <li>{{ link_to_route('geo_live_voyage_page', 'Live Travels (new)') }}</li>
     </ul>
     <p></p>
     Список кораблей, уходящих в дальние страны.
     <p>Можно заказать привезти оттуда разных ресов
     <p></p>
+    <b>Дела внешней торговли</b>
+    <p></p>
+    <b>Актуальные предложения от заморских NPC</b>
+    <p></p>
+
 
     @if(count($travelShips) > 0)
         <table class="table table-condensed">

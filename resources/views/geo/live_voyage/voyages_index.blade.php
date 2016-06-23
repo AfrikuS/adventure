@@ -9,7 +9,12 @@
 
     <div class="row row-offcanvas">
         <div class="col-lg-12">
-            {{ link_to_route('geo_map_page', 'All Locations') }}
+            <ul>
+                <li>{{ link_to_route('geo_travels_page', 'Рейсы \ Отправления') }}</li>
+                <li>{{ link_to_route('geo_map_page', 'Локации \ Карта') }}</li>
+                <li>{{ link_to_route('geo_live_voyage_page', 'Live Travels (new)') }}</li>
+            </ul>
+
             <p></p>
             <h4>Список локаций \ Карта</h4>
             <p></p>

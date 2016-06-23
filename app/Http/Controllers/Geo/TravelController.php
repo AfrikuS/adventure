@@ -46,7 +46,7 @@ class TravelController extends Controller
 
         if (null == $travel) {
             Session::flash('message', 'Travel is ended yet!');
-            return redirect('/geo/travel');
+            return redirect()->route('geo_travels_page');
         }
         
         return $this->view('geo/travel_order', [
@@ -63,12 +63,12 @@ class TravelController extends Controller
 
         if (null == $travel) {
             Session::flash('message', 'Travel is ended yet!');
-            return redirect('/geo/travel');
+            return redirect()->route('geo_travels_page');
         }
 
         SeaRepository::createOrderOnTravel($travel, $timeMinutes);
         Session::flash('message', 'Travel Order is created!');
 
-        return redirect()->route('sea_travels_page');
+        return redirect()->route('geo_travels_page');
     }
 }
