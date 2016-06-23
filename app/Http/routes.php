@@ -127,7 +127,12 @@ Route::group(['middleware' => 'app_auth'], function () {
 
     
     // geo-module
+    Route::get('/geo/travel', 'Geo\TravelController@index')->name('geo_travels_page');
+
+    Route::get('/geo/live_voyage', 'Geo\LiveVoyageController@index')->name('geo_live_voyage_page');
+    Route::post('/geo/live_voyage_sail_to', 'Geo\LiveVoyageController@sailTo')->name('geo_live_sail_to_action');
     
+
     Route::get('/geo', 'Geo\LocationController@index')->name('geo_map_page');
     Route::get('/geo/location/{id}', 'Geo\LocationController@show')->name('geo_location_page');
     Route::post('/geo/bind_locations', 'Geo\LocationController@bind')->name('geo_bind_locations_action');
@@ -144,6 +149,8 @@ Route::group(['middleware' => 'app_auth'], function () {
     Route::post('/geo/voyage_start_sail', 'Geo\VoyageController@startSail')->name('geo_voyage_start_sail_action');
     Route::post('/geo/voyage_moor', 'Geo\VoyageController@moor')->name('geo_voyage_moor_action');
 //    Route::resource('islands', 'Geo\IslandsController');
+    Route::get('/geo/travel/order/{travel_id}', 'Geo\TravelController@showOrder')->name('sea_create_order_page');
+    Route::post('/geo/travel/create_order', 'Geo\TravelController@createOrder')->name('sea_create_order_action');
 
     
     // battle-module
@@ -159,10 +166,6 @@ Route::group(['middleware' => 'app_auth'], function () {
 
 
 
-    Route::get('/sea/travel', 'Sea\TravelController@index')->name('sea_travels_page');
-    Route::get('/sea/travel/order/{travel_id}', 'Sea\TravelController@showOrder')->name('sea_create_order_page');
-    Route::post('/sea/travel/create_order', 'Sea\TravelController@createOrder')->name('sea_create_order_action');
-
 
 
     Route::get('/auction', 'AuctionController@index')->name('auction_page');
@@ -170,8 +173,8 @@ Route::group(['middleware' => 'app_auth'], function () {
     Route::post('/auction/buy', 'AuctionController@buy')->name('auction_buy_lot_action');
 
     // fixture methods
-    Route::post('/generate/sea/travel', 'DataGeneratorController@generateTravel')->name('sea_generate_travel_action');
-    Route::get('/delete/sea/travel/{id}', 'DataGeneratorController@deleteTravel')->name('sea_delete_travel_action');
+    Route::post('/generate/geo/travel', 'DataGeneratorController@generateTravel')->name('sea_generate_travel_action');
+    Route::get('/delete/geo/travel/{id}', 'DataGeneratorController@deleteTravel')->name('sea_delete_travel_action');
 
     Route::post('/generate/work/order', 'DataGeneratorController@generateWorkOrder')->name('generate_work_order_action');
     Route::post('/generate/work/teamorder', 'DataGeneratorController@generateWorkTeamOrder')->name('generate_work_teamorder_action');

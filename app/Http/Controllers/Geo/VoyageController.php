@@ -13,13 +13,6 @@ use Illuminate\Support\Facades\Session;
 
 class VoyageController extends Controller
 {
-    public function index()
-    {
-        $user_id = auth()->id();
-
-        return $this->view('path/page', []);
-    }
-
     public function createVoyage()
     {
         $data = Input::all();
@@ -55,7 +48,8 @@ class VoyageController extends Controller
             Session::flash('message', 'Ship in sea yet');
         }
 
-        return \Redirect::route('geo_map_page');
+        return \Redirect::back();
+//        return \Redirect::route('geo_map_page');
     }
 
     public function moor() // причалить
@@ -66,7 +60,10 @@ class VoyageController extends Controller
         $voyage = VoyagesRepository::findById($voyage_id);
         $route = TravelRoutesRepository::findById($voyage->route_id);
 
-        if ($voyage->status == 'in_cruise') {
+        if ($voyage->point->status == 'final') {
+            Session::flash('message', 'Voyage is finished yet!!!');
+        }
+        elseif ($voyage->status == 'in_cruise') {
             // change next point
             $currentPointNumber = $voyage->point->number;
 
@@ -82,6 +79,7 @@ class VoyageController extends Controller
             Session::flash('message', 'Ship is ready to sail');
         }
 
-        return \Redirect::route('geo_map_page');
+        return \Redirect::back();
+//        return \Redirect::route('geo_map_page');
     }
 }

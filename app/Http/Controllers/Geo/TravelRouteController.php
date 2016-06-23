@@ -9,6 +9,7 @@ use App\Models\Geo\TravelRoute;
 use App\Repositories\Geo\LocationsRepository;
 use App\ViewModel\Geo\LocationsViewModel;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Session;
 
 class TravelRouteController extends Controller
 {
@@ -66,15 +67,22 @@ class TravelRouteController extends Controller
         $route_id = $data['route_id'];
 
         $route = TravelRoute::with('points')->find($route_id);
-        $pointsCount = $route->points->count();
+
+        if ($route->status == 'commited') {
+            Session::flash('message', 'Route is commited yet!!!');
+        }
+        else {
+
+            $pointsCount = $route->points->count();
 
 
-        RoutePoint::create([
-            'route_id' => $route_id,
-            'location_id' => $location_id,
-            'status' => 'normal',
-            'number' => $pointsCount + 1,
-        ]);
+            RoutePoint::create([
+                'route_id' => $route_id,
+                'location_id' => $location_id,
+                'status' => 'normal',
+                'number' => $pointsCount + 1,
+            ]);
+        }
 
         return \Redirect::route('geo_route_build_page', ['id' => $route->id]);
     }
@@ -85,8 +93,15 @@ class TravelRouteController extends Controller
         $route_id = $data['route_id'];
 
         $route = TravelRoute::with('points')->find($route_id);
-        $lastPoint = $route->points->last();
-        $lastPoint->update(['status' => 'final']);
+
+        if ($route->status == 'commited') {
+            Session::flash('message', 'Route is commited yet!!!');
+        }
+        else {
+            $lastPoint = $route->points->last();
+            $lastPoint->update(['status' => 'final']);
+        }
+
 
         return \Redirect::route('geo_route_build_page', ['id' => $route->id]);
     }
@@ -97,9 +112,17 @@ class TravelRouteController extends Controller
         $route_id = $data['route_id'];
 
         $route = TravelRoute::with('points')->find($route_id);
-//        $pointsCount = $route->points->count();
-        $route->points->last()->delete();
 
+        if ($route->status == 'commited') {
+            Session::flash('message', 'Route is commited yet!!!');
+        }
+        else {
+
+//        $pointsCount = $route->points->count();
+            $route->points->last()->delete();
+
+
+        }
 
         return \Redirect::route('geo_route_build_page', ['id' => $route->id]);
     }

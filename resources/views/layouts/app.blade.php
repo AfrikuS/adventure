@@ -22,7 +22,7 @@
                     <dd>{{ link_to_route('maxovik_page', 'Maxovik', []) }}</dd>
                     <dd>{{ link_to_route('admin_page', 'Админка (сделать что-то)', []) }}</dd>
                     <dd>{{ link_to_route('auction_page', 'Аукцион', []) }}</dd>
-                    <dd>{{ link_to_route('sea_travels_page', 'В порт', []) }}</dd>
+                    <dd>{{ link_to_route('geo_travels_page', 'В порт', []) }}</dd>
                     <dt>Дела внешней торговли</dt>
                     <dd><a href="/boss">Босс</a></dd>
                     <dd><a href="/npc/offers">Актуальные предложения</a></dd>

@@ -153,9 +153,12 @@ CREATE TABLE IF NOT EXISTS `geo_travel_routes` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `user_id` INT UNSIGNED NOT NULL,
     `title` varchar(255) NOT NULL,
+    `status` varchar(255) NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+ALTER TABLE `geo_travel_routes` ADD COLUMN `status` varchar(255) NOT NULL AFTER `title`;
+
 
 CREATE TABLE IF NOT EXISTS `geo_travel_route_points` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -177,6 +180,16 @@ CREATE TABLE IF NOT EXISTS `geo_travel_voyages` (
     FOREIGN KEY (route_id) REFERENCES geo_travel_routes(id),
     FOREIGN KEY (point_id) REFERENCES geo_travel_route_points(id),
     FOREIGN KEY (route_id) REFERENCES geo_travel_routes(id)
+);
+
+CREATE TABLE IF NOT EXISTS `geo_travel_live_voyages` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `location_id` INT UNSIGNED NOT NULL,
+    `traveler_id` INT UNSIGNED NOT NULL,
+    `status` varchar(255) NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (traveler_id) REFERENCES users(id),
+    FOREIGN KEY (location_id) REFERENCES geo_locations(id)
 );
 
 -- хранит данные о последних боях между двмя игроками (данные динамические, могут исп-ться).

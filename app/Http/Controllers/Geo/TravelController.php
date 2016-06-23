@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Sea;
+namespace App\Http\Controllers\Geo;
 
 use App\Domain\SeaActions;
 use App\Http\Requests\SeaCreateOrderRequest;
@@ -9,6 +9,8 @@ use App\Models\HeroResources;
 use App\Models\Sea\TravelOrder;
 use App\Models\Sea\TravelShip;
 use App\Models\User;
+use App\Models\Work\Order;
+use App\Repositories\Geo\VoyagesRepository;
 use App\Repositories\SeaRepository;
 use App\Repositories\TravelRepository;
 use Carbon\Carbon;
@@ -28,10 +30,13 @@ class TravelController extends Controller
     {
         $travelShips = TravelRepository::getTravelShips();
         $ordersTimers = TravelRepository::getActiveOrdersTimersByUser($this->user_id);
+        
+        $voyages = VoyagesRepository::getVoyagesWithPointLocation();
 
-        return $this->view('sea/travel', [
+        return $this->view('geo/travel', [
             'travelShips'=>$travelShips,
             'ordersTimers' => $ordersTimers,
+            'voyages' => $voyages,
         ]);
     }
     
@@ -41,10 +46,10 @@ class TravelController extends Controller
 
         if (null == $travel) {
             Session::flash('message', 'Travel is ended yet!');
-            return redirect('/sea/travel');
+            return redirect('/geo/travel');
         }
         
-        return $this->view('sea/travel_order', [
+        return $this->view('geo/travel_order', [
             'travel'=>$travel,
         ]);
     }
@@ -58,7 +63,7 @@ class TravelController extends Controller
 
         if (null == $travel) {
             Session::flash('message', 'Travel is ended yet!');
-            return redirect('/sea/travel');
+            return redirect('/geo/travel');
         }
 
         SeaRepository::createOrderOnTravel($travel, $timeMinutes);

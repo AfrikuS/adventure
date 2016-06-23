@@ -29,8 +29,7 @@
                         <td>{{ $employment->kind }}</td>
                         <td><div class="timer" data-seconds-left={{ $employment->duration_seconds }}></div></td>
 {{--                        <td>{{ link_to_route('sea_create_order_page', 'Выбрать', ['id' => $employment->id]) }}</td>--}}
-                        <td><a href="/sea/travel/order/{{ $employment->id }}">Выбрать</a>
-                        </td>
+                        <td>{{ link_to_route('sea_create_order_page', 'Выбрать', ['id' => $employment->id]) }}</td>
                     </tr>
                 @endforeach
                 </tbody>
