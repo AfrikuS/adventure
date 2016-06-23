@@ -54,6 +54,7 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Work \ Orders<span class="caret"></span></a>
                     <ul class="dropdown-menu">
+                        <li>{{ link_to_route('work_index_page', 'Work Index') }}</li>
                         <li>{{ link_to_route('work_orders_page', 'Single Orders') }}</li>
                         <li>{{ link_to_route('work_teamorders_page', 'Team Orders') }}</li>
                         <li>{{ link_to_route('work_show_privateteam_page', 'My Team', ['id' => 1]) }}</li>

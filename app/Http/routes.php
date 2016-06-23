@@ -32,7 +32,7 @@ Route::group(['middleware' => 'app_auth'], function () {
 //    Route::post('/work/mine', 'Work\MineController@mine')->name('work_mine_action');
 
 
-    Route::get('/work', 'WorkController@index')->name('work_index_page');
+    Route::get('/work', 'Work\WorkController@index')->name('work_index_page');
 
 
     Route::get('/work/orders', 'Work\OrderController@index')->name('work_orders_page');
@@ -85,7 +85,7 @@ Route::group(['middleware' => 'app_auth'], function () {
 
 
     // macro-module
-    Route::get('/macro', 'MacroController@index')->name('macro_page');
+    Route::get('/macro', 'Macro\PoliticController@index')->name('macro_page');
     Route::get('/macro/obtain', 'Macro\ObtainController@index')->name('macro_obtain_page');
     Route::get('/macro/buildings', 'Macro\BuildingController@index')->name('macro_buildings_page');
     Route::get('/macro/buildings/{id}', 'Macro\BuildingController@show')->name('macro_buildings_smith');
@@ -97,7 +97,7 @@ Route::group(['middleware' => 'app_auth'], function () {
     Route::post('/macro/equip', 'Macro\BuildingController@equip');
     Route::post('/macro/food', 'Macro\ObtainController@obtainFood');
     Route::post('/macro/build', 'Macro\BuildingController@build');
-    Route::post('/macro/profession', 'MacroController@learnProfession');
+    Route::post('/macro/profession', 'Macro\PoliticController@learnProfession')->name('politic_learn_profession');
 
 
     // admin
@@ -134,7 +134,6 @@ Route::group(['middleware' => 'app_auth'], function () {
     Route::post('/geo/bind_locations', 'Geo\LocationController@bind')->name('geo_bind_locations_action');
     Route::post('/geo/add_location', 'Geo\LocationController@addLocation')->name('geo_add_location_action');
 
-    Route::get('/geo/routebuilder', 'Geo\TravelRouteController@index')->name('geo_routebuilder_page');
     Route::get('/geo/build_route/{id}', 'Geo\TravelRouteController@buildRoute')->name('geo_route_build_page');
     Route::post('/geo/add_route', 'Geo\TravelRouteController@addRoute')->name('geo_add_route_action');
     Route::post('/geo/add_routepoint', 'Geo\TravelRouteController@addRoutePoint')->name('geo_add_routepoint_action');
@@ -194,6 +193,3 @@ Route::get('/logout', 'Auth\UserController@logout')->name('logout_action');
 
 Route::post('/login', 'Guest\GuestController@login')->name('sign_in_action');
 Route::post('/register', 'Auth\UserController@register')->name('sign_up_action');
-
-//Route::group(['middleware' => 'lfm_auth'], function () {
-//});

@@ -19,7 +19,7 @@
     Кнопка отправить
 
     <p></p>
-    {!! Form::open(['action' => ['Macro\ObtainController@obtainFood'], 'class' => '']) !!}
+    {!! Form::open(['route' => 'politic_learn_profession', 'class' => '']) !!}
     <input type="range" name="count" min="0" max="{{ $resources->free_people }}" step="5" value="0">
     <p></p>
     <p></p>
@@ -38,7 +38,7 @@
 
     {{--{!! Form::hidden('user_id', $attack->user_id, ['id' =>  '']) !!}--}}
 
-    {!! Form::open(['action' => ['MacroController@learnProfession'], 'class' => '']) !!}
+    {!! Form::open(['route' => 'politic_learn_profession', 'class' => '']) !!}
     Оставить людей обучаться ремеслу у того, кто владеет им
     <select class="form-control" id="empl_kind" name="kind">
         <option value="smith_kind">Изучать кузнечное ремесло (без кузницы)</option>

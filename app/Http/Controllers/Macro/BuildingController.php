@@ -15,7 +15,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
-class BuildingController extends MacroController
+class BuildingController extends PoliticController
 {
     public function index()
     {

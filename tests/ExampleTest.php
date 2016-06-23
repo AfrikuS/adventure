@@ -13,7 +13,9 @@ class ExampleTest extends TestCase
      */
     public function testBasicExample()
     {
-        $this->visit('/')
-             ->see('Laravel 5');
+        $this->visit('/sign_in')
+             ->see('Sign In Page');
+
+        $this->assertPageLoaded('/sign_in');
     }
 }

@@ -14,7 +14,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 
-class ExchangeController extends MacroController
+class ExchangeController extends PoliticController
 {
     public function index()
     {

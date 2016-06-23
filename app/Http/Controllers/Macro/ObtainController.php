@@ -3,17 +3,14 @@
 namespace App\Http\Controllers\Macro;
 
 use App\Http\Controllers\MacroController;
+use App\Http\Requests;
 use App\Http\Requests\Process\EmploymentRequest;
 use App\Models\Macro\Timer;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
-class ObtainController extends MacroController
+class ObtainController extends PoliticController
 {
     public function index()
     {

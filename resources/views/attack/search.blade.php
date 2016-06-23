@@ -24,7 +24,7 @@
                                         <td><div class="timer" data-seconds-left={{ $attack->duration_seconds }}></div></td>
                                     @else
                                         <td>
-                                            {!! Form::open(['action' => ['AttackController@attack'], 'class' => '']) !!}
+                                            {!! Form::open(['roue' => 'attack_enemy_action', 'class' => '']) !!}
                                             {!! Form::hidden('user_id', $attack->defense_user_id, ['id' =>  '']) !!}
                                             {!! Form::submit('Напасть', array('class' => 'btn btn-primary')) !!}
                                             {!! Form::close() !!}
@@ -38,7 +38,7 @@
             </div>
             <p></p>
             <p>
-            {!! Form::open(['action' => ['AttackController@searchOpponent'], 'class' => '']) !!}
+            {!! Form::open(['route' => 'search_enemy_action', 'class' => '']) !!}
             {!! Form::submit('Искать случайного соперника', array('class' => 'btn btn-primary')) !!}
             {!! Form::close() !!}
         </div>

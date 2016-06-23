@@ -3,21 +3,11 @@
 namespace App\Http\Controllers\Macro;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Process\BuildRequest;
-use App\Http\Requests\Process\EmploymentRequest;
-use App\Models\Macro\Building;
-use App\Models\Macro\Resources;
-use App\Models\Macro\Timer;
-use App\Repositories\Macro\ProcessRepository;
-use Carbon\Carbon;
-use Exception;
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
+use App\Models\Macro\Building;
+use App\Repositories\Macro\ProcessRepository;
 
-class MacroController extends Controller
+class PoliticController extends Controller
 {
     public function index ()
     {

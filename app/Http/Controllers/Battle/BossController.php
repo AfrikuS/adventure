@@ -32,12 +32,12 @@ class BossController extends Controller
                 case 'BOSS_END': {
                     $workers = BossRepository::getUsers($boss->id);
 
-                    DB::beginTransaction();
+                    \DB::beginTransaction();
 
                     BossTimerRepository::delete($boss->id);
                     BossRepository::deleteUsers($boss->id);
                     BossRepository::delete($boss->id);
-                    DB::commit();
+                    \DB::commit();
 
                     return $this->view('mass/boss/boss_end', [
                         'mass_work' => $boss,
@@ -56,10 +56,11 @@ class BossController extends Controller
                     ]);
                 }
                 case 'NO_BOSS': {
-                    $massworks = BossRepository::getAll();
+                    $bosses = BossRepository::getAll();
+
 
                     return $this->view('mass/boss/index', [
-                        'mass_works' => $massworks,
+                        'bosses' => $bosses,
                     ]);
                 }
                 default: {
