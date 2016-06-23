@@ -181,6 +181,10 @@ Route::group(['middleware' => 'app_auth'], function () {
     Route::post('/generate/work/create_instrument', 'DataGeneratorController@createInstrument')->name('create_work_instrument_action');
     Route::get('/delete/work/teamorder/{id}', 'DataGeneratorController@deleteWorkTeamOrder')->name('work_delete_teamorder_action');
 
+    // inner-api
+    Route::get('api/geo/locations', 'Api\Geo\LocationsController@locations')->name('api_geo_locations');
+    
+    
 
     // OTHER / mass-actions on socket.io
     Route::get('/maxovik', 'Mass\MaxovikController@index')->name('maxovik_page');

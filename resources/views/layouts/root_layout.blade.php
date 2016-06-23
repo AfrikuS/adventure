@@ -105,10 +105,11 @@
         $(function(){
             $('.timer').startTimer(options);
         });
+
+    @yield('scripts')
     </script>
 @show
 
-@yield('scripts')
 
 </body>
 </html>

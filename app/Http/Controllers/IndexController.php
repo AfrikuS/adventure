@@ -59,7 +59,7 @@ class IndexController extends GuestController
     public function test ()
     {
 
-        $this->dispatch(new SendMessageToWorker());
+/*        $this->dispatch(new SendMessageToWorker());
         Queue::pushOn('emails', new SendMessageToWorker());
 
         $job = (new SendMessageToWorker())->onQueue('post_messages');
@@ -69,7 +69,7 @@ class IndexController extends GuestController
 
         $date = Carbon::now()->addSeconds(25);
 
-        Queue::later($date, new SendMessageToWorker());
+        Queue::later($date, new SendMessageToWorker());*/
 
 //        $allUSers = User::get();
 //
