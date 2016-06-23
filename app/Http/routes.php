@@ -17,6 +17,7 @@ Route::group(['middleware' => 'app_auth'], function () {
     Route::get('/profile/channels', 'Profile\ProfileController@channels')->name('profile_channels_page');
 
 
+    // work-module
 //    Route::get('/work/mine', 'Work\MineController@index')->name('work_mine_page');
 //    Route::get('/work/mine/create_teamwork', 'Work\MineController@createSingleTeamWork')->name('work_create_single_teamwork_page');
 //    Route::post('/work/mine/commit_privateteam_action', 'Work\TeamworksController@commitPrivateteamAction')->name('work_commit_privateteam_action');
@@ -83,7 +84,7 @@ Route::group(['middleware' => 'app_auth'], function () {
 
 
 
-
+    // macro-module
     Route::get('/macro', 'MacroController@index')->name('macro_page');
     Route::get('/macro/obtain', 'Macro\ObtainController@index')->name('macro_obtain_page');
     Route::get('/macro/buildings', 'Macro\BuildingController@index')->name('macro_buildings_page');
@@ -99,12 +100,13 @@ Route::group(['middleware' => 'app_auth'], function () {
     Route::post('/macro/profession', 'MacroController@learnProfession');
 
 
+    // admin
+    Route::get('/admin', 'Admin\AdminController@index')->name('admin_page');
 
 
 
     Route::get('/', 'IndexController@index')->name('index_page');
     Route::get('/test', 'IndexController@test')->name('test_page');
-    Route::get('/admin', 'Admin\AdminController@index')->name('admin_page');
 
     // team-order-constructor
     Route::get('/admin/orders', 'Admin\OrderBuilder\TeamOrderBuilderController@orderDrafts')->name('admin_orderdrafts_page');
@@ -118,8 +120,6 @@ Route::group(['middleware' => 'app_auth'], function () {
     Route::post('/admin/accept_orderdraft', 'Admin\OrderBuilder\TeamOrderBuilderController@acceptOrderDraft')->name('admin_accept_orderdraft_action');
     
     
-    // mass-actions on socket.io
-    Route::get('/maxovik', 'Mass\MaxovikController@index')->name('maxovik_page');
 
     
     // geo-module
@@ -150,24 +150,24 @@ Route::group(['middleware' => 'app_auth'], function () {
 
     
     // battle-module
-    Route::get('/search', 'AttackController@searchPage')->name('search_page');
-    Route::post('/search', 'AttackController@searchOpponent')->name('search_enemy_action');
-    Route::post('/attack', 'AttackController@attack')->name('attack_enemy_action');
+    Route::get('/search', 'Battle\AttackController@searchPage')->name('search_page');
+    Route::post('/search', 'Battle\AttackController@searchOpponent')->name('search_enemy_action');
+    Route::post('/attack', 'Battle\AttackController@attack')->name('attack_enemy_action');
 
-    Route::get('/bodalka', 'BodalkaController@index')->name('bodalka_page');
-    Route::post('/bodalka', 'BodalkaController@start')->name('bodalka_start_action');
+    Route::get('/bodalka', 'Battle\BodalkaController@index')->name('bodalka_page');
+    Route::post('/bodalka', 'Battle\BodalkaController@start')->name('bodalka_start_action');
 
-    Route::get('/boss', 'Mass\BossController@index')->name('boss_page');
-    Route::post('/boss_create', 'Mass\BossController@boss_create')->name('boss_create_action');
-    Route::post('/boss_join', 'Mass\BossController@boss_join')->name('boss_join_action');
-    Route::post('/boss_kick', 'Mass\BossController@boss_kick')->name('boss_kick_action');
+    Route::get('/boss', 'Battle\BossController@index')->name('boss_page');
+    Route::post('/boss_create', 'Battle\BossController@boss_create')->name('boss_create_action');
+    Route::post('/boss_join', 'Battle\BossController@boss_join')->name('boss_join_action');
+    Route::post('/boss_kick', 'Battle\BossController@boss_kick')->name('boss_kick_action');
 
 
 
-    // trading module
-    Route::get('/auction', 'AuctionController@index')->name('auction_page');
-    Route::post('/auction/add_lot', 'AuctionController@addLot')->name('auction_add_lot_action');
-    Route::post('/auction/buy', 'AuctionController@buy')->name('auction_buy_lot_action');
+    // trade module
+    Route::get('/auction', 'Trade\AuctionController@index')->name('auction_page');
+    Route::post('/auction/add_lot', 'Trade\AuctionController@addLot')->name('auction_add_lot_action');
+    Route::post('/auction/buy', 'Trade\AuctionController@buy')->name('auction_buy_lot_action');
 
     // fixture methods
     Route::post('/generate/geo/travel', 'DataGeneratorController@generateTravel')->name('sea_generate_travel_action');
@@ -183,6 +183,8 @@ Route::group(['middleware' => 'app_auth'], function () {
     Route::get('/delete/work/teamorder/{id}', 'DataGeneratorController@deleteWorkTeamOrder')->name('work_delete_teamorder_action');
 
 
+    // OTHER / mass-actions on socket.io
+    Route::get('/maxovik', 'Mass\MaxovikController@index')->name('maxovik_page');
 });
 
 
