@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Session;
 // todo review -> add fsm
 class TravelRouteController extends Controller
 {
-    public function buildRoute($id)
+    public function editRoute($id)
     {
         $locs = LocationsRepository::getLocationsWithNexts();
 
@@ -68,7 +68,7 @@ class TravelRouteController extends Controller
 
         $route = TravelRoute::with('points')->find($route_id);
 
-        if ($route->status == 'commited') { // todo replace == 'forming'
+        if ($route->status === 'commited') { // todo replace == 'forming'
             Session::flash('message', 'Route is commited yet!!!');
         }
         else {
@@ -91,6 +91,7 @@ class TravelRouteController extends Controller
         else {
             $lastPoint = $route->points->last();
             $lastPoint->update(['status' => 'final']);
+            $route->update(['status', 'commited']);
         }
         
         return \Redirect::route('geo_route_build_page', ['id' => $route->id]);

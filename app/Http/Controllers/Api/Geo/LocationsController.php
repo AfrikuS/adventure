@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Geo;
 use App\Http\Controllers\Controller;
 use App\Models\Geo\LocationPath;
 use App\Repositories\Geo\LocationsRepository;
+use stdClass;
 
 class LocationsController extends Controller
 {
@@ -30,10 +31,12 @@ class LocationsController extends Controller
 
 //        $nodes = $locations-> toArray(); //pluck('title', 'id'); // ->toArray();
 
-        $data = [
-            ['nodes' => $nodes],
-            ['edges' => $edges]
-        ];
+        $data = new stdClass();
+        $data->nodes = $nodes;
+        $data->edges = $edges;
+//            ['nodes' => ],
+//            ['edges' => $edges]
+//        ];
 
 
 //        json_encode($array);

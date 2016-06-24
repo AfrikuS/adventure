@@ -9,7 +9,7 @@
 
     <ul>
         <li>{{ link_to_route('geo_travels_page', 'Рейсы \ Отправления') }}</li>
-        <li>{{ link_to_route('geo_map_page', 'Локации \ Карта') }}</li>
+        <li>{{ link_to_route('geo_index_page', 'Порт - Главная') }}</li>
         <li>{{ link_to_route('geo_live_voyage_page', 'Live Travels (new)') }}</li>
     </ul>
     <p></p>
@@ -22,36 +22,6 @@
     <p></p>
 
 
-    @if(count($travelShips) > 0)
-        <table class="table table-condensed">
-            <table class="table table-bordered table-hover">
-                <thead>
-                <tr>
-                    <th>LOT ID</th>
-                    <th>destination</th>
-                    <th>resource_code</th>
-                    <th>date_sending</th>
-                    <th>Покупка</th>
-                    <th>Действие</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($travelShips as $ship)
-                    <tr>
-                        <td>{{ $ship->id }}</td>
-                        <td>{{ $ship->destination }}</td>
-                        <td>{{ $ship->resource_code }}</td>
-                        <td><div class="timer" data-seconds-left={{ $ship->duration_seconds }}></div></td>
-                        <td>{{ link_to_route('sea_create_order_page', 'Выбрать', ['id' => $ship->id]) }}</td>
-                        <td>{{ link_to_route('sea_delete_travel_action', 'Del', ['id' => $ship->id]) }}</td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-        </table>
-    @else
-        Кораблей нет
-    @endif
 
     <p></p><p></p>
 

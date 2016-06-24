@@ -4,7 +4,11 @@ namespace App\Factories;
 
 use App\Models\Geo\Location;
 use App\Models\Geo\RoutePoint;
+use App\Models\Geo\Travel\MaterialPrice;
 use App\Models\Geo\TravelRoute;
+use App\Models\Geo\TravelShip;
+use App\Models\Work\Catalogs\WorkMaterial;
+use Carbon\Carbon;
 
 class GeoFactory
 {
@@ -45,6 +49,34 @@ class GeoFactory
             'status' => 'normal',
             'number' => $pointsCount + 1,
         ]);
+    }
+
+    public static function createTravelShipWithMaterials(int $location_id, Carbon $dateSending)
+    {
+        \DB::transaction(function () use ($location_id, $dateSending) {
+
+            $ship = TravelShip::create([
+                'destination_location_id' => $location_id,
+                'date_sending' => $dateSending->toDateTimeString(),
+            ]);
+
+            $materialsCount = 5;
+            $faker = \Faker\Factory::create();
+            // materials for shop-ship
+            $materials = WorkMaterial::get(['id', 'code'])->toArray();
+
+            for ($i = 0; $i < $materialsCount; $i++) {
+                $material = $faker->unique()->randomElement($materials);
+                $price = rand(3, 6);
+
+                MaterialPrice::create([
+                    'ship_id' => $ship->id,
+                    'code' => $material['code'],
+                    'material_id' => $material['id'],
+                    'price' => $price,
+                ]);
+            }
+        });
     }
 
 }

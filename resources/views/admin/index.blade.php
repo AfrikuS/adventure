@@ -11,7 +11,9 @@
 
     {{ link_to_route('admin_orderdrafts_page', 'Конструктор заказов') }}
     <p></p>
-    
+    {{ link_to_route('admin_locations_page', 'Редактор локаций') }}
+    <p></p>
+
     <ul class="nav nav-tabs">
         <li role="presentation" class="active"><a href="#">Награды</a></li>
         <li role="presentation"><a href="#">Тайминги</a></li>

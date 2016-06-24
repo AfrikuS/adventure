@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Geo;
+namespace App\Http\Controllers\Geo\Business;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\Geo\TravelRoute;
 use App\Models\Geo\Voyage;
+use App\Repositories\Geo\LocationsRepository;
+use App\Repositories\Geo\TravelRepository;
 use App\Repositories\Geo\TravelRoutesRepository;
 use App\Repositories\Geo\VoyagesRepository;
 use Illuminate\Support\Facades\Input;
@@ -13,6 +15,27 @@ use Illuminate\Support\Facades\Session;
 
 class VoyageController extends Controller
 {
+    public function index()
+    {
+        $travelShips = TravelRepository::getTravelShips();
+        $ordersTimers = TravelRepository::getActiveOrdersTimersByUser($this->user_id);
+
+        $routes = TravelRoutesRepository::getRoutes();
+        $voyages = VoyagesRepository::getVoyagesWithPointLocation();
+
+        $locations = LocationsRepository::getLocationsWithNexts();
+        $locationsSelect = $locations->pluck('title', 'id')->toArray();
+
+
+        return $this->view('geo.business.business_index', [
+            'travelShips' => $travelShips,
+            'ordersTimers' => $ordersTimers,
+            'voyages' => $voyages,
+            'routes' => $routes,
+            'locationsSelect'  => $locationsSelect,
+        ]);
+    }
+    
     public function createVoyage()
     {
         $data = Input::all();

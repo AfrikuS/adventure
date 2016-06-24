@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TravelOrder extends Model
 {
-    protected $table      = 'sea_travel_orders';
+    protected $table      = 'geo_travel_orders';
+    protected $primaryKey = 'id';
     public    $timestamps = false;
-    protected $fillable   = ['destination', 'resource_code', 'date_time', 'user_id', 'travel_id'];
+    protected $fillable   = ['traveler_id', 'ship_id', 'type', 'total_amount'];
 }

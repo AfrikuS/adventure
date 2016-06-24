@@ -7,42 +7,9 @@
 
 @section('center')
 
-    <div class="row row-offcanvas">
-        <div class="col-lg-12">
-            {{ link_to_route('geo_map_page', 'All Locations') }}
-            <p></p>
-            <h4>Список локаций и путей между ними</h4>
-            <p></p>
-            @if(count($locationsTableRows) > 0)
-                <table class="table table-condensed">
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th>Location</th>
-                            <th>next_paths</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($locationsTableRows as $locId => $locationData)
-                            <tr>
-                                <td>{{ $locationData['title'] }}</td>
-                                <td>
-                                    <ul>
-                                        @foreach($locationData['next_locations_title'] as $title)
-                                            <li>{{ $title }}</li>
-                                        @endforeach
-                                    </ul>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </table>
-            @else
-                Локаций нет
-            @endif
-        </div>
-    </div>
+    {{ link_to_route('geo_index_page', 'На главную Порта') }}
+    <p></p>
+    <h4>Редактор маршрута грузоперевозок</h4>
 
     <div class="row row-offcanvas">
         <div class="col-lg-4">
@@ -99,13 +66,47 @@
             <p>{!! Form::open(['route' => 'geo_add_routepoint_action', 'class' => '']) !!}
             <p>{!! Form::hidden('route_id', $route->id) !!}
             <p>{!! Form::select('location_id', $possibleLocationsSelect) !!}
-            <p>{!! Form::submit('Add route') !!}
+            <p>{!! Form::submit('Add route point') !!}
             {!! Form::close() !!}
 
         </div>
     </div>
 
 
+    <div class="row row-offcanvas">
+        <div class="col-lg-12">
+            @if(count($locationsTableRows) > 0)
+                <table class="table table-condensed">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>Location</th>
+                            <th>next_paths</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($locationsTableRows as $locId => $locationData)
+                            <tr>
+                                <td>{{ $locationData['title'] }}</td>
+                                <td>
+                                    <ul>
+                                        @foreach($locationData['next_locations_title'] as $title)
+                                            <li>{{ $title }}</li>
+                                        @endforeach
+                                    </ul>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </table>
+            @else
+                Локаций нет
+            @endif
+
+            <p></p>
+        </div>
+    </div>
 
 
 @endsection

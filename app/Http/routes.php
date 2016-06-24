@@ -118,35 +118,47 @@ Route::group(['middleware' => 'app_auth'], function () {
     Route::post('/admin/edit_orderdraft_1', 'Admin\OrderBuilder\TeamOrderBuilderController@editOrderDraftAction_1')->name('admin_edit_orderdraft_1_action');
     Route::post('/admin/edit_orderdraft_2', 'Admin\OrderBuilder\TeamOrderBuilderController@editOrderDraftAction_2')->name('admin_edit_orderdraft_2_action');
     Route::post('/admin/accept_orderdraft', 'Admin\OrderBuilder\TeamOrderBuilderController@acceptOrderDraft')->name('admin_accept_orderdraft_action');
-    
-    
+
+    // admin-geo
+    Route::get('/admin/locations', 'Admin\Geo\LocationsEditorController@index')->name('admin_locations_page');
+    Route::post('/admin/bind_locations', 'Admin\Geo\LocationsEditorController@bind')->name('admin_bind_locations_action');
+    Route::post('/admin/add_location', 'Admin\Geo\LocationsEditorController@addLocation')->name('admin_add_location_action');
+
+
+
+
+    // geo-module
+    Route::get('/geo/', 'Geo\GeoController@index')->name('geo_index_page');
+
+    Route::get('/geo/ship_shops', 'Geo\DockMarketController@index')->name('geo_dock_market_page');
+    Route::get('/geo/shipshop/{id}', 'Geo\DockMarketController@shipShop')->name('geo_travel_ship_shop_page');
+    Route::post('/geo/travel/ship_create_order', 'Geo\TravelController@createOrder')->name('travelship_create_order_action');
 
     
-    // geo-module
     Route::get('/geo/travel', 'Geo\TravelController@index')->name('geo_travels_page');
 
     Route::get('/geo/live_voyage', 'Geo\LiveVoyageController@index')->name('geo_live_voyage_page');
     Route::post('/geo/live_voyage_sail_to', 'Geo\LiveVoyageController@sailTo')->name('geo_live_sail_to_action');
     
 
-    Route::get('/geo', 'Geo\LocationController@index')->name('geo_map_page');
-    Route::get('/geo/location/{id}', 'Geo\LocationController@show')->name('geo_location_page');
-    Route::post('/geo/bind_locations', 'Geo\LocationController@bind')->name('geo_bind_locations_action');
-    Route::post('/geo/add_location', 'Geo\LocationController@addLocation')->name('geo_add_location_action');
 
-    Route::get('/geo/build_route/{id}', 'Geo\TravelRouteController@buildRoute')->name('geo_route_build_page');
+    Route::get('/geo/build_route/{id}', 'Geo\TravelRouteController@editRoute')->name('geo_route_build_page');
     Route::post('/geo/add_route', 'Geo\TravelRouteController@addRoute')->name('geo_add_route_action');
     Route::post('/geo/add_routepoint', 'Geo\TravelRouteController@addRoutePoint')->name('geo_add_routepoint_action');
     Route::post('/geo/delete_lastpoint', 'Geo\TravelRouteController@deleteLastpoint')->name('geo_delete_lastpoint_action');
     Route::post('/geo/final_route', 'Geo\TravelRouteController@finalRoute')->name('geo_final_route_action');
 
-    Route::post('/geo/create_voyage', 'Geo\VoyageController@createVoyage')->name('geo_create_voyage_action');
-    Route::post('/geo/voyage_start_sail', 'Geo\VoyageController@startSail')->name('geo_voyage_start_sail_action');
-    Route::post('/geo/voyage_moor', 'Geo\VoyageController@moor')->name('geo_voyage_moor_action');
-//    Route::resource('islands', 'Geo\IslandsController');
-    Route::get('/geo/travel/order/{travel_id}', 'Geo\TravelController@showOrder')->name('sea_create_order_page');
+    Route::get('/geo/business', 'Geo\Business\VoyageController@index')->name('geo_business_page');
+    Route::post('/geo/create_voyage', 'Geo\Business\VoyageController@createVoyage')->name('geo_create_voyage_action');
+    Route::post('/geo/voyage_start_sail', 'Geo\Business\VoyageController@startSail')->name('geo_voyage_start_sail_action');
+    Route::post('/geo/voyage_moor', 'Geo\Business\VoyageController@moor')->name('geo_voyage_moor_action');
+
     Route::post('/geo/travel/create_order', 'Geo\TravelController@createOrder')->name('sea_create_order_action');
 
+    
+    
+    
+    
     
     // battle-module
     Route::get('/search', 'Battle\AttackController@searchPage')->name('search_page');

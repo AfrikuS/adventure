@@ -1,33 +1,25 @@
 <?php
 
-namespace App\Http\Controllers\Geo;
+namespace App\Http\Controllers\Admin\Geo;
 
+use App\Factories\GeoFactory;
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
 use App\Models\Geo\Location;
-use App\Models\Geo\TravelRoute;
 use App\Repositories\Geo\LocationsRepository;
-use App\Repositories\Geo\TravelRoutesRepository;
-use App\Repositories\Geo\VoyagesRepository;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 use App\ViewModel\Geo\LocationsViewModel;
+use Illuminate\Support\Facades\Input;
 
-class LocationController extends Controller
+class LocationsEditorController extends Controller
 {
     public function index()
     {
         $locations = LocationsRepository::getLocationsWithNexts();
-        $routes = TravelRoutesRepository::getRoutes();
-        $voyages = VoyagesRepository::getVoyagesWithPointLocation();
 
         $locationsTableRows = LocationsViewModel::geoListLocationsPage($locations);
         $locationsSelect = $locations->pluck('title', 'id')->toArray();
-        
-        return $this->view('geo.locations', [
+
+        return $this->view('admin.geo.locations', [
             'locationsTableRows'  => $locationsTableRows,
-            'routes'  => $routes,
-            'voyages'  => $voyages,
             'locationsSelect'  => $locationsSelect,
         ]);
     }
@@ -36,9 +28,9 @@ class LocationController extends Controller
     {
         $title = Input::get('title');
 
-        Location::create($title);
+        GeoFactory::createLocation($title);
 
-        return \Redirect::route('geo_map_page');
+        return \Redirect::route('admin_locations_page');
     }
 
 
@@ -50,6 +42,7 @@ class LocationController extends Controller
         $location = Location::find($location_id);
         $location->locationsTo()->attach($nextLocation_id);
 
-        return \Redirect::route('geo_map_page');
+        return \Redirect::route('admin_locations_page');
     }
+
 }

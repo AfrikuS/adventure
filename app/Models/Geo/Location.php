@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Location extends Model
 {
-    protected $primaryKey = 'id';
     protected $table = 'geo_locations';
+    protected $primaryKey = 'id';
     public $timestamps = false;
     public $fillable = ['title'];
 

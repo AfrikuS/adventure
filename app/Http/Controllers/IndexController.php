@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Factories\GeoFactory;
 use App\Http\Controllers\Guest\GuestController;
 use App\Jobs\SendMessageToWorker;
 use App\Models\HeroThing;
@@ -58,6 +59,9 @@ class IndexController extends GuestController
 
     public function test ()
     {
+        $auctionStartStr = Carbon::create()->addMinutes(200);
+
+//        GeoFactory::createTravelShipWithMaterials(5, $auctionStartStr);
 
 /*        $this->dispatch(new SendMessageToWorker());
         Queue::pushOn('emails', new SendMessageToWorker());

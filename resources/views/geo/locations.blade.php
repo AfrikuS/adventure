@@ -3,82 +3,17 @@
 @section('title', 'Geo - Locations -> Main Map')
 @section('head')
     @parent
-    {{--<meta charset="UTF-8">--}}
-    {{--<meta content="utf-8" http-equiv="encoding">--}}
 
     <link rel="stylesheet" href="{{ asset('js/alchemy-0.4.1/alchemy.css') }}">
 
-
-    {{--<script src="http://d3js.org/d3.v3.min.js" ></script>--}}
     <script src="{{ asset('js/d3/d3.js') }}" charset="utf-8"></script>
     <script src="{{ asset('js/alchemy-0.4.1/scripts/vendor.js') }}"></script>
     <script src="{{ asset('js/alchemy-0.4.1/alchemy.js') }}"></script>
-    {{--<script type="text/javascript" src="http://cdn.graphalchemist.com/alchemy.min.js"></script>--}}
 @endsection
 
 @section('center')
 
-    <div class="row row-offcanvas">
-        <div class="col-lg-12">
-            <ul>
-                <li>{{ link_to_route('geo_travels_page', 'Рейсы \ Отправления') }}</li>
-                <li>{{ link_to_route('geo_map_page', 'Локации \ Карта') }}</li>
-                <li>{{ link_to_route('geo_live_voyage_page', 'Live Travels (new)') }}</li>
-            </ul>
-
-            <p></p>
-            <h4>Список локаций и путей между ними</h4>
-            <p></p>
-            <div id="alchemy" class="alchemy"></div>
-            <p></p>
-            <p></p>
-            @if(count($locationsTableRows) > 0)
-                <table class="table table-condensed">
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th>Location</th>
-                            <th>next_paths</th>
-                            <th>add_next</th>
-                            <th>action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($locationsTableRows as $locId => $locationColumns)
-                            <tr>
-                                <td>{{ $locationColumns['title'] }}</td>
-                                <td>
-                                    <ul>
-                                        @foreach($locationColumns['nextLocationsTitles'] as $nextTitle)
-                                            <li>{{ $nextTitle }}</li>
-                                        @endforeach
-                                    </ul>
-                                </td>
-                                @if (count($locationColumns['otherLocations']) > 0)
-                                    <td>
-                                        {!! Form::open(['route' => 'geo_bind_locations_action', 'class' => '']) !!}
-                                        {!! Form::hidden('location_id', $locId) !!}
-                                        {!! Form::select('next_location_id', $locationColumns['otherLocations']) !!}
-                                    </td>
-                                    <td>
-                                        {!! Form::submit('Add') !!}
-                                        {!! Form::close() !!}
-                                    </td>
-                                @else
-                                    <td></td>
-                                    <td></td>
-                                @endif
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </table>
-            @else
-                Локаций нет
-            @endif
-        </div>
-    </div>
-
+{{--
     <div class="row row-offcanvas">
         <div class="col-lg-8">
         </div>
@@ -140,6 +75,7 @@
         </div>
     </div>
 
+--}}
 
 @endsection
 

@@ -11,7 +11,7 @@
         <div class="col-lg-12">
             <ul>
                 <li>{{ link_to_route('geo_travels_page', 'Рейсы \ Отправления') }}</li>
-                <li>{{ link_to_route('geo_map_page', 'Локации \ Карта') }}</li>
+                <li>{{ link_to_route('geo_index_page', 'Порт - Главная') }}</li>
                 <li>{{ link_to_route('geo_live_voyage_page', 'Live Travels (new)') }}</li>
             </ul>
 

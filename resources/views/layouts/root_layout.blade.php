@@ -67,7 +67,7 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Geo<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li>{{ link_to_route('geo_map_page', 'Локации \ Карта мира') }}</li>
+                        <li>{{ link_to_route('geo_index_page', 'Порт') }}</li>
                         <li>{{ link_to_route('geo_live_voyage_page', 'Live Travels (new)') }}</li>
                         <li>{{ link_to_route('geo_travels_page', 'Travels \ Orders') }}</li>
                     </ul>

@@ -30,7 +30,7 @@ class AdminController extends Controller
         $skills = WorkSkill::get();
 
 
-        return $this->view('admin/index', [
+        return $this->view('admin.index', [
             'materials' => $materials,
             'instruments' => $instruments,
             'skills' => $skills,

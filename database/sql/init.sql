@@ -109,29 +109,40 @@ CREATE TABLE IF NOT EXISTS `hero_resource_channels` (
 
 
 
--- // sea
-CREATE TABLE IF NOT EXISTS `sea_travel_ships` (
+-- // geo-travel-shop
+CREATE TABLE IF NOT EXISTS `geo_travel_ships` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `destination` varchar(255) NOT NULL,
-    `resource_code` varchar(255) NOT NULL,
+    `destination_location_id` INT UNSIGNED NOT NULL,
     `date_sending` DATETIME NOT NULL,
-    PRIMARY KEY (`id`)
-);
-
-CREATE TABLE IF NOT EXISTS `sea_travel_orders` (
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `user_id` INT UNSIGNED NOT NULL,
-    `travel_id` INT UNSIGNED NOT NULL,
-    `destination` varchar(255) NOT NULL,
-    `resource_code` varchar(255) NOT NULL,
-    `date_time` DATETIME NOT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (travel_id) REFERENCES sea_travel_ships(id)
+    FOREIGN KEY (destination_location_id) REFERENCES geo_locations(id)
 );
---ALTER TABLE `sea_travel_orders` CHANGE `user_id` `sender_user_id` INT UNSIGNED NOT NULL; + foreign
 
+CREATE TABLE IF NOT EXISTS `travel_materials_prices` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `ship_id` INT UNSIGNED NOT NULL,
+    `code` varchar(255) NOT NULL,
+    `material_id` INT UNSIGNED NOT NULL,
+    `price` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (ship_id) REFERENCES geo_travel_ships(id),
+    FOREIGN KEY (material_id) REFERENCES work_catalog_materials(id),
+    UNIQUE KEY `unique_ship_material` (`ship_id`, `material_id`)
+);
 
+CREATE TABLE IF NOT EXISTS `geo_travel_orders` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `traveler_id` INT UNSIGNED NOT NULL,
+    `ship_id` INT UNSIGNED NOT NULL,
+    `type` varchar(255) NOT NULL,
+    `total_amount` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (traveler_id) REFERENCES users(id),
+    FOREIGN KEY (ship_id) REFERENCES geo_travel_ships(id),
+    UNIQUE KEY `unique_traveler_ship` (`traveler_id`, `ship_id`)
+);
+
++ travel_order_material : order, material
 -- geo locations
 CREATE TABLE IF NOT EXISTS `geo_locations` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
