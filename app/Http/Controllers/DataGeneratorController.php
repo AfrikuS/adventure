@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Work\WorkMaterial;
-use App\Models\Work\WorkInstrument;
-use App\Models\Work\WorkSkill;
-use App\Repositories\Generate\EntityGenerator;
-use Cartalyst\Sentinel\Users\IlluminateUserRepository;
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
+use App\Models\Work\Catalogs\Instrument;
+use App\Models\Work\Catalogs\Material;
+use App\Models\Work\Catalogs\Skill;
+use App\Repositories\Generate\EntityGenerator;
 use Illuminate\Support\Facades\Input;
 
 class DataGeneratorController extends Controller
@@ -55,7 +52,7 @@ class DataGeneratorController extends Controller
         $code = $data['code'];
         $title = $data['title'];
 
-        WorkMaterial::create([
+        Material::create([
             'code' => $code,
             'title' => $title,
         ]);
@@ -69,7 +66,7 @@ class DataGeneratorController extends Controller
         $code = $data['code'];
         $title = $data['title'];
 
-        WorkSkill::create([
+        Skill::create([
             'code' => $code,
             'title' => $title,
         ]);
@@ -83,7 +80,7 @@ class DataGeneratorController extends Controller
         $code = $data['code'];
         $title = $data['title'];
 
-        WorkInstrument::create([
+        Instrument::create([
             'code' => $code,
             'title' => $title,
         ]);

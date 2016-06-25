@@ -2,22 +2,18 @@
 
 namespace App\Repositories;
 
-use App\Models\HeroResources;
+use App\Models\Hero\Resources;
 use App\Models\User;
 
 class HeroResourcesRepository
 {
     public static function addGoldToUser($user, $value)
     {
-        HeroResources::find($user->id)->increment('gold', $value);
-//        $user->increment('gold', $value);
-//        $user->gold += $goldValue;
-//        $user->save();
+        Resources::find($user->id, ['id', 'gold'])->increment('gold', $value);
     }
 
     public static function subtractGoldFromUser($user, $value)
     {
-        HeroResources::find($user->id, ['id', 'gold'])->decrement('gold', $value);
-//        $resources->decrement('gold', $value);
+        Resources::find($user->id, ['id', 'gold'])->decrement('gold', $value);
     }
 }

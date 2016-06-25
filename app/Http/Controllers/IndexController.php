@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Factories\GeoFactory;
 use App\Http\Controllers\Guest\GuestController;
 use App\Jobs\SendMessageToWorker;
-use App\Models\HeroThing;
+use App\Models\Hero\Thing;
 use App\Models\Macro\Resources;
 use App\Models\User;
 use App\Models\UserRedis;
 use App\Models\Work\Team\TeamOrder;
+use App\Repositories\Work\OrderRepository;
+use App\StateMachines\Work\OrderStateMachine;
 use Carbon\Carbon;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Support\Facades\DB;
@@ -59,7 +61,25 @@ class IndexController extends GuestController
 
     public function test ()
     {
-        $auctionStartStr = Carbon::create()->addMinutes(200);
+
+        $a = null;
+
+        $b = $a == null ? $c = 4 : 5;
+
+/*
+        $order_id = 9;
+
+        $order = OrderRepository::findOrderById($order_id);
+        $orderSM = new OrderStateMachine($order);
+        $sm = $orderSM->getSM();
+
+        // Retrieve current state
+        $aa = $sm->getCurrentState();
+
+// Can we process a transition ?
+        $aa = $sm->can('finish_stock_materials');
+        $aa = $sm->apply('finish_stock_materials');*/
+
 
 //        GeoFactory::createTravelShipWithMaterials(5, $auctionStartStr);
 

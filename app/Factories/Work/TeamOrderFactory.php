@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Repositories\Work;
+namespace App\Factories\Work;
 
 use App\Models\Work\Team\TeamOrder;
 use App\Models\Work\Team\TeamOrderMaterial;
 use App\Models\Work\Team\TeamOrderSkill;
 
-class CatalogsRepository
+class TeamOrderFactory
 {
     public static function createTeamOrderMaterial(TeamOrder $order, string $code)
     {

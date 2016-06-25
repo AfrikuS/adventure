@@ -57,7 +57,7 @@
         <p>
         Кнопка начать работы (указано время работ)
         <p>
-        {!! Form::open(['route' => 'work_order_start_works_action', 'class' => 'form-signup']) !!}
+        {!! Form::open(['route' => 'work_order_apply_skill_action', 'class' => 'form-signup']) !!}
         {!! Form::hidden('order_id', $order->id, []) !!}
         {!! Form::submit('Начать работу', array('class' => 'btn btn-primary')) !!}
         {!! Form::close() !!}

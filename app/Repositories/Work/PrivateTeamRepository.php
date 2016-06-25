@@ -4,6 +4,7 @@ namespace App\Repositories\Work;
 
 use App\Models\User;
 use App\Models\Work\Team\PrivateTeam;
+use App\Models\Work\Worker;
 use Illuminate\Support\Facades\DB;
 
 class PrivateTeamRepository
@@ -55,5 +56,24 @@ class PrivateTeamRepository
             ->find($id, ['id', 'leader_worker_id', 'kind_work', 'status']);
 
         return $privateteam;
+    }
+
+    public static function getLeader(PrivateTeam $privateTeam)
+    {
+        return Worker::find($privateTeam->leader_worker_id);
+    }
+
+    /** @deprecated  */ // todo review
+    public static function getWorkersByTeam(PrivateTeam $team)
+    {
+        $workers = Worker::
+            select('id',  'status', 'privateteam_id', 'worker_user_id')
+            ->where('privateteam_id', $team->id)
+            ->with(['user' => function ($query) {
+                $query->select('id', 'name');
+            }])
+            ->get();
+
+        return $workers;
     }
 }

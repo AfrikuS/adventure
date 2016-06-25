@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin\OrderBuilder;
 
 use App\Http\Controllers\Controller;
-use App\Models\Work\Catalogs\WorkInstrument;
-use App\Models\Work\Catalogs\WorkMaterial;
-use App\Models\Work\Catalogs\WorkSkill;
+use App\Models\Work\Catalogs\Instrument;
+use App\Models\Work\Catalogs\Material;
+use App\Models\Work\Catalogs\Skill;
 use App\Models\Work\Team\TeamOrder;
 use App\Repositories\Work\Team\TeamOrderRepository;
 use App\Transactions\Admin\TeamOrderBuilder;
@@ -25,9 +25,9 @@ class TeamOrderBuilderController extends Controller
 
     public function createOrderDraft()
     {
-        $materials = WorkMaterial::get();
-        $instruments = WorkInstrument::get();
-        $skills = WorkSkill::get();
+        $materials = Material::get();
+        $instruments = Instrument::get();
+        $skills = Skill::get();
         
         return $this->view('admin.orders.create', [
             'materials' => $materials,
@@ -45,9 +45,9 @@ class TeamOrderBuilderController extends Controller
         $orderSkillsCodes = $orderDraft->skills()->select('code')->get()->lists('code')->toArray();
         $orderIstrumentsCodes = [];//$orderDraft->instruments()->select('code')->get()->lists('code')->toArray();
 
-        $materials = WorkMaterial::get();
-        $instruments = WorkInstrument::get();
-        $skills = WorkSkill::get();
+        $materials = Material::get();
+        $instruments = Instrument::get();
+        $skills = Skill::get();
 
         return $this->view('admin.orders.edit_1', [
             'draft' => $orderDraft,

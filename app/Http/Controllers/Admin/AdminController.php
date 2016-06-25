@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
-use App\Models\Work\Catalogs\WorkInstrument;
-use App\Models\Work\Catalogs\WorkMaterial;
-use App\Models\Work\Catalogs\WorkSkill;
+use App\Models\Work\Catalogs\Instrument;
+use App\Models\Work\Catalogs\Material;
+use App\Models\Work\Catalogs\Skill;
 
 class AdminController extends Controller
 {
@@ -23,11 +23,11 @@ class AdminController extends Controller
 //            'password' => bcrypt(123),
 //        ]);
 
-//        HeroResources::init();
+//        Resources::init();
 
-        $materials = WorkMaterial::get();
-        $instruments = WorkInstrument::get();
-        $skills = WorkSkill::get();
+        $materials = Material::get();
+        $instruments = Instrument::get();
+        $skills = Skill::get();
 
 
         return $this->view('admin.index', [

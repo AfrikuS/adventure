@@ -9,7 +9,7 @@ class ResourceChannel extends Model
     protected $table      = 'hero_resource_channels';
     protected $primaryKey = 'id';
     public    $timestamps = false;
-//    protected $fillable   = ['id'];
+    protected $fillable   = ['from_user_id', 'to_user_id', 'resource', 'tax_percent'];
 
     public function fromUser()
     {

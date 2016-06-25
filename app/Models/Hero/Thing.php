@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Hero;
 
 use Illuminate\Database\Eloquent\Model;
 
-class HeroThing extends Model
+class Thing extends Model
 {
     protected $table      = 'hero_things';
     public    $timestamps = false;

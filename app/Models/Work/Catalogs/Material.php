@@ -4,7 +4,7 @@ namespace App\Models\Work\Catalogs;
 
 use Illuminate\Database\Eloquent\Model;
 
-class WorkMaterial extends Model
+class Material extends Model
 {
     protected $table      = 'work_catalog_materials';
     protected $primaryKey = 'id';

@@ -76,18 +76,18 @@
 @section('right_column')
 
     @parent
-    Таймеры по заказам
-    <p>
-    @if(count($ordersTimers) > 0)
-        <ul>
-            @foreach($ordersTimers as $timer)
-                <li><div class="timer" data-seconds-left={{ $timer->duration_seconds }}></div></li>
-            @endforeach
-        </ul>
-    @endif
+    {{--Таймеры по заказам--}}
+    {{--<p>--}}
+    {{--@if(count($ordersTimers) > 0)--}}
+        {{--<ul>--}}
+            {{--@foreach($ordersTimers as $timer)--}}
+                {{--<li><div class="timer" data-seconds-left={{ $timer->duration_seconds }}></div></li>--}}
+            {{--@endforeach--}}
+        {{--</ul>--}}
+    {{--@endif--}}
 
-    <p></p>
-    <p></p>
+    {{--<p></p>--}}
+    {{--<p></p>--}}
 
     {!! Form::open(['route' => 'sea_generate_travel_action', 'class' => 'form-signup']) !!}
     {!! Form::submit('Сгенерить тревел', array('class' => 'btn btn-primary')) !!}

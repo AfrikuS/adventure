@@ -4,11 +4,10 @@ namespace App\Models\Work\Catalogs;
 
 use Illuminate\Database\Eloquent\Model;
 
-class WorkSkill extends Model
+class Instrument extends Model
 {
-    protected $table      = 'work_catalog_skills';
+    protected $table      = 'work_catalog_instruments';
     protected $primaryKey = 'id';
     public    $timestamps = false;
     protected $fillable   = ['code', 'title'];
-
 }

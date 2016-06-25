@@ -6,15 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\Battle\ResourceChannel;
 use App\Repositories\Work\SkillRepository;
+use App\Repositories\Work\Team\WorkerRepository;
 
 class ProfileController extends Controller
 {
     public function index()
     {
-        $userSkills = SkillRepository::getUserSkills(auth()->user());
+        $worker = WorkerRepository::findWithMaterialsAndSkillsById(\Auth::id());
+        $skills = $worker->skills;
 
         return $this->view('profile.profile', [
-            'skills' => $userSkills
+            'skills' => $skills
         ]);
     }
 

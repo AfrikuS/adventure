@@ -6,7 +6,7 @@ use App\Concerns\Auth\AppAuthenticatableTrait;
 use App\Models\Battle\Boss;
 use App\Models\Battle\ResourceChannel;
 use App\Models\Macro\Building;
-use App\Models\Work\Team\TeamWorker;
+use App\Models\Work\Worker;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,12 +27,12 @@ class User extends Model implements Authenticatable
     
     public function resources()
     {
-        return $this->hasOne(HeroResources::class, 'id', 'id');
+        return $this->hasOne(Resources::class, 'id', 'id');
     }
 
     public function worker()
     {
-        return $this->belongsTo(TeamWorker::class, 'id');
+        return $this->belongsTo(Worker::class, 'id');
     }
 
     public function buildings()

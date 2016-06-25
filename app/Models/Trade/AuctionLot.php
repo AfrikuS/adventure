@@ -13,6 +13,6 @@ class AuctionLot extends Model
 
     public function thing() // todo check
     {
-        return $this->hasOne(HeroThing::class, 'id', 'thing_id');
+        return $this->hasOne(Thing::class, 'id', 'thing_id');
     }
 }

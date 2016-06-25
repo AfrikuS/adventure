@@ -2,8 +2,9 @@
 
 namespace App\Http\Middleware\Work;
 
+use App\Models\Work\Order;
 use App\Repositories\Work\OrderRepository;
-use App\Repositories\Work\Team\TeamWorkerRepository;
+use App\Repositories\Work\Team\WorkerRepository;
 use Closure;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Input;
@@ -22,12 +23,19 @@ class OrderAcceptor
     {
         if (($order_id = $request->route()->parameter('id')) || ($order_id = $request->get('order_id'))) {
 
-            $worker = TeamWorkerRepository::findById(\Auth::id());
-            $order = OrderRepository::getOrderById($order_id);
+            $worker = WorkerRepository::findWithMaterialsAndSkillsById(\Auth::id());
+            /** @var Order $order */
+            $order = OrderRepository::findOrderWithMateriaslAndSkillsById($order_id);
 
-            if (OrderRepository::isOrderAcceptor($order, $worker)) {
+            if ($order->isAcceptedBy($worker)) {
+                $request->attributes->add([
+                    'worker' => $worker,
+                    'order' => $order,
+                ]);
+
                 return $next($request);
             }
+
         }
 
         Session::flash('message', 'This order not yours!');

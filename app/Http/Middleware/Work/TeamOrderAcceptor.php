@@ -3,7 +3,7 @@
 namespace App\Http\Middleware\Work;
 
 use App\Repositories\Work\Team\TeamOrderRepository;
-use App\Repositories\Work\Team\TeamWorkerRepository;
+use App\Repositories\Work\Team\WorkerRepository;
 use Closure;
 use Illuminate\Support\Facades\Session;
 use Redirect;
@@ -22,7 +22,7 @@ class TeamOrderAcceptor
         if ($order_id = $request->get('order_id')) {
 
             $order = TeamOrderRepository::getOrderById($order_id);
-            $worker = TeamWorkerRepository::findById(\Auth::id());
+            $worker = WorkerRepository::findById(\Auth::id());
             $team = $worker->team;
 
             if ($worker->team->id == $order->acceptor_team_id) {

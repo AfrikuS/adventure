@@ -17,10 +17,7 @@ class VoyageController extends Controller
 {
     public function index()
     {
-        $travelShips = TravelRepository::getTravelShips();
-        $ordersTimers = TravelRepository::getActiveOrdersTimersByUser($this->user_id);
-
-        $routes = TravelRoutesRepository::getRoutes();
+        $travelRoutes = TravelRoutesRepository::getRoutes();
         $voyages = VoyagesRepository::getVoyagesWithPointLocation();
 
         $locations = LocationsRepository::getLocationsWithNexts();
@@ -28,10 +25,8 @@ class VoyageController extends Controller
 
 
         return $this->view('geo.business.business_index', [
-            'travelShips' => $travelShips,
-            'ordersTimers' => $ordersTimers,
             'voyages' => $voyages,
-            'routes' => $routes,
+            'routes' => $travelRoutes,
             'locationsSelect'  => $locationsSelect,
         ]);
     }

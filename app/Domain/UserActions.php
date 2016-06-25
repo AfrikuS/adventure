@@ -2,7 +2,7 @@
 
 namespace App\Domain;
 
-use App\Models\HeroResources;
+use App\Models\Resources;
 use App\Models\Macro\Resources;
 use App\Models\User;
 use DB;
@@ -18,7 +18,7 @@ class UserActions
         ]);
 
         DB::transaction(function () use ($user) {
-            HeroResources::create(['id' => $user->id]);
+            Resources::create(['id' => $user->id]);
             Resources::create([
                 'id' => $user->id,
                 'food' => 5000,

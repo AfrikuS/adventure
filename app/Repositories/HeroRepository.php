@@ -2,18 +2,18 @@
 
 namespace App\Repositories;
 
-use App\Models\HeroThing;
+use App\Models\Hero\Thing;
 
 class HeroRepository
 {
     public static function getHeroThings($user)
     {
-        return HeroThing::select('id', 'title', 'status')->where('owner_id', $user->id)->get();
+        return Thing::select('id', 'title', 'status')->where('owner_id', $user->id)->get();
 
     }
 
     public static function findHeroThingById($id)
     {
-        return HeroThing::find($id, ['id', 'title', 'status']);
+        return Thing::find($id, ['id', 'title', 'status']);
     }
 }

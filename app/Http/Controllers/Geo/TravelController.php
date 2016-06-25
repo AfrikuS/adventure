@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Requests\SeaCreateOrderRequest;
 use App\Models\Geo\Travel\MaterialPrice;
-use App\Models\Geo\TravelShip;
 use App\Models\Work\Order;
 use App\Repositories\Geo\SeaRepository;
 use App\Repositories\Geo\VoyagesRepository;
@@ -18,14 +17,10 @@ class TravelController extends Controller
 {
     public function index()
     {
-        $travelShips = TravelRepository::getTravelShips();
-        $ordersTimers = []; //TravelRepository::getActiveOrdersTimersByUser($this->user_id);
-        
+
         $voyages = VoyagesRepository::getVoyagesWithPointLocation();
 
         return $this->view('geo.travel', [
-            'travelShips'=>$travelShips,
-            'ordersTimers' => $ordersTimers,
             'voyages' => $voyages,
         ]);
     }

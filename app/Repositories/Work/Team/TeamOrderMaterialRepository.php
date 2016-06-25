@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Work\Team;
 
-use App\Models\Work\WorkMaterial;
+use App\Models\Work\Material;
 use App\Models\Work\Order;
 use App\Models\Work\OrderMaterials;
 use App\Models\Work\Team\TeamOrder;

@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class OrderMaterials extends Model
 {
     protected $table      = 'work_order_materials';
-    public $timestamps    = false;
     protected $primaryKey = 'id';
+    public $timestamps    = false;
     protected $fillable   = ['order_id', 'code', 'need', 'stock'];
 
     public function order()
     {
-        return $this->hasOne(Order::class, 'id', 'order_id');
+        return $this->belongsTo(Order::class, 'order_id', 'id');
     }
 }

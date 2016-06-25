@@ -7,12 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\Work\ShopInstrument;
 use App\Models\Work\ShopMaterial;
-use App\Models\Work\UserInstrument;
+use App\Models\Work\Worker\UserInstrument;
+use App\Models\Work\Worker\WorkerInstrument;
 use App\Repositories\HeroResourcesRepository;
 use App\Repositories\ShopRepository;
 use App\Repositories\Work\OrderMaterialsRepository;
-use App\Repositories\Work\Team\TeamWorkerRepository;
-use App\Repositories\Work\UserMaterialsRepository;
+use App\Repositories\Work\Team\WorkerRepository;
+use App\Repositories\Work\WorkerMaterialsRepository;
 use App\Transactions\Work\ShopTransactions;
 use Illuminate\Support\Facades\Input;
 
@@ -21,7 +22,9 @@ class ShopController extends Controller
     public function index()
     {
         $shopMaterials = ShopMaterial::get(['code', 'price']);
-        $userMaterials = UserMaterialsRepository::getMaterialsByUser(auth()->user());
+        
+        $worker = WorkerRepository::findWithMaterialsAndSkillsById(\Auth::id());
+        $userMaterials = $worker->materials;
         
         return $this->view('work/shop/shop_materials', [
             'pricesMaterials' => $shopMaterials,
@@ -32,7 +35,7 @@ class ShopController extends Controller
     public function instruments()
     {
         $shopInstruments = ShopInstrument::get();
-        $userInstruments = UserInstrument::get();
+        $userInstruments = WorkerInstrument::get();
 
         return $this->view('work/shop/shop_instruments', [
             'shopInstruments' => $shopInstruments,
@@ -43,11 +46,11 @@ class ShopController extends Controller
     public function buyMaterial()
     {
         $materialCode = Input::get('material');
-        $worker = TeamWorkerRepository::findById(\Auth::id());
+        $worker = WorkerRepository::findWithMaterialsAndSkillsById(\Auth::id());
 
         $shopMaterial = ShopRepository::getSingleShopMaterialByCode($materialCode);
 
-        ShopTransactions::transferShopMaterialToUser($worker, $shopMaterial);
+        ShopTransactions::transferShopMaterialToWorker($worker, $shopMaterial);
 
         return \Redirect::route('work_shop_page');
     }
@@ -55,10 +58,11 @@ class ShopController extends Controller
     public function buyInstrument()
     {
         $instrumentCode = Input::get('instrument');
+        $worker = WorkerRepository::findWithMaterialsAndSkillsById(\Auth::id());
         
         $instrument = ShopRepository::getSingleInstrumentByCode($instrumentCode);
 
-        ShopTransactions::transferInstrumentToUser(auth()->user(), $instrument);
+        ShopTransactions::transferInstrumentToWorker($worker, $instrument);
 
         return redirect()->back();
     }

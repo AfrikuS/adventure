@@ -2,15 +2,15 @@
 
 namespace App\Transactions;
 
-use App\Models\HeroResources;
+use App\Models\Hero\Resources;
 
 class ResourcesTransactions
 {
 
     public static function transferGoldBetweenUsers($userFrom, $userTo, $amount)
     {
-        $from = HeroResources::find($userFrom->id, ['id', 'gold']);
-        $to = HeroResources::find($userTo->id, ['id', 'gold']);
+        $from = Resources::find($userFrom->id, ['id', 'gold']);
+        $to = Resources::find($userTo->id, ['id', 'gold']);
 
         \DB::transaction(function () use ($from, $to, $amount) {
 

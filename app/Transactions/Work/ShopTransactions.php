@@ -2,53 +2,42 @@
 
 namespace App\Transactions\Work;
 
-use App\Domain\Work\MaterialsActions;
-use App\Models\HeroResources;
+use App\Factories\Work\WorkerFactory;
+use App\Models\Hero\Resources;
 use App\Models\Work\ShopInstrument;
 use App\Models\Work\ShopMaterial;
-use App\Models\Work\UserInstrument;
-use App\Models\Work\UserMaterial;
+use App\Models\Work\Worker;
 use App\Repositories\HeroResourcesRepository;
-use App\Repositories\ShopRepository;
-use App\Repositories\Work\Team\TeamWorkerRepository;
+use App\Repositories\Work\Team\WorkerRepository;
 use Illuminate\Support\Facades\Session;
 
 class ShopTransactions
 {
-    public static function transferShopMaterialToUser($worker, ShopMaterial $shopMaterial)
+    public static function transferShopMaterialToWorker(Worker $worker, ShopMaterial $shopMaterial)
     {
-        $workerMaterial = TeamWorkerRepository::getMaterialByCode($worker, $shopMaterial->code);
+        $workerMaterial = $worker->getMaterialByCode($shopMaterial->code);
         
-        $userResources = HeroResources::select('id', 'gold')->findOrFail($worker->id);
+        $userResources = Resources::select('id', 'gold')->findOrFail($worker->id);
 
         \DB::transaction(function () use ($shopMaterial, $workerMaterial, $userResources) {
 
             $cost = $shopMaterial->price;
 
-            $workerMaterial->increment('value', 10);
+            $workerMaterial->increment('value', 70);
 
             $userResources->decrement('gold', $cost);
         });
     }
 
     // todo review / only first purchase
-    public static function transferInstrumentToUser($user, ShopInstrument $instrument)
+    public static function transferInstrumentToWorker($worker, ShopInstrument $instrument)
     {
-        $userResources = HeroResources::findOrFail($user->id, ['id', 'gold']);
-
         try {
-            \DB::transaction(function () use ($user, $instrument, $userResources) {
+            \DB::transaction(function () use ($worker, $instrument) {
 
-
-                UserInstrument::create([
-                    'worker_id' => $user->id,
-                    'code' => $instrument->code,
-                    'skill_level' => 0,
-                ]);
-
-                $instrumentPrice = $instrument->price;
-
-                $userResources->decrement('gold', $instrumentPrice);
+                WorkerFactory::createWorkerInstrument($worker, $instrument->code);
+                
+                HeroResourcesRepository::subtractGoldFromUser($worker, $instrument->price);
             });
         }
         catch (\Exception $e) {
@@ -57,5 +46,21 @@ class ShopTransactions
 
             redirect()->back();
         }
+    }
+
+    public static function transferShopMaterialToWorkerByCode(Worker $worker, $shopMaterial)
+    {
+        $workerMaterial = WorkerRepository::getMaterialByCode($worker, $shopMaterial->code);
+
+        $userResources = Resources::select('id', 'gold')->find($worker->id);
+
+        \DB::transaction(function () use ($shopMaterial, $workerMaterial, $userResources) {
+
+            $cost = $shopMaterial->price;
+
+            $workerMaterial->increment('value', 70);
+
+            $userResources->decrement('gold', $cost);
+        });
     }
 }

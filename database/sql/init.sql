@@ -109,38 +109,36 @@ CREATE TABLE IF NOT EXISTS `hero_resource_channels` (
 
 
 
--- // geo-travel-shop
-CREATE TABLE IF NOT EXISTS `geo_travel_ships` (
+CREATE TABLE IF NOT EXISTS `market_temp_shops` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `destination_location_id` INT UNSIGNED NOT NULL,
-    `date_sending` DATETIME NOT NULL,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (destination_location_id) REFERENCES geo_locations(id)
+    `date_ending` DATETIME NOT NULL,
+    PRIMARY KEY (`id`)
 );
+
 
 CREATE TABLE IF NOT EXISTS `travel_materials_prices` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `ship_id` INT UNSIGNED NOT NULL,
+    `shop_id` INT UNSIGNED NOT NULL,
     `code` varchar(255) NOT NULL,
     `material_id` INT UNSIGNED NOT NULL,
     `price` INT UNSIGNED NOT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (ship_id) REFERENCES geo_travel_ships(id),
+    FOREIGN KEY (shop_id) REFERENCES market_temp_shops(id),
     FOREIGN KEY (material_id) REFERENCES work_catalog_materials(id),
-    UNIQUE KEY `unique_ship_material` (`ship_id`, `material_id`)
+    UNIQUE KEY `unique_shop_material` (`shop_id`, `material_id`)
 );
 
-CREATE TABLE IF NOT EXISTS `geo_travel_orders` (
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `traveler_id` INT UNSIGNED NOT NULL,
-    `ship_id` INT UNSIGNED NOT NULL,
-    `type` varchar(255) NOT NULL,
-    `total_amount` INT UNSIGNED NOT NULL,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (traveler_id) REFERENCES users(id),
-    FOREIGN KEY (ship_id) REFERENCES geo_travel_ships(id),
-    UNIQUE KEY `unique_traveler_ship` (`traveler_id`, `ship_id`)
-);
+--CREATE TABLE IF NOT EXISTS `geo_travel_orders` (
+--    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+--    `traveler_id` INT UNSIGNED NOT NULL,
+--    `ship_id` INT UNSIGNED NOT NULL,
+--    `type` varchar(255) NOT NULL,
+--    `total_amount` INT UNSIGNED NOT NULL,
+--    PRIMARY KEY (`id`),
+--    FOREIGN KEY (traveler_id) REFERENCES users(id),
+--    FOREIGN KEY (ship_id) REFERENCES geo_travel_ships(id),
+--    UNIQUE KEY `unique_traveler_ship` (`traveler_id`, `ship_id`)
+--);
 
 + travel_order_material : order, material
 -- geo locations

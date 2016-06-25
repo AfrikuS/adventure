@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Geo;
 
+use App\Factories\GeoFactory;
+use App\Http\Controllers\Controller;
+use App\Http\Requests;
 use App\Models\Geo\LiveVoyage;
 use App\Repositories\Geo\LocationsRepository;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 
 class LiveVoyageController extends Controller
@@ -16,7 +15,6 @@ class LiveVoyageController extends Controller
     {
         $locations = LocationsRepository::getLocationsWithNexts();
 
-//        $liveVoyages = LiveVoyage::get();
         $user_id = \Auth::id();
 
         $voyage = LiveVoyage::select('id', 'location_id', 'status', 'traveler_id')
@@ -30,11 +28,7 @@ class LiveVoyageController extends Controller
             ->first();
 
         if ($voyage == null) {
-            $voyage = LiveVoyage::create([
-                'location_id' => 6,
-                'traveler_id' => $user_id,
-                'status' => 'ready_to_sail',
-            ]);
+            GeoFactory::createVoyage(6, $user_id);
         }
 
         $currentLocation = $voyage->location;

@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\User;
 use App\Models\Work\Team\PrivateTeam;
-use App\Models\Work\Team\TeamWorker;
+use App\Models\Work\Worker;
 use App\Repositories\Work\PrivateTeamRepository;
-use App\Repositories\Work\Team\TeamWorkerRepository;
+use App\Repositories\Work\Team\WorkerRepository;
 use App\Transactions\Work\Team\PrivateTeamTransactions;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
@@ -41,7 +41,7 @@ class PrivateTeamController extends Controller
 
     public function createPrivateteamAction()
     {
-        $leader = TeamWorkerRepository::findById(auth()->id());
+        $leader = WorkerRepository::findById(auth()->id());
 
         // begin organise teamwork
         $team = PrivateTeamRepository::createPrivateTeamwork($leader);
@@ -57,10 +57,10 @@ class PrivateTeamController extends Controller
         $team_id = $data['privateteam_id'];
 
         $team = PrivateTeamRepository::getTeamWithCreatorAndPartnersById($team_id);
-        $worker = TeamWorkerRepository::findById($worker_id); // todo offers from workers
+        $worker = WorkerRepository::findById($worker_id); // todo offers from workers
 
         // todo exclude validate to middleware
-        if ($worker && TeamWorkerRepository::workerHaveNotTeam($worker)) {
+        if ($worker && WorkerRepository::workerHaveNotTeam($worker)) {
 
             PrivateTeamTransactions::addWorkerToTeam($worker, $team);
 
@@ -94,7 +94,7 @@ class PrivateTeamController extends Controller
 
 //        $name = \Auth::getName();
 
-        $worker = TeamWorkerRepository::findById(\Auth::id());
+        $worker = WorkerRepository::findById(\Auth::id());
         $team = PrivateTeamRepository::getTeamWithCreatorAndPartnersById($team_id);
 
         if ($worker->id == $team->leader->id) {
@@ -127,7 +127,7 @@ class PrivateTeamController extends Controller
             DB::transaction(function () use ($team) {
 
                 foreach ($team->partners as $partner) {
-                    $worker = PrivateTeamRepository::createTeamWorker($partner, $team);
+                    $worker = PrivateTeamRepository::createWorker($partner, $team);
                 }
 
                 $team->status = 'committed';

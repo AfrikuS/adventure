@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models\Work;
+namespace App\Models\Work\Worker;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UserInstrument extends Model
+class WorkerInstrument extends Model
 {
     protected $table      = 'work_worker_instruments';
     protected $primaryKey = 'id';

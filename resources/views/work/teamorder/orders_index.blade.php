@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Sea -> Travel Port')
+@section('title', 'Work - Team-Orders')
 @section('head')
     @parent
 @endsection
@@ -32,7 +32,7 @@
                     <tr>
                         <td>{{ $order->id }}</td>
                         <td>
-                            {!! Form::open(['route' => 'work_accept_teamorder_page', 'class' => 'form-signup']) !!}
+                            {!! Form::open(['route' => 'work_accept_teamorder_action', 'class' => 'form-signup']) !!}
                             {!! Form::hidden('order_id', $order->id, []) !!}
                             {!! Form::submit('Accept', array('class' => 'btn btn-primary')) !!}
                             {!! Form::close() !!}

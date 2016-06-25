@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware\Work;
 
-use App\Repositories\Work\Team\TeamWorkerRepository;
+use App\Repositories\Work\Team\WorkerRepository;
 use Closure;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -19,7 +19,7 @@ class WorkerLeaderOnlyOneTeam
     public function handle($request, Closure $next)
     {
         $user = \Auth::user();
-        $worker = TeamWorkerRepository::findById($user->id);
+        $worker = WorkerRepository::findById($user->id);
 //        $hasTeam = $worker->team->select('id')->get()->first(); // hasTeam todo ?
         $hasTeamYet = $worker->team !== null;
 

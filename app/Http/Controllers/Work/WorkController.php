@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Work;
 
+use App\Factories\WorkFactory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
-use App\Repositories\Work\Team\TeamWorkerRepository;
+use App\Models\Work\Worker;
 
 class WorkController extends Controller
 {
@@ -12,10 +13,11 @@ class WorkController extends Controller
     {
         $user = auth()->user();
 
-        // protect access to this page todo
-        TeamWorkerRepository::findOrCreate($user);
+        if (null === Worker::find($user->id)) {
+            WorkFactory::createWorker($user);
+        }
 
-        return $this->view('work/work_index', [
+        return $this->view('work.work_index', [
         ]);
     }
 }

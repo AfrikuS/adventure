@@ -2,8 +2,8 @@
 
 namespace App\Transactions\Admin;
 
-use App\Models\Work\Catalogs\WorkMaterial;
-use App\Models\Work\Catalogs\WorkSkill;
+use App\Models\Work\Catalogs\Material;
+use App\Models\Work\Catalogs\Skill;
 use App\Models\Work\Team\TeamOrder;
 use App\Models\Work\Team\TeamOrderMaterial;
 use App\Models\Work\Team\TeamOrderSkill;
@@ -34,7 +34,7 @@ class TeamOrderBuilder
             $order = $this->createSimpleOrder();
             
             if (count($this->materialsIds) > 0) {
-                $materials = WorkMaterial::whereIn('id', $this->materialsIds)->get();
+                $materials = Material::whereIn('id', $this->materialsIds)->get();
                 
                 $materials->each(function ($material, $key) use ($order) {
                     $this->createMaterial($order, $material->code, 8);
@@ -42,7 +42,7 @@ class TeamOrderBuilder
             }
             
             if (count($this->skillsIds) > 0) {
-                $materials = WorkSkill::whereIn('id', $this->skillsIds)->get();
+                $materials = Skill::whereIn('id', $this->skillsIds)->get();
                 
                 $materials->each(function ($skill, $key) use ($order) {
                     $this->createSkill($order, $skill->code, 8);

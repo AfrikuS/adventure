@@ -2,42 +2,49 @@
 
 namespace App\Transactions\Work;
 
-use App\Models\Work\WorkMaterial;
+use App\Factories\WorkFactory;
 use App\Models\Work\Order;
-use App\Models\Work\OrderMaterials;
-use App\Models\Work\WorkSkill;
+use App\Models\Work\Worker;
 use App\Repositories\HeroResourcesRepository;
-use App\Repositories\Work\OrderMaterialsRepository;
-use App\Repositories\Work\SkillRepository;
-use App\Repositories\Work\UserMaterialsRepository;
 
 class OrderTransactions
 {
-    public static function transferMaterialFromUserToOrder($user, OrderMaterials $orderMaterial)
+    public static function transferMaterialFromWorkerToOrder(Worker $worker, Order $order, string $materialCode)
     {
-        $userMaterial = UserMaterialsRepository::getSingleUserMaterialByCode($user, $orderMaterial->code);
+        $orderMaterial = $order->getMaterialByCode($materialCode);
+        $workerMaterial = $worker->getMaterialByCode($materialCode);
+
         $amount = $orderMaterial->need - $orderMaterial->stock;
 
-        \DB::transaction(function () use ($orderMaterial, $userMaterial, $amount) {
+        \DB::transaction(function () use ($orderMaterial, $workerMaterial, $amount) {
 
             $orderMaterial->stock += $amount;
             $orderMaterial->save();
-            $userMaterial->value -=  $amount;
-            $userMaterial->save();
+
+            $workerMaterial->value -=  $amount;
+            $workerMaterial->save();
         });
 
     }
-    public static function transferOrderRewardToUser(Order $order, $user)
+    public static function transferOrderRewardToWorker(Order $order, Worker $worker)
     {
-        \DB::transaction(function () use ($order) {
+        $skillCode = 'pokraska';
+//        $rewardGold = 400;
+        
+        $workerSkill = $worker->getSkillByCode('pokraska');
+        
+        if ($workerSkill === null) {
+            $workerSkill = WorkFactory::createWorkerSkill($worker, $skillCode);
+        }
 
-            $skillCode = $order->kind_work_title;
+        $user = $worker->user()->first();
+        \DB::transaction(function () use ($workerSkill, $user, $order) {
 
-            SkillRepository::addSkillToUserByCode(auth()->user(), $skillCode);
 
-            HeroResourcesRepository::addGoldToUser(auth()->user(), $order->price);
+            $workerSkill->value += 12;
+            $workerSkill->save();
+
+            HeroResourcesRepository::addGoldToUser($user, $order->price);
         });
-
-        return true;
     }
 }

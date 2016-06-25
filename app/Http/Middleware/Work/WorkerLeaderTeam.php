@@ -4,7 +4,7 @@ namespace App\Http\Middleware\Work;
 
 use App\Models\Work\Team\PrivateTeam;
 use App\Repositories\Work\PrivateTeamRepository;
-use App\Repositories\Work\Team\TeamWorkerRepository;
+use App\Repositories\Work\Team\WorkerRepository;
 use Closure;
 use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -23,7 +23,7 @@ class WorkerLeaderTeam
         if ($team_id = $request->get('privateteam_id')) {
 
 //            $user = \Auth::user();
-            $worker = TeamWorkerRepository::findById(\Auth::id());
+            $worker = WorkerRepository::findById(\Auth::id());
             $team = PrivateTeamRepository::getTeamWithCreatorAndPartnersById($team_id);
 
             if ($worker && $team && $team->leader_worker_id == $worker->id) {

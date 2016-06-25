@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\HeroThing;
+use App\Models\Hero\Thing;
 use App\Models\Trade\AuctionLot;
 
 class AuctionRepository
@@ -21,7 +21,7 @@ class AuctionRepository
 
     public static function getThingsByUserId($userId)
     {
-        $things = HeroThing::where('owner_id', $userId)->get(['id', 'title']);
+        $things = Thing::where('owner_id', $userId)->get(['id', 'title']);
         return $things;
     }
 

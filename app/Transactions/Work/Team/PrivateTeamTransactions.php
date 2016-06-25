@@ -3,7 +3,7 @@
 namespace App\Transactions\Work\Team;
 
 use App\Models\Work\Team\PrivateTeam;
-use App\Models\Work\Team\TeamWorker;
+use App\Models\Work\Worker;
 use App\Repositories\Work\PrivateTeamRepository;
 
 class PrivateTeamTransactions
@@ -24,12 +24,12 @@ class PrivateTeamTransactions
         });
     }
 
-    public static function addWorkerToTeam(TeamWorker $worker, PrivateTeam $team)
+    public static function addWorkerToTeam(Worker $worker, PrivateTeam $team)
     {
         $team->partners()->save($worker);
     }
 
-    public static function excludeWorkerFromTeam(TeamWorker $worker, PrivateTeam $team)
+    public static function excludeWorkerFromTeam(Worker $worker, PrivateTeam $team)
     {
         \DB::transaction(function () use ($worker) {
             $worker->team_id = null;

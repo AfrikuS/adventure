@@ -6,45 +6,77 @@ use App\Domain\Work\MaterialsActions;
 use App\Models\Work\Order;
 use App\Models\Work\OrderMaterials;
 use App\Models\Work\UserMaterial;
-use App\Models\Work\WorkSkill;
+use App\Models\Work\Catalogs\Skill;
+use App\Models\Work\Worker;
 use App\Repositories\HeroResourcesRepository;
-use App\Repositories\Work\UserMaterialsRepository;
+use App\Repositories\Work\Team\WorkerRepository;
+use App\Repositories\Work\WorkerMaterialsRepository;
 use App\Repositories\Work\OrderMaterialsRepository;
 use App\Repositories\Work\OrderRepository;
 use App\Repositories\Work\SkillRepository;
+use App\StateMachines\Work\OrderStateMachine;
 use App\Transactions\Work\OrderTransactions;
+use App\ViewModel\WorkViewModels;
+use Finite\Exception\StateException;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
 class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::get();
+        $freeOrders = Order::where('status', 'free')->get();
+        $workerOrders = WorkerRepository::getSingleOrders(\Auth::id());
 
-        return $this->view('work/order/orders_index', [
-            'orders' => $orders,
+        return $this->view('work.order.orders_index', [
+            'orders' => $freeOrders,
+            'workerOrders' => $workerOrders,
         ]);
     }
 
-    public function showOrder($id)
+    public function acceptOrder()
     {
-        $order = OrderRepository::getOrderById($id);
+        $data = Input::all();
+        $order_id = $data['order_id'];
+        $user_id = \Auth::id();
 
-        $orderMaterials = OrderMaterialsRepository::getOrderMaterials($order);
+        $order = OrderRepository::findOnlyOrderById($order_id);
+        $orderSM = new OrderStateMachine($order);
+
+        $orderSM->accept($user_id);
+
+        return Redirect::route('work_show_order_page', ['id' => $order->id]);
+    }
+
+    public function showOrder(Request $request, $id)
+    {
+        /** @var Worker $worker*/
+        $worker = $request->get('worker');
+        if ($worker === null) {
+            $worker = WorkerRepository::findWithMaterialsAndSkillsById(\Auth::id());
+        }
+
+        /** @var Order $order */
+        $order = $request->get('order');
+        if ($order === null) {
+            $order = OrderRepository::findOrderWithMateriaslAndSkillsById($id);
+        }
+
+        $orderMaterials = $order->materials;
 
         $orderReadyToBeginWorks = OrderRepository::isOrderReadyToWorks($order);
 
-        $userMaterials = UserMaterialsRepository::getMaterialsSameOrder(auth()->user(), $order);
+        $workerNeedMaterials = WorkViewModels::getWorkerMaterialsNeedForOrder($order, $worker);
 
-        return $this->view('work/order/show_order', [
+        return $this->view('work.order.show_order', [
             'order' => $order,
             'orderMaterials' => $orderMaterials,
-            'userMaterials' => $userMaterials,
+            'userMaterials' => $workerNeedMaterials,
             'orderReady' => $orderReadyToBeginWorks,
         ]);
     }
@@ -52,49 +84,44 @@ class OrderController extends Controller
     public function addMaterial()
     {
         $data = Input::all();
-
         $materialCode = $data['material'];
         $order_id = $data['order_id'];
 
-        $order = OrderRepository::getOrderById($order_id);
-        $orderMaterial = OrderMaterialsRepository::getOrderMaterialByCode($order, $materialCode);
-        
+        /** @var Order $order */
+        $order = OrderRepository::findOrderWithMateriaslAndSkillsById($order_id);
+        $orderState = new OrderStateMachine($order);
 
-        // validate
-        if (!UserMaterialsRepository::hasUserNeedMaterialAmount(auth()->user(), $orderMaterial)) {
+        $worker = WorkerRepository::findWithMaterialsAndSkillsById(\Auth::id());
         
-            Session::flash('message', 'Nedostatochno ' . $orderMaterial->code);
+        if (!OrderRepository::hasWorkerNeedAmountMaterialForOrder($worker, $order, $materialCode)) {
+        
+            Session::flash('message', 'Nedostatochno ' . $materialCode);
             return redirect()->back();
         }
 
-        // action
-        OrderTransactions::transferMaterialFromUserToOrder(auth()->user(), $orderMaterial);
-        OrderMaterialsRepository::deleteStockedMaterial($orderMaterial);
+        OrderTransactions::transferMaterialFromWorkerToOrder($worker, $order, $materialCode);
 
-        // validate
-        if (OrderRepository::orderReadyToWork($order)) {
-            // action
-            $order->update(['status' => 'ready_to_work']);
+        if ($orderState->areMaterialsStocked()) {
+            $orderState->finishStockMaterials();
+            Session::flash('message', 'All materials are stocked');
         }
 
-        Session::flash('message', 'Внесено ' . $materialCode);
+        Session::flash('message', 'Stocked ' . $materialCode);
 
-        return redirect()->back();
+        return Redirect::route('work_show_order_page', ['id' => $order->id]);
     }
 
-    public function startWorks()
+    public function applySkill()
     {
         $data = Input::all();
         $order_id = $data['order_id'];
-        $order = OrderRepository::getOrderById($order_id);
-        
-        OrderRepository::startWorks($order);
 
-        OrderTransactions::transferOrderRewardToUser($order, auth()->user());
+        $order = OrderRepository::findOnlyOrderById($order_id);
+        $worker = WorkerRepository::findWithMaterialsAndSkillsById(\Auth::id());
 
-        OrderRepository::finishWorks($order);
-//      OrderMaterialsRepository::deleteOrder($order);
+        $orderState = new OrderStateMachine($order);
+        $orderState->finishStockSkills($worker);
 
-        return redirect()->back();
+        return Redirect::route('work_show_order_page', ['id' => $order->id]);
     }
 }

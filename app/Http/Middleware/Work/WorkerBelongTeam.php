@@ -3,7 +3,7 @@
 namespace App\Http\Middleware\Work;
 
 use App\Repositories\Work\PrivateTeamRepository;
-use App\Repositories\Work\Team\TeamWorkerRepository;
+use App\Repositories\Work\Team\WorkerRepository;
 use Closure;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -22,9 +22,9 @@ class WorkerBelongTeam
         if (($team_id = $request->route()->parameter('id')) || ($team_id = $request->get('privateteam_id'))) {
 
             $team = PrivateTeamRepository::getTeamWithCreatorAndPartnersById($team_id);
-            $worker = TeamWorkerRepository::findById(\Auth::id());
+            $worker = WorkerRepository::findById(\Auth::id());
 
-            if (TeamWorkerRepository::belongToTeam($worker, $team)) {
+            if (WorkerRepository::belongToTeam($worker, $team)) {
                 return $next($request);
             }
         }

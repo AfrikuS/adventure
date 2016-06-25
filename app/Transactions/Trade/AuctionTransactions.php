@@ -2,7 +2,7 @@
 
 namespace App\Transactions\Trade;
 
-use App\Models\HeroThing;
+use App\Models\Hero\Thing;
 use App\Models\Trade\AuctionLot;
 use App\Models\User;
 use App\Serializers\RedisAuctionLot;
@@ -12,7 +12,7 @@ class AuctionTransactions
 {
     public static function commitPurchasing(AuctionLot $lot, $purchaser)
     {
-        $thing = HeroThing::find($lot->thing_id, ['owner_id', 'status']);
+        $thing = Thing::find($lot->thing_id, ['owner_id', 'status']);
         $thingOwner = User::find($lot->owner_id, ['id', 'name']);
         
         \DB::transaction(function () use ($purchaser, $lot, $thing, $thingOwner) {

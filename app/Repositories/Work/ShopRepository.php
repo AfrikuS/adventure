@@ -2,11 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Models\Work\WorkMaterial;
+use App\Models\Work\Catalogs\Material;
 use App\Models\Work\ShopInstrument;
 use App\Models\Work\ShopMaterial;
-use App\Models\Work\UserInstrument;
-use App\Models\Work\WorkInstrument;
+use App\Models\Work\Worker\WorkerInstrument;
 
 class ShopRepository
 {
@@ -19,14 +18,14 @@ class ShopRepository
     
     public static function getSingleMaterialByCode(string $materialCode)
     {
-        $material = WorkMaterial::select('id', 'code', 'title')->whereCode($materialCode)->firstOrFail();
+        $material = Material::select('id', 'code', 'title')->whereCode($materialCode)->firstOrFail();
 
         return $material;
     }
     
     public static function reindexMaterialPrices()
     {
-        $materialsCodes = WorkMaterial::select('id', 'code')->get();
+        $materialsCodes = Material::select('id', 'code')->get();
         
         $materialsCodes->each(function ($item, $key) {
             ShopMaterial::updateOrCreate(
@@ -40,7 +39,7 @@ class ShopRepository
 
     public static function reindexInstrumentsPrices()
     {
-        $instrumentCodes = WorkInstrument::select('id', 'code')->get();
+        $instrumentCodes = Instrument::select('id', 'code')->get();
         
         $instrumentCodes->each(function ($item, $key) {
             ShopInstrument::updateOrCreate(
@@ -61,7 +60,7 @@ class ShopRepository
     /** @deprecated  todo review  @see transferInstrumentToUser */
     public static function addInstrumentToUser($worker, $instrument)
     {
-        $userInstrument = UserInstrument::
+        $userInstrument = WorkerInstrument::
             select('id', 'skill_level')
             ->firstOrCreate(['worker_id' => $worker->id, 'code' => $instrument->code]);
     }

@@ -5,6 +5,7 @@ namespace App\Repositories;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
+// danger pron-code
 class AttackRepository
 {
 

@@ -6,7 +6,7 @@ use App\Domain\UserActions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\RegisterUserRequest;
-use App\Models\HeroResources;
+use App\Models\Resources;
 use App\Models\User;
 use App\Models\UserRedis;
 use Illuminate\Support\Facades\Auth;

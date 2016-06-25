@@ -56,7 +56,7 @@
 
     <div class="row row-offcanvas">
         <div class="col-lg-12">
-            <div id="alchemy" class="alchemy"></div>
+            {{--<div id="alchemy" class="alchemy"></div>--}}
             <p></p>
             <h4>Список локаций и путей между ними</h4>
             <p></p>

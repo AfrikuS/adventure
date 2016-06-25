@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Work;
 
 use App\Domain\Work\TeamworkCalculator;
 use App\Models\User;
-use App\Models\Work\Team\TeamWorker;
+use App\Models\Work\Worker;
 use App\Repositories\TeamworkRepository;
 use Illuminate\Http\Request;
 
@@ -23,7 +23,7 @@ class TeamworksController extends Controller
     {
         $data = Input::all();
 
-        TeamWorker::
+        Worker::
             where('worker_user_id', $this->user_id)
             ->update(['status' => 'ready']);
 

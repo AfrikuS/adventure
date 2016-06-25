@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Hero;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
-class HeroResources extends Model
+class Resources extends Model
 {
     protected $table      = 'hero_resources';
     public    $timestamps = false;
@@ -14,12 +15,12 @@ class HeroResources extends Model
     {
         $users = User::find([9,10,12,13,14]);
         foreach ($users as $user) {
-            HeroResources::create(['id' => $user->id]);
+            Resources::create(['id' => $user->id]);
         }
     }
 
     public function user ()
     {
-        return $this->belongsTo('App\Models\User', 'id');
+        return $this->belongsTo(User::class, 'id');
     }
 }

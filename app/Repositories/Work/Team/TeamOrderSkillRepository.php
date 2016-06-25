@@ -5,8 +5,8 @@ namespace App\Repositories\Work\Team;
 use App\Models\Work\Order;
 use App\Models\Work\Team\TeamOrder;
 use App\Models\Work\Team\TeamOrderSkill;
-use App\Models\Work\WorkSkill;
-use App\Models\Work\WorkUserSkill;
+use App\Models\Work\Catalogs\Skill;
+use App\Models\Work\Worker\WorkerSkill;
 use Illuminate\Database\Eloquent\Collection;
 
 class TeamOrderSkillRepository
@@ -42,7 +42,7 @@ class TeamOrderSkillRepository
     
         public static function addSkillToUserByCode($user, string $skillCode)
         {
-            $userSkill = WorkUserSkill::
+            $userSkill = Skill::
                 select('id', 'value')
                 ->firstOrCreate(['user_id' => $user->id, 'code' => $skillCode]);
     
@@ -51,7 +51,7 @@ class TeamOrderSkillRepository
     
         public static function getUserSkills($user)
         {
-            return WorkUserSkill::
+            return Skill::
                 select('id', 'code', 'value')
                 ->where('user_id', $user->id)
                 ->get();

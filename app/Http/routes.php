@@ -37,18 +37,19 @@ Route::group(['middleware' => 'app_auth'], function () {
 
     Route::get('/work/orders', 'Work\OrderController@index')->name('work_orders_page');
     // single-order actions
+    Route::post('/work/order/accept', 'Work\OrderController@acceptOrder')->name('work_accept_order_action');
     Route::group(['middleware' => 'work_order_acceptor'], function () {
         Route::get('/work/order/{id}', 'Work\OrderController@showOrder')->name('work_show_order_page');
         Route::post('/work/order/add_material', 'Work\OrderController@addMaterial')->name('work_order_add_material_in_stock_action');
-        Route::post('/work/order/start_works', 'Work\OrderController@startWorks')->name('work_order_start_works_action');
+        Route::post('/work/order/apply_skill', 'Work\OrderController@applySkill')->name('work_order_apply_skill_action');
     });
 
-    Route::get('/work/teamorders', 'Work\Team\TeamOrderController@index')->name('work_teamorders_page');
-
-
+    
+    
     // team-order actions
+    Route::get('/work/teamorders', 'Work\Team\TeamOrderController@index')->name('work_teamorders_page');
     Route::group(['middleware' => 'work_teamorder_acceptor'], function () {
-        Route::post('/work/teamorder/accept', 'Work\Team\TeamOrderController@acceptOrder')->name('work_accept_teamorder_page');
+        Route::post('/work/teamorder/accept', 'Work\Team\TeamOrderController@acceptOrder')->name('work_accept_teamorder_action');
     });
     
     
@@ -133,6 +134,7 @@ Route::group(['middleware' => 'app_auth'], function () {
     Route::get('/geo/ship_shops', 'Geo\DockMarketController@index')->name('geo_dock_market_page');
     Route::get('/geo/shipshop/{id}', 'Geo\DockMarketController@shipShop')->name('geo_travel_ship_shop_page');
     Route::post('/geo/travel/ship_create_order', 'Geo\TravelController@createOrder')->name('travelship_create_order_action');
+    Route::post('/geo/shipshop/buy_material', 'Geo\DockMarketController@buyMaterial')->name('travelship_buy_material_action');
 
     
     Route::get('/geo/travel', 'Geo\TravelController@index')->name('geo_travels_page');

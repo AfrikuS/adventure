@@ -2,18 +2,18 @@
 
 namespace App\Repositories\Work;
 
+use App\Factories\WorkFactory;
 use App\Models\Work\Order;
-use App\Models\Work\OrderMaterials;
-use App\Models\Work\Team\TeamWorker;
+use App\Models\Work\Worker;
 
 class OrderRepository
 {
     public static function isOrderReadyToWorks(Order $order)
     {
-        return $order->status === 'ready_to_work';
+        return $order->status === 'stock_skills';
     }
 
-    public static function getOrderById($id)
+    public static function findOnlyOrderById($id)
     {
         $order = Order::
             select(['id', 'desc', 'kind_work_title', 'price', 'acceptor_user_id', 'status' ])
@@ -22,30 +22,28 @@ class OrderRepository
         return $order;
     }
 
-    // with materials
-    public static function deleteOrder(Order $order)
+    public static function hasWorkerNeedAmountMaterialForOrder(Worker $worker, Order $order, string $materialCode)
     {
-        OrderMaterials::where('order_id', $order->id)->delete();
-        Order::destroy($order->id);
+        $orderMaterial = $order->getMaterialByCode($materialCode);
+        $workerMaterial = $worker->getMaterialByCode($materialCode);
+        
+        if ($workerMaterial === null) {
+            WorkFactory::createWorkerMaterial($worker, $materialCode);
+            return false;
+        }
+
+        $needAmount = $orderMaterial->need - $orderMaterial->stock;
+        return $needAmount <= $workerMaterial->value;
     }
 
-    public static function startWorks(Order $order): void
+    public static function findOrderWithMateriaslAndSkillsById($id)
     {
-        $order->update(['status' => 'working']);
-    }
+        $order = Order::
+            select(['id', 'desc', 'kind_work_title', 'price', 'acceptor_user_id', 'status' ])
+            ->with('materials')
+//            ->with('skills')
+            ->find($id);
 
-    public static function finishWorks(Order $order): void
-    {
-        $order->update(['status' => 'finished']);
-    }
-
-    public static function orderReadyToWork(Order $order): bool
-    {
-        return OrderMaterials::select('id')->where('order_id', $order->id)->count() == 0; // todo raw-count() ?
-    }
-
-    public static function isOrderAcceptor(Order $order, TeamWorker $worker)
-    {
-        return $order && $order->acceptor_user_id == $worker->id;
+        return $order;
     }
 }

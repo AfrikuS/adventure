@@ -19,7 +19,8 @@
         "phing/phing": "^2.14",
         "davejamesmiller/laravel-breadcrumbs": "^3.0",
         "pda/pheanstalk": "^3.1",
-        "robmorgan/phinx": "^0.6.2"
+        "robmorgan/phinx": "^0.6.2",
+        "yohang/finite": "^1.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

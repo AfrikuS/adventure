@@ -2,6 +2,7 @@
 
 namespace App\Models\Work\Team;
 
+use App\Models\Work\Worker;
 use Illuminate\Database\Eloquent\Model;
 
 class PrivateTeam extends Model
@@ -13,17 +14,17 @@ class PrivateTeam extends Model
 
     public function leader() 
     {
-        return $this->belongsTo(TeamWorker::class, 'leader_worker_id', 'id');
+        return $this->belongsTo(Worker::class, 'leader_worker_id', 'id');
     }
 
     public function partners()
     {
-        return $this->hasMany('App\Models\Work\Team\TeamWorker', 'team_id');
+        return $this->hasMany(Worker::class, 'team_id');
     }
 
     public function orders()
     {
-        return $this->hasMany('App\Models\Work\Team\TeamOrder', 'acceptor_team_id', 'id');
+        return $this->hasMany(TeamOrder::class, 'acceptor_team_id', 'id');
     }
 
 

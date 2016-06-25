@@ -3,8 +3,8 @@
 namespace App\Repositories\Generate;
 
 use App\Models\Sea\TravelShip;
-use App\Models\Work\Catalogs\WorkMaterial;
-use App\Models\Work\Catalogs\WorkSkill;
+use App\Models\Work\Catalogs\Material;
+use App\Models\Work\Catalogs\Skill;
 use App\Models\Work\Order;
 use App\Models\Work\OrderMaterials;
 use App\Models\Work\Team\TeamOrder;
@@ -42,7 +42,7 @@ class EntityGenerator
 
     public static function createWorkOrderWithMaterials()
     {
-        $skill = WorkSkill::get()->random();
+        $skill = Skill::get()->random();
 
         \DB::transaction(function () use ($skill) {
             $desc = 'order_desc';
@@ -60,7 +60,7 @@ class EntityGenerator
 
     public static function createTeamWorkOrderWithMaterials()
     {
-        $skill = WorkSkill::get()->random();
+        $skill = Skill::get()->random();
 
         \DB::transaction(function () use ($skill) {
             $desc = 'order_desc';
@@ -77,7 +77,7 @@ class EntityGenerator
             $faker = \Faker\Factory::create();
             
             // materials for order
-            $materialsCodes = WorkMaterial::get(['id', 'code'])->pluck('code');
+            $materialsCodes = Material::get(['id', 'code'])->pluck('code');
             for ($i = 0; $i < $count; $i++) {
                 $materialCode = $faker->unique()->randomElement($materialsCodes->toArray());
                 TeamOrderMaterial::create([
@@ -90,7 +90,7 @@ class EntityGenerator
 
             // skills for order
             $count = 3;
-            $skillsCodes = WorkSkill::get(['id', 'code'])->pluck('code');
+            $skillsCodes = Skill::get(['id', 'code'])->pluck('code');
             for ($i = 0; $i < $count; $i++) {
                 $skillCode = $faker->unique()->randomElement($skillsCodes->toArray());
                 TeamOrderSkill::create([
@@ -106,7 +106,7 @@ class EntityGenerator
     private static function searchRandomMaterials($count, Order $order)
     {
         $faker = \Faker\Factory::create();
-        $materialsCodes = WorkMaterial::get(['id', 'code'])->pluck('code');
+        $materialsCodes = Material::get(['id', 'code'])->pluck('code');
 
         for ($i = 0; $i < $count; $i++) { // wtf todo
             $materialCode = $faker->unique()->randomElement($materialsCodes->toArray());
@@ -149,12 +149,12 @@ class EntityGenerator
     public static function createUserMaterials($user)
     {
         $faker = \Faker\Factory::create();
-        $materialsCodes = WorkMaterial::pluck('code');
+        $materialsCodes = Material::pluck('code');
 
         //         $faker->valid($evenValidator)->randomElement(1, 3, 5, 7, 9);
 
         $materialCode = $faker->unique()->randomElement($materialsCodes->toArray());
-        UserMaterial::select('id')->updateOrCreate(
+        WorkerMaterial::select('id')->updateOrCreate(
             ['code' => $materialCode, 'user_id' => $user->id],
             ['value' => rand(79, 157), 'user_id' => $user->id]
         );

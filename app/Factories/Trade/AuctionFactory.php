@@ -3,12 +3,12 @@
 namespace App\Factories;
 
 use App\Models\AuctionLot;
-use App\Models\HeroThing;
+use App\Models\Hero\Thing;
 use Carbon\Carbon;
 
 class AuctionFactory
 {
-    public static function createLotByThing(HeroThing $thing, $user, int $startBid)
+    public static function createLotByThing(Thing $thing, $user, int $startBid)
     {
         $auctionStartStr = Carbon::create()->addMinutes(200)->toDateTimeString();
 

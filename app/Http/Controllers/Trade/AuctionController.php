@@ -9,7 +9,7 @@ use App\Http\Requests;
 use App\Http\Requests\AuctionAddLotRequest;
 use App\Http\Requests\AuctionBuyLotRequest;
 use App\Models\AuctionLot;
-use App\Models\HeroThing;
+use App\Models\Hero\Thing;
 use App\Repositories\AuctionRepository;
 use App\Repositories\HeroRepository;
 use App\Repositories\HeroResourcesRepository;
