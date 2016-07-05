@@ -16,7 +16,7 @@ class ProfileController extends Controller
         $skills = $worker->skills;
 
         return $this->view('profile.profile', [
-            'skills' => $skills
+            'workSkills' => $skills
         ]);
     }
 

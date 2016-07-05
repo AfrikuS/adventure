@@ -90,7 +90,7 @@
 
 @section('scripts')
 
-    {{--<script type="javascript">--}}
+    <script type="javascript">
 
     //alert();
     var some_data =
@@ -176,6 +176,6 @@
 
 
 
-    {{--//    </script>--}}
+    //    </script>
 
 @endsection

@@ -2,13 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\Domain\AuctionActions;
-use App\Models\Trade\AuctionLot;
+use App\Commands\Trade\Auction\CommitPurchasingCommand;
+use App\Commands\Trade\Auction\RemoveLotFromAuction;
 use App\Models\User;
-use App\Repositories\AuctionRepository;
+use App\Repositories\HeroRepositoryObj;
+use App\Repositories\Trade\AuctionRepository;
 use App\Transactions\Trade\AuctionTransactions;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 
 class AuctionPurchases extends Command
 {
@@ -26,13 +26,20 @@ class AuctionPurchases extends Command
      */
     protected $description = 'Commit expired auction lots';
 
+    /** @var  AuctionRepository */
+    protected $auctionRepo;
+    /** @var  HeroRepositoryObj */
+    private $heroRepo;
+
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(AuctionRepository $auctionRepo, HeroRepositoryObj $heroRepo)
     {
+        $this->auctionRepo = $auctionRepo;
+        $this->heroRepo = $heroRepo;
         parent::__construct();
     }
 
@@ -43,17 +50,20 @@ class AuctionPurchases extends Command
      */
     public function handle()
     {
-        $expiredLots = AuctionRepository::getExpiredLots();
+        $expiredLots = $this->auctionRepo->getExpiredLots();
+
+        $purchaseCommand = new CommitPurchasingCommand($this->auctionRepo, $this->heroRepo);
+        
+        $removeCommand = new RemoveLotFromAuction($this->auctionRepo, $this->heroRepo);
 
         foreach ($expiredLots as $lot) {
+            
             if (isset($lot->purchaser_id)) {
 
-                $purchaser = User::find($lot->purchaser_id);
-
-                AuctionTransactions::commitPurchasing($lot, $purchaser);
+                $purchaseCommand->commitPurchasing($lot->id, $lot->purchaser_id);
             }
             else {
-                $lot->delete(); // todo review thing-status = free?
+                $removeCommand->removeLotFromAuction($lot);
             }
         }
     }

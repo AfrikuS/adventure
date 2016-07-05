@@ -22,21 +22,11 @@ class BossTimerRepository
     public static function getTimerBoss($bossId)
     {
 
-        $timer = BossTimer::where('boss_id', '=', $bossId)
+        $timer = BossTimer::where('boss_id', $bossId)
             ->select(DB::raw('TIMESTAMPDIFF(SECOND, now(), mass_boss_timers.date_time) AS duration_seconds'))
             ->first();
 
         return $timer;
     }
 
-    public static function delete($bossId)
-    {
-        $timer = BossTimer::where('boss_id', $bossId)->first();
-
-        if ($timer) {
-            return $timer->delete();
-        }
-        
-        return false;
-    }
 }

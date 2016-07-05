@@ -2,33 +2,49 @@
 
 namespace App\Repositories;
 
+use App\Models\Work\Catalogs\Instrument;
 use App\Models\Work\Catalogs\Material;
+use App\Models\Work\PriceMaterial;
 use App\Models\Work\ShopInstrument;
-use App\Models\Work\ShopMaterial;
 use App\Models\Work\Worker\WorkerInstrument;
 
 class ShopRepository
 {
     public static function getSingleShopMaterialByCode(string $materialCode)
     {
-        $material = ShopMaterial::select('id', 'code', 'price')->whereCode($materialCode)->firstOrFail();
+        $material = PriceMaterial::select('id', 'code', 'price')->whereCode($materialCode)->first();
 
         return $material;
     }
-    
-    public static function getSingleMaterialByCode(string $materialCode)
+
+    public static function getMaterialPriceByCode(string $materialCode): int
     {
-        $material = Material::select('id', 'code', 'title')->whereCode($materialCode)->firstOrFail();
+        $materialPrice = ShopRepository::getSingleShopMaterialByCode($materialCode);
 
-        return $material;
+        if ($materialPrice === null) {
+            throw new \Exception;
+        }
+
+        return $materialPrice->price;
+    }
+
+    public static function getInstrumentPriceByCode($instrumentCode): int
+    {
+        $instrumentPrice = ShopInstrument::select('id', 'code', 'price')->whereCode($instrumentCode)->first();
+
+        if ($instrumentPrice === null) {
+            throw new \Exception;
+        }
+
+        return $instrumentPrice->price;
     }
     
-    public static function reindexMaterialPrices()
+    public static function reindexPriceMaterials()
     {
         $materialsCodes = Material::select('id', 'code')->get();
         
         $materialsCodes->each(function ($item, $key) {
-            ShopMaterial::updateOrCreate(
+            PriceMaterial::updateOrCreate(
                 ['code' => $item->code],
                 ['price' => rand(3, 7),
                     'material_id' => $item->id,
@@ -49,12 +65,6 @@ class ShopRepository
                     'code' => $item->code,
                 ]);
         });
-    }
-
-    public static function getSingleInstrumentByCode($instrumentCode): ShopInstrument
-    {
-        $instrument = ShopInstrument::select('id', 'code', 'price')->whereCode($instrumentCode)->firstOrFail();
-        return $instrument;
     }
 
     /** @deprecated  todo review  @see transferInstrumentToUser */

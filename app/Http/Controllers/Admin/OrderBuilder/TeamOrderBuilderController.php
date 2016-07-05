@@ -2,44 +2,62 @@
 
 namespace App\Http\Controllers\Admin\OrderBuilder;
 
+use App\Factories\Work\TeamOrderFactory;
 use App\Http\Controllers\Controller;
 use App\Models\Work\Catalogs\Instrument;
 use App\Models\Work\Catalogs\Material;
 use App\Models\Work\Catalogs\Skill;
 use App\Models\Work\Team\TeamOrder;
 use App\Repositories\Work\Team\TeamOrderRepository;
+use App\Repositories\Work\Team\TeamOrderRepositoryObj;
 use App\Transactions\Admin\TeamOrderBuilder;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
 
 class TeamOrderBuilderController extends Controller
 {
+    /** @var TeamOrderRepositoryObj */
+    protected $teamOrdersRep;
+
+    public function __construct(TeamOrderRepositoryObj $teamOrdersRep)
+    {
+        $this->teamOrdersRep = $teamOrdersRep;
+        parent::__construct();
+    }
+
     public function orderDrafts()
     {
-
-        $draftOrders = TeamOrder::where('status', 'draft')->get();
+        $draftOrders = $this->teamOrdersRep->getOrdersDrafts();
 
         return $this->view('admin.orders.drafts', [
             'draftOrders' => $draftOrders,
         ]);
     }
 
-    public function createOrderDraft()
+    public function newTeamOrderDraft()
     {
         $materials = Material::get();
         $instruments = Instrument::get();
         $skills = Skill::get();
-        
+
         return $this->view('admin.orders.create', [
             'materials' => $materials,
             'instruments' => $instruments,
             'skills' => $skills,
         ]);
     }
+
+    public function createOrderDraft()
+    {
+        $draft = $this->teamOrdersRep->createTeamOrderDraft();
+
+        return \Redirect::route('admin_edit_orderdraft_1_page', ['id' => $draft->id]);
+    }
     
     public function editOrderDraft_1($id)
     {
 
-        $orderDraft = TeamOrderRepository::getOrderWithMaterialsAndSkillsById($id); // add condition ('status', 'draft')
+        $orderDraft = TeamOrderRepository::findOrderWithMaterialsAndSkillsById($id); // add condition ('status', 'draft')
 
         $orderMaterialsCodes = $orderDraft->materials()->select('code')->get()->lists('code')->toArray();
         $orderSkillsCodes = $orderDraft->skills()->select('code')->get()->lists('code')->toArray();
@@ -66,7 +84,7 @@ class TeamOrderBuilderController extends Controller
         $data = Input::all();
         $draft_id = $data['draft_id']; 
 
-        $orderDraft = TeamOrderRepository::getOrderWithMaterialsAndSkillsById($draft_id); // add condition ('status', 'draft')
+        $orderDraft = TeamOrderRepository::findOrderWithMaterialsAndSkillsById($draft_id); // add condition ('status', 'draft')
 
         // update draft-order materials
         if (isset($data['materials'])) {
@@ -95,7 +113,7 @@ class TeamOrderBuilderController extends Controller
 
     public function editOrderDraft_2($id)
     {
-        $orderDraft = TeamOrderRepository::getOrderWithMaterialsAndSkillsById($id); // add condition ('status', 'draft')
+        $orderDraft = TeamOrderRepository::findOrderWithMaterialsAndSkillsById($id); // add condition ('status', 'draft')
 
         $draftMaterials = $orderDraft->materials;
         $draftSkills = $orderDraft->skills;
@@ -115,7 +133,7 @@ class TeamOrderBuilderController extends Controller
         $data = Input::all();
         $draft_id = $data['draft_id'];
 
-        $orderDraft = TeamOrderRepository::getOrderWithMaterialsAndSkillsById($draft_id);
+        $orderDraft = TeamOrderRepository::findOrderWithMaterialsAndSkillsById($draft_id);
 
         if (isset($data['order'])) {
             $orderValues = $data['order'];

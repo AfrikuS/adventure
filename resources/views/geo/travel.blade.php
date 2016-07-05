@@ -51,7 +51,7 @@
                         <td>{{ $voyage->point->location->title }}</td>
                         <td>{{ $voyage->status }}</td>
                         <td>
-                            {!! Form::open(['route' => 'geo_voyage_start_sail_action', 'class' => '']) !!}
+                            {!! Form::open(['route' => 'geo_voyage_start_voyage_action', 'class' => '']) !!}
                             {!! Form::hidden('voyage_id', $voyage->id) !!}
                             {!! Form::submit('Just Плыть') !!}
                             {!! Form::close() !!}

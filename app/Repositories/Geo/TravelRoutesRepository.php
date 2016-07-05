@@ -11,17 +11,19 @@ class TravelRoutesRepository
         return TravelRoute::select('id', 'title')->get();
     }
 
+    public static function findTravelWithPointsById($id)
+    {
+        return TravelRoute::
+            select('id', 'status', 'user_id')
+            ->with(['points' => function($query) {
+                $query->select('id', 'location_id', 'status', 'number', 'route_id');
+            }])
+            ->find($id);
+    }
+
+
     public static function findById($id)
     {
-//        return TravelRoute::
-//            with(['route' => function($query) {
-//                $query->select('title', 'id');
-//            }])
-//            ->with(['points' => function($query) {
-//                $query->select('location_id', 'status', 'number', 'route_id', 'id');
-//            }])
-//            ->find($id, ['id', 'status', 'route_id', 'point_id']);
-
         return TravelRoute::with(['points' => function($query) {
                     $query->select('location_id', 'status', 'number', 'route_id', 'id')
                         ->with(['location' => function($query) {

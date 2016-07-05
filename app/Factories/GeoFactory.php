@@ -5,10 +5,12 @@ namespace App\Factories;
 use App\Models\Geo\LiveVoyage;
 use App\Models\Geo\Location;
 use App\Models\Geo\RoutePoint;
+use App\Models\Geo\Trader\Ship;
 use App\Models\Geo\Travel\MaterialPrice;
 use App\Models\Geo\Travel\TempShop;
 use App\Models\Geo\TravelRoute;
 use App\Models\Geo\TravelShip;
+use App\Models\Geo\Voyage;
 use App\Models\Work\Catalogs\Material;
 use Carbon\Carbon;
 
@@ -21,37 +23,24 @@ class GeoFactory
         ]);
     }
 
-    public static function createRoute($user, string $title, int $startLocation_id)
+    public static function createRoute(int $trader_id, string $routeTitle, int $startLocation_id)
     {
-        return \DB::transaction(function () use ($user, $title, $startLocation_id) {
-
-            $route = TravelRoute::create([
-                'title' => $title,
-                'user_id' => $user->id,
-            ]);
-
-            RoutePoint::create([
-                'route_id' => $route->id,
-                'location_id' => $startLocation_id,
-                'status' => 'first',
-                'number' => 1,
-            ]);
-            
-            return $route;
-        });
-    }
-
-    public static function createRoutePoint(TravelRoute $route, $location_id)
-    {
-        $pointsCount = $route->points->count();
-
-        return RoutePoint::create([
-            'route_id' => $route->id,
-            'location_id' => $location_id,
-            'status' => 'normal',
-            'number' => $pointsCount + 1,
+        $route = TravelRoute::create([
+            'title' => $routeTitle,
+            'user_id' => $trader_id,
+            'status' => 'drafting',
         ]);
+
+        RoutePoint::create([
+            'route_id' => $route->id,
+            'location_id' => $startLocation_id,
+            'status' => 'first',
+            'number' => 1,
+        ]);
+ 
+        return $route;
     }
+
 
     public static function createTempShopWithMaterials(Carbon $dateEnding)
     {
@@ -77,10 +66,10 @@ class GeoFactory
                     'price' => $price,
                 ]);
             }
-});
+        });
     }
 
-    public static function createVoyage($location_id, $user_id)
+    public static function createLiveVoyage($location_id, $user_id)
     {
         return LiveVoyage::create([
             'location_id' => $location_id,
@@ -89,4 +78,15 @@ class GeoFactory
         ]);
     }
 
+    public static function createVoyage(TravelRoute $route, Ship $ship)
+    {
+        $startPoint = $route->points->first();
+
+        return Voyage::create([
+            'route_id' => $route->id,
+            'point_id' => $startPoint->id,
+            'status' => 'ready_start',
+            'ship_id' => $ship->id,
+        ]);
+    }
 }

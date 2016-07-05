@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.admin_layout')
 
 @section('title', 'Orders-Constructor Fill data. Step_2 - Admin Page')
 @section('head')

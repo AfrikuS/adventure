@@ -52,7 +52,7 @@
 
             @if ($userInstruments != null)
                 <ul>
-                    <li>Инструмент \ Уровень владения </li>
+                    <li>Инструмент \ Заряды </li>
                     @foreach($userInstruments as $instrument)
                         <li>{{ $instrument->code . " - "  .$instrument->skill_level }}</li>
                     @endforeach

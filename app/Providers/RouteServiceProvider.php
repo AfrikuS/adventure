@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -52,9 +53,17 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes(Router $router)
     {
-        $router->group([
-            'namespace' => $this->namespace, 'middleware' => 'web',
-        ], function ($router) {
+        $ctrlsDirs = ['Profile', 'Npc'];
+        
+        $router->group(['namespace' => $this->namespace, 'middleware' => 'web'], function ($router) {
+            require app_path('Http/Controllers/NotAuth/routes.php');
+
+            $router->group(['middleware' => 'app_auth'], function () {
+                        
+                require app_path('Http/Controllers/Profile/routes.php');
+                require app_path('Http/Controllers/Npc/routes.php');
+            });
+
             require app_path('Http/routes.php');
         });
     }

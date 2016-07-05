@@ -28,18 +28,11 @@ class LocationsController extends Controller
                 'target' => $item->to_id,
             ];
         });
-
-//        $nodes = $locations-> toArray(); //pluck('title', 'id'); // ->toArray();
-
+        
         $data = new stdClass();
         $data->nodes = $nodes;
         $data->edges = $edges;
-//            ['nodes' => ],
-//            ['edges' => $edges]
-//        ];
 
-
-//        json_encode($array);
         return response()->json($data, 200, [], JSON_UNESCAPED_UNICODE);
     }
 }

@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers\Geo;
 
+use App\Commands\Shop\BuyMaterialCommand;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\Geo\Travel\MaterialPrice;
 use App\Models\Geo\Travel\TempShop;
 use App\Models\Work\WorkerMaterial;
 use App\Repositories\Geo\TravelRepository;
+use App\Repositories\HeroRepositoryObj;
+use App\Repositories\ShopRepository;
 use App\Repositories\Work\Team\WorkerRepository;
 use App\Repositories\Work\WorkerMaterialsRepository;
+use App\Repositories\Work\WorkerRepositoryObj;
 use App\Transactions\Work\ShopTransactions;
 use Illuminate\Support\Facades\Input;
 
@@ -53,24 +57,15 @@ class DockMarketController extends Controller
 
     public function buyMaterial()
     {
-        $data = Input::all();
-        $shop_id = $data['shop_id'];
-
+//        $data = Input::all();
         $materialCode = Input::get('material');
-        $worker = WorkerRepository::findById(\Auth::id());
-
-        $shopMaterial = MaterialPrice::where('shop_id', $shop_id)
-            ->where('code', $materialCode)->get()->first();
-
-//        ShopTransactions::transferShopMaterialToUser($worker, $shopMaterial);
-        ShopTransactions::transferShopMaterialToWorkerByCode($worker, $shopMaterial); // todo review format-mess
+//        $shop_id = $data['shop_id'];
+        $user_id = \Auth::id();
 
 
-
-//        $worker = WorkerRepository::findById(\Auth::id());
-
-//        $shopMaterial = ShopRepository::getSingleShopMaterialByCode($materialCode);
+        $cmd = new BuyMaterialCommand(new WorkerRepositoryObj, new ShopRepository, new HeroRepositoryObj);
         
+        $cmd->buyMaterial($materialCode, $user_id);
 
         return \Redirect::back();
     }

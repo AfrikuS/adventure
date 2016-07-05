@@ -184,11 +184,12 @@ CREATE TABLE IF NOT EXISTS `geo_travel_voyages` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `route_id` INT UNSIGNED NOT NULL,
     `point_id` INT UNSIGNED NOT NULL,
+    `ship_id` INT UNSIGNED NOT NULL,
     `status` varchar(255) NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (route_id) REFERENCES geo_travel_routes(id),
     FOREIGN KEY (point_id) REFERENCES geo_travel_route_points(id),
-    FOREIGN KEY (route_id) REFERENCES geo_travel_routes(id)
+    FOREIGN KEY (ship_id) REFERENCES geo_trader_ships(id)
 );
 
 CREATE TABLE IF NOT EXISTS `geo_travel_live_voyages` (
@@ -201,6 +202,30 @@ CREATE TABLE IF NOT EXISTS `geo_travel_live_voyages` (
     FOREIGN KEY (location_id) REFERENCES geo_locations(id)
 );
 
+--  buisness in dock-port-geo
+
+CREATE TABLE IF NOT EXISTS `geo_traders` (
+    `id` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS `geo_trader_ships` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `owner_id` INT UNSIGNED NOT NULL,
+    `route_id` INT UNSIGNED,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (owner_id) REFERENCES geo_traders(id),
+    FOREIGN KEY (route_id) REFERENCES geo_travel_routes(id)
+);
+
+CREATE TABLE IF NOT EXISTS `geo_trader_temporary_shops` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `owner_id` INT UNSIGNED NOT NULL,
+    `date_ending` DATETIME NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (owner_id) REFERENCES geo_traders(id)
+);
 -- хранит данные о последних боях между двмя игроками (данные динамические, могут исп-ться).
 -- статика обо всех рез-тах сейчас не нужна
 CREATE TABLE IF NOT EXISTS `event_attacks` (

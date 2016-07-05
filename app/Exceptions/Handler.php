@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -48,6 +49,10 @@ class Handler extends ExceptionHandler
     {
         if ($e instanceof NotFoundHttpException) {
             return response()->view('errors.404', [], 404);
+        }
+        elseif ($e instanceof DefecitHeroResException) {
+            Session::flash('message', 'Nedostatochno gold');
+            return redirect()->back();
         }
 
         return parent::render($request, $e);

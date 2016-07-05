@@ -13,12 +13,12 @@ class TeamOrder extends Model
 
     public function materials()
     {
-        return $this->hasMany('App\Models\Work\Team\TeamOrderMaterial', 'teamorder_id', 'id');
+        return $this->hasMany(TeamOrderMaterial::class, 'teamorder_id', 'id');
     }
 
     public function skills()
     {
-        return $this->hasMany('App\Models\Work\Team\TeamOrderSkill', 'teamorder_id', 'id');
+        return $this->hasMany(TeamOrderSkill::class, 'teamorder_id', 'id');
     }
     
     public function instruments()

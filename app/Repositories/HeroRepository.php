@@ -2,18 +2,20 @@
 
 namespace App\Repositories;
 
-use App\Models\Hero\Thing;
+use App\Models\Core\Hero;
+use App\Models\Core\Thing;
 
 class HeroRepository
 {
-    public static function getHeroThings($user)
-    {
-        return Thing::select('id', 'title', 'status')->where('owner_id', $user->id)->get();
 
-    }
+//    public static function subtractGoldFromUser($user, $value)
+//    {
+//        Hero::find($user->id, ['id', 'gold'])->decrement('gold', $value);
+//    }
 
-    public static function findHeroThingById($id)
-    {
-        return Thing::find($id, ['id', 'title', 'status']);
-    }
+
+//    public static function findById($id)
+//    {
+//        return Hero::find($id);
+//    }
 }

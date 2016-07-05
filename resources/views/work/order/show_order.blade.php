@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Sea -> Travel Port')
+@section('title', 'Show Individual Order')
 
 @section('center')
 
@@ -64,5 +64,13 @@
     @endif
 @endsection
 
+@section('right_column')
 
+    @parent
 
+    {{--{!! Form::open(['route' => 'work_order_estimate_action', 'class' => 'form-signup']) !!}--}}
+    {{--{!! Form::hidden('order_id', $order->id, []) !!}--}}
+    {{--{!! Form::submit('Оценить работу', array('class' => 'btn btn-primary')) !!}--}}
+    {{--{!! Form::close() !!}--}}
+
+@endsection

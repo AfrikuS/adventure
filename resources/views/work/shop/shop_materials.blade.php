@@ -13,7 +13,7 @@
     <p></p>
     <div class="row row-offcanvas">
         <div class="col-lg-7">
-            @if(count($pricesMaterials) > 0)
+            @if($shop->getProducts()->count() > 0)
                 <table class="table table-condensed">
                     <table class="table table-bordered table-hover">
                         <thead>
@@ -25,13 +25,13 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($pricesMaterials as $materialPrice)
+                        @foreach($shop->getProducts() as $product)
                             <tr>
-                                <td>{{ $materialPrice->code }}</td>
-                                <td>{{ $materialPrice->price }}</td>
+                                <td>{{ $product->code }}</td>
+                                <td>{{ $product->price }}</td>
                                 <td>
                                     {!! Form::open(['route' => 'work_shop_buy_material_action', 'class' => '']) !!}
-                                    {!! Form::hidden('material', $materialPrice->code) !!}
+                                    {!! Form::hidden('material', $product->code) !!}
                                     {!! Form::submit('Купить', array('class' => 'btn btn-primary')) !!}
                                     {!! Form::close() !!}
                                 </td>
@@ -61,6 +61,19 @@
             @endif
         </div>
     </div>
+
+    {{--<div class="row row-offcanvas">--}}
+        {{--<div class="col-lg-12">--}}
+            {{--<ul>--}}
+                {{--@foreach ($shop->getProducts() as $product)--}}
+                    {{--<li>{{ $product->price }}</li>--}}
+                {{--@endforeach--}}
+            {{--</ul>--}}
+
+        {{--</div>--}}
+    {{--</div>--}}
+
+
 
 @endsection
 

@@ -35,6 +35,8 @@ class CheckAppRoutesTest  extends TestCase
             'delete/work/order/{id}',
             'delete/work/teamorder/{id}',
             'geo/shipshop/{id}',
+            'npc/show_offer/{id}',
+            'npc/show_deal/{id}',
             '/',
             'test',
             'logout',

@@ -79,7 +79,7 @@
                                 <td>{{ $order->acceptor_user_id }}</td>
                                 <td>{{ $order->status }}</td>
                                 <td>{{ link_to_route('work_show_order_page', 'Выбрать', ['id' => $order->id]) }}</td>
-                                <td>{{ link_to_route('work_delete_teamorder_action', 'Del', ['id' => $order->id]) }}</td>
+                                <td>{{ link_to_route('work_delete_order_action', 'Del', ['id' => $order->id]) }}</td>
                             </tr>
                         @endforeach
                         </tbody>

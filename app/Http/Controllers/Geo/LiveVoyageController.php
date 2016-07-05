@@ -28,7 +28,7 @@ class LiveVoyageController extends Controller
             ->first();
 
         if ($voyage == null) {
-            GeoFactory::createVoyage(6, $user_id);
+            GeoFactory::createLiveVoyage(6, $user_id);
         }
 
         $currentLocation = $voyage->location;

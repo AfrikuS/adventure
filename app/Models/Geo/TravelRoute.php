@@ -9,7 +9,7 @@ class TravelRoute extends Model
     protected $table      = 'geo_travel_routes';
     protected $primaryKey = 'id';
     public    $timestamps = false;
-    protected $fillable   = ['title', 'user_id'];
+    protected $fillable   = ['title', 'user_id', 'status'];
 
     public function points()
     {

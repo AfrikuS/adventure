@@ -17,7 +17,6 @@ class StateBoss //implements IState
         $this->boss = BossRepository::getBossByUserId($userId);
         $this->states = [
             'NO_BOSS',
-//            'USER_JOINED_BUT_NOT_WORK_YET',
             'BOSS_PROCESS',
             'BOSS_END'
         ];

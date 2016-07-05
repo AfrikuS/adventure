@@ -9,7 +9,6 @@ use App\Models\Work\Team\PrivateTeam;
 use App\Models\Work\Worker;
 use App\Repositories\Work\PrivateTeamRepository;
 use App\Repositories\Work\Team\WorkerRepository;
-use App\Transactions\Work\Team\PrivateTeamTransactions;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -20,7 +19,7 @@ class PrivateTeamController extends Controller
     {
         $teams = PrivateTeamRepository::getAllTeamsWithWorkers();
 
-        return $this->view('work/team/teams_index', [
+        return $this->view('work.team.teams_index', [
             'teams' => $teams,
         ]);
     }
@@ -29,14 +28,14 @@ class PrivateTeamController extends Controller
     {
         $privateteam = PrivateTeamRepository::getTeamWithCreatorAndPartnersById($id);
 
-        return $this->view('work/team/show_privateteam', [
+        return $this->view('work.team.show_privateteam', [
             'privateteam' => $privateteam,
         ]);
     }
 
     public function createPrivateteam()
     {
-        return $this->view('work/team/create_privateteam', []);
+        return $this->view('work.team.create_privateteam', []);
     }
 
     public function createPrivateteamAction()
@@ -60,9 +59,9 @@ class PrivateTeamController extends Controller
         $worker = WorkerRepository::findById($worker_id); // todo offers from workers
 
         // todo exclude validate to middleware
-        if ($worker && WorkerRepository::workerHaveNotTeam($worker)) {
+        if ($worker && $worker->team_id === null) {
 
-            PrivateTeamTransactions::addWorkerToTeam($worker, $team);
+            PrivateTeamRepository::addWorkerToTeam($worker, $team);
 
             Session::flash('message', 'New parnter was added to privateteam!');
         }
@@ -81,7 +80,7 @@ class PrivateTeamController extends Controller
         $team_id = $data['privateteam_id'];
 
 
-        PrivateTeamTransactions::deleteTeamById($team_id);
+        PrivateTeamRepository::deleteTeamById($team_id);
 
         Session::flash('message', 'Team is deleted. Workers are free!');
         return Redirect::route('work_privateteams_page');
@@ -102,7 +101,7 @@ class PrivateTeamController extends Controller
             return Redirect::route('work_show_privateteam_page', ['id' => $team->id]);
         }
 
-        PrivateTeamTransactions::excludeWorkerFromTeam($worker, $team);
+        PrivateTeamRepository::excludeWorkerFromTeam($worker, $team);
 
         Session::flash('message', 'You are left team ' . $team_id . ' !');
         return Redirect::route('work_show_privateteam_page', ['id' => $team->id]);

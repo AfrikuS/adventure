@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Generate;
 
+use App\Models\Geo\Trader\Ship;
 use App\Models\Sea\TravelShip;
 use App\Models\Work\Catalogs\Material;
 use App\Models\Work\Catalogs\Skill;
@@ -103,6 +104,15 @@ class EntityGenerator
         });
     }
 
+    public static function createShip()
+    {
+        Ship::create([
+            'owner_id' => \Auth::id(),
+//            'resource_code' => $resource,
+//            'date_sending' => $dt,
+        ]);
+    }
+
     private static function searchRandomMaterials($count, Order $order)
     {
         $faker = \Faker\Factory::create();
@@ -119,31 +129,6 @@ class EntityGenerator
         }
     }
     
-    public static function deleteWorkOrder($id)
-    {
-        Order::destroy($id);
-    }
-
-    public static function deleteTeamWorkOrder($id)
-    {
-        $order = TeamOrderRepository::getOrderById($id);
-        $materials = TeamOrderMaterialRepository::getOrderMaterials($order);
-
-        $material_ids = $materials->map(function ($material, $key) {
-            return $material->id;
-        })->toArray();
-        TeamOrderMaterial::destroy($material_ids);
-
-        $skills = TeamOrderSkillRepository::getOrderSkills($order);
-
-        $skills_ids = $skills->map(function ($skill, $key) {
-            return $skill->id;
-        })->toArray();
-        TeamOrderSkill::destroy($skills_ids);
-
-
-        TeamOrder::destroy($id);
-    }
 
     /** @deprecated */
     public static function createUserMaterials($user)

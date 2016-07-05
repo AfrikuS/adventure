@@ -2,7 +2,7 @@
 
 namespace App\Serializers;
 
-use App\Models\AuctionLot;
+use App\Models\Trade\AuctionLot;
 use Illuminate\Support\Facades\Redis;
 
 class RedisAuctionLot

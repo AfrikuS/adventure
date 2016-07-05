@@ -33,13 +33,6 @@ class Inspire extends Command
      */
     public function handle()
     {
-//        $this->comment(PHP_EOL.Inspiring::quote().PHP_EOL);
-
-//        $lot = AuctionLot::get()->first();
-//        $lot->bid = $lot->bid + 1;
-//        $lot->save();
-
-//        print "\t\thello\n";
 
         $expiredOrders = DB::table('sea_travel_orders')
             ->select('sea_travel_orders.id AS id')

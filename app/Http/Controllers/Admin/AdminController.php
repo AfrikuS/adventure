@@ -7,29 +7,19 @@ use App\Http\Requests;
 use App\Models\Work\Catalogs\Instrument;
 use App\Models\Work\Catalogs\Material;
 use App\Models\Work\Catalogs\Skill;
+use Gate;
 
 class AdminController extends Controller
 {
     public function index()
     {
-//        Action::create(['title' => 'Уйти в дозор', 'code' => 'dozor', 'duration_seconds' => 15 * 60]);
-//        Action::create(['title' => 'Бодаться', 'code' => 'bodalka', 'duration_seconds' => 5]);
-//        Action::create(['title' => 'Работать в кузнице', 'code' => 'smith', 'duration_seconds' => 6]);
-//        Action::create(['title' => 'Добывать нефть', 'code' => 'oil_hole', 'duration_seconds' => 4]);
 
-//        User::create([
-//            'name' => 'test6',
-//            'email' => 'test6' . '@mail.com',
-//            'password' => bcrypt(123),
-//        ]);
-
-//        Resources::init();
+//        Gate::index();
 
         $materials = Material::get();
         $instruments = Instrument::get();
         $skills = Skill::get();
-
-
+        
         return $this->view('admin.index', [
             'materials' => $materials,
             'instruments' => $instruments,

@@ -2,33 +2,36 @@
 
 namespace App\Http\Controllers\Work;
 
-use App\Domain\Work\MaterialsActions;
+use App\Commands\Shop\BuyInstrumentCommand;
+use App\Commands\Shop\BuyMaterialCommand;
+use App\Domain\Work\ShopValueObject;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Models\Work\PriceMaterial;
 use App\Models\Work\ShopInstrument;
-use App\Models\Work\ShopMaterial;
-use App\Models\Work\Worker\UserInstrument;
 use App\Models\Work\Worker\WorkerInstrument;
-use App\Repositories\HeroResourcesRepository;
+use App\Repositories\HeroRepositoryObj;
 use App\Repositories\ShopRepository;
-use App\Repositories\Work\OrderMaterialsRepository;
 use App\Repositories\Work\Team\WorkerRepository;
-use App\Repositories\Work\WorkerMaterialsRepository;
-use App\Transactions\Work\ShopTransactions;
+use App\Repositories\Work\WorkerRepositoryObj;
 use Illuminate\Support\Facades\Input;
+use Session;
 
 class ShopController extends Controller
 {
     public function index()
     {
-        $shopMaterials = ShopMaterial::get(['code', 'price']);
+        $shopMaterials = PriceMaterial::get(['code', 'price']);
         
         $worker = WorkerRepository::findWithMaterialsAndSkillsById(\Auth::id());
         $userMaterials = $worker->materials;
         
-        return $this->view('work/shop/shop_materials', [
-            'pricesMaterials' => $shopMaterials,
+        $shop = new ShopValueObject($shopMaterials);
+        
+        return $this->view('work.shop.shop_materials', [
+//            'pricesMaterials' => $shopMaterials,
             'userMaterials' => $userMaterials,
+            'shop' => $shop,
         ]);
     }
 
@@ -37,7 +40,7 @@ class ShopController extends Controller
         $shopInstruments = ShopInstrument::get();
         $userInstruments = WorkerInstrument::get();
 
-        return $this->view('work/shop/shop_instruments', [
+        return $this->view('work.shop.shop_instruments', [
             'shopInstruments' => $shopInstruments,
             'userInstruments' => $userInstruments,
         ]);
@@ -46,11 +49,13 @@ class ShopController extends Controller
     public function buyMaterial()
     {
         $materialCode = Input::get('material');
-        $worker = WorkerRepository::findWithMaterialsAndSkillsById(\Auth::id());
+        $user_id = \Auth::id();
 
-        $shopMaterial = ShopRepository::getSingleShopMaterialByCode($materialCode);
+        $cmd = new BuyMaterialCommand(new WorkerRepositoryObj(), new ShopRepository(), new HeroRepositoryObj());
+        
+        $cmd->buyMaterial($materialCode, $user_id);
 
-        ShopTransactions::transferShopMaterialToWorker($worker, $shopMaterial);
+        Session::flash('message', 'You are bought ' . $materialCode);
 
         return \Redirect::route('work_shop_page');
     }
@@ -58,12 +63,14 @@ class ShopController extends Controller
     public function buyInstrument()
     {
         $instrumentCode = Input::get('instrument');
-        $worker = WorkerRepository::findWithMaterialsAndSkillsById(\Auth::id());
-        
-        $instrument = ShopRepository::getSingleInstrumentByCode($instrumentCode);
 
-        ShopTransactions::transferInstrumentToWorker($worker, $instrument);
+        $user_id = \Auth::id();
 
+        $cmd = new BuyInstrumentCommand(new WorkerRepositoryObj(), new ShopRepository(), new HeroRepositoryObj());
+
+        $cmd->buyInstrument($instrumentCode, $user_id);
+
+        Session::flash('message', 'You are bought ' . $instrumentCode);
         return redirect()->back();
     }
 

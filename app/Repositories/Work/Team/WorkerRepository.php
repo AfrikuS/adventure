@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Work\Team;
 
-use App\Factories\WorkFactory;
+use App\Factories\WorkerFactory;
 use App\Models\Work\Order;
 use App\Models\Work\Team\PrivateTeam;
 use App\Models\Work\Worker;
@@ -23,13 +23,12 @@ class WorkerRepository
             ->with(['skills' => function ($query) {
                 $query->select('id', 'worker_id', 'code', 'value');
             }])
+            ->with(['instruments' => function ($query) {
+                $query->select('id', 'worker_id', 'code', 'skill_level');
+            }])
             ->find($id);
     }
 
-    public static function workerHaveNotTeam(Worker $worker): bool
-    {
-        return $worker->team === null;
-    }
 
     public static function belongToTeam(Worker $worker, PrivateTeam $team)
     {
@@ -101,12 +100,10 @@ class WorkerRepository
             ->find($id);
     }
 
-    public static function getSingleOrders($worker_id)
-    {
-        return Order::where('acceptor_user_id', $worker_id)->get();        
-    }
-
-
+//    public static function getSingleOrders($worker_id)
+//    {
+//        return Order::where('acceptor_user_id', $worker_id)->get();        
+//    }
 
 //    public static function getMaterialByCode(Worker $worker, string $materialCode)
 //    {

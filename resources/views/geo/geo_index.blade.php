@@ -7,9 +7,9 @@
 
     <link rel="stylesheet" href="{{ asset('js/alchemy-0.4.1/alchemy.css') }}">
 
-    <script src="{{ asset('js/d3/d3.js') }}" charset="utf-8"></script>
-    <script src="{{ asset('js/alchemy-0.4.1/scripts/vendor.js') }}"></script>
-    <script src="{{ asset('js/alchemy-0.4.1/alchemy.js') }}"></script>
+    {{--<script src="{{ asset('js/d3/d3.js') }}" charset="utf-8"></script>--}}
+    {{--<script src="{{ asset('js/alchemy-0.4.1/scripts/vendor.js') }}"></script>--}}
+    {{--<script src="{{ asset('js/alchemy-0.4.1/alchemy.js') }}"></script>--}}
 @endsection
 
 
@@ -96,7 +96,7 @@
 
 @section('scripts')
 
-    {{--<script type="javascript">--}}
+    <script type="javascript">
 
     //alert();
     var some_data =
@@ -182,6 +182,6 @@
 
 
 
-    {{--//    </script>--}}
+    //    </script>
 
 @endsection

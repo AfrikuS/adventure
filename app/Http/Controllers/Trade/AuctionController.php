@@ -2,36 +2,52 @@
 
 namespace App\Http\Controllers\Trade;
 
-use App\Domain\AuctionActions;
-use App\Factories\AuctionFactory;
+use App\Commands\Trade\Auction\CommitPurchasingCommand;
+use App\Commands\Trade\Auction\CommitPurchasingContext;
+use App\Commands\Trade\Auction\CreateLotCommand;
+use App\Commands\Trade\Auction\CreateLotContext;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Requests\AuctionAddLotRequest;
 use App\Http\Requests\AuctionBuyLotRequest;
-use App\Models\AuctionLot;
-use App\Models\Hero\Thing;
-use App\Repositories\AuctionRepository;
 use App\Repositories\HeroRepository;
-use App\Repositories\HeroResourcesRepository;
+use App\Repositories\HeroRepositoryObj;
+use App\Repositories\Trade\AuctionRepository;
 use App\Serializers\RedisAuctionLot;
 use App\Transactions\Trade\AuctionTransactions;
-use DB;
-use Exception;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class AuctionController extends Controller
 {
+    /** @var  HeroRepositoryObj */
+    private $heroRepo;
+    /** @var  AuctionRepository */
+    protected $auctionRepo;
+
+    /**
+     * AuctionController constructor.
+     */
+    public function __construct(AuctionRepository $auctionRepo, HeroRepositoryObj $heroRepo)
+    {
+        $this->auctionRepo = $auctionRepo;
+        $this->heroRepo = $heroRepo;
+
+        parent::__construct();
+    }
+
     public function index()
     {
-        $lots = AuctionRepository::getActiveLots();
-        $heroThings = HeroRepository::getHeroThings(\Auth::user());
+        $user_id = \Auth::id();
+        $lots = $this->auctionRepo->getActiveLots();
+
+        $hero = $this->heroRepo->findById($user_id);
+        $heroThings = $hero->things;
 
         $thingsForSale = $heroThings->filter(function ($thing) {
             return $thing->status === 'free';
         });
 
-        $expiredLots = AuctionRepository::getExpiredLots();
+        $expiredLots = $this->auctionRepo->getExpiredLots();
         
         $userJson = json_encode(['id' => $this->user_id, 'name' => auth()->user()->name]);
 
@@ -46,15 +62,13 @@ class AuctionController extends Controller
 
     public function addLot(AuctionAddLotRequest $request)
     {
-        $thing = HeroRepository::findHeroThingById($request->thing_id);
-
-        $lot = AuctionFactory::createLotByThing($thing, auth()->user(), $request->bid);
-        $thing->lock();
-
-        RedisAuctionLot::saveLotInRedis($lot);
+        $user_id = \Auth::id();
+        
+        $command = new CreateLotCommand($this->heroRepo);
+        
+        $command->createLot($request->thing_id, $user_id, $request->bid);
 
         Session::flash('message', 'Lot is added successfully!');
-
         return redirect()->route('auction_page');
     }
 
@@ -62,16 +76,13 @@ class AuctionController extends Controller
     public function buy(AuctionBuyLotRequest $request)
     {
         $lot_id = $request->get('lot_id');
-        $lot = AuctionLot::find($lot_id, ['id', 'owner_id', 'thing_id','bid']);
-        $purchaser = auth()->user();
+        $purchaser_id = \Auth::id();
 
-        if ($lot != null) {
-            AuctionTransactions::commitPurchasing($lot, $purchaser);
-        }
-        else {
-            Session::flash('message', 'Lot is bought yet!');
-        }
-        
+        $cmd = new CommitPurchasingCommand(new AuctionRepository(), new HeroRepositoryObj());
+        $cmd->commitPurchasing($lot_id, $purchaser_id);
+
+        Session::flash('message', 'Lot is bought yet!');
+
         return redirect()->route('auction_page');
     }
 }

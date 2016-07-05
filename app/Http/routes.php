@@ -13,12 +13,16 @@
 
 Route::group(['middleware' => 'app_auth'], function () {
 
-    Route::get('/profile', 'Profile\ProfileController@index')->name('profile_page');
-    Route::get('/profile/channels', 'Profile\ProfileController@channels')->name('profile_channels_page');
+//    Route::get('/profile', 'Profile\ProfileController@index')->name('profile_page');
+//    Route::get('/profile/channels', 'Profile\ProfileController@channels')->name('profile_channels_page');
 
 
     // work-module
-//    Route::get('/work/mine', 'Work\MineController@index')->name('work_mine_page');
+    Route::get('/mine', 'Mine\MineController@index')->name('mine_index_page');
+    Route::post('/mine/mine_petrol', 'Mine\OilController@minePetrol')->name('mine_mine_petrol_action');
+    Route::post('/mine/mine_kerosene', 'Mine\OilController@mineKerosene')->name('mine_mine_kerosene_action');
+    Route::post('/mine/mine_oil', 'Mine\OilController@mineOil')->name('mine_mine_oil_action');
+    Route::post('/mine/mine_whater', 'Mine\OilController@mineWhater')->name('mine_mine_whater_action');
 //    Route::get('/work/mine/create_teamwork', 'Work\MineController@createSingleTeamWork')->name('work_create_single_teamwork_page');
 //    Route::post('/work/mine/commit_privateteam_action', 'Work\TeamworksController@commitPrivateteamAction')->name('work_commit_privateteam_action');
 //    Route::post('/work/mine/ready_to_teamwork_action', 'Work\TeamworksController@readyToTeamworkAction')->name('work_ready_to_teamwork_action');
@@ -33,30 +37,39 @@ Route::group(['middleware' => 'app_auth'], function () {
 
 
     Route::get('/work', 'Work\WorkController@index')->name('work_index_page');
+    Route::get('/delete/work/order/{id}', 'Work\OrderController@deleteOrder')->name('work_delete_order_action');
+    Route::post('/generate/work/order', 'Work\OrderController@generateOrder')->name('generate_work_order_action');
+
 
 
     Route::get('/work/orders', 'Work\OrderController@index')->name('work_orders_page');
     // single-order actions
     Route::post('/work/order/accept', 'Work\OrderController@acceptOrder')->name('work_accept_order_action');
-    Route::group(['middleware' => 'work_order_acceptor'], function () {
+//    Route::group(['middleware' => 'work_order_acceptor'], function () {
         Route::get('/work/order/{id}', 'Work\OrderController@showOrder')->name('work_show_order_page');
         Route::post('/work/order/add_material', 'Work\OrderController@addMaterial')->name('work_order_add_material_in_stock_action');
         Route::post('/work/order/apply_skill', 'Work\OrderController@applySkill')->name('work_order_apply_skill_action');
-    });
+        Route::post('/work/order/estimate', 'Work\OrderController@estimate')->name('work_order_estimate_action');
+//    });
 
     
     
     // team-order actions
     Route::get('/work/teamorders', 'Work\Team\TeamOrderController@index')->name('work_teamorders_page');
-    Route::group(['middleware' => 'work_teamorder_acceptor'], function () {
+//    Route::group(['middleware' => 'work_teamorder_acceptor'], function () {
         Route::post('/work/teamorder/accept', 'Work\Team\TeamOrderController@acceptOrder')->name('work_accept_teamorder_action');
-    });
+    Route::get('/delete/work/teamorder/{id}', 'Work\Team\TeamOrderController@deleteTeamOrder')->name('work_delete_teamorder_action');
+    Route::post('/work/teamorder/estimate', 'Work\Team\TeamOrderController@estimate')->name('work_teamorder_estimate_action');
+    Route::post('/work/teamorder/take_reward', 'Work\Team\TeamOrderController@takeReward')->name('work_teamorder_take_reward_action');
+    
+    
+//    });
     
     
     Route::group(['middleware' => 'work_teamorder_partner'], function () {
         Route::get('/work/teamorder/{id}', 'Work\Team\TeamOrderController@showOrder')->name('work_show_teamorder_page');
         Route::post('/work/teamorder/add_material', 'Work\Team\TeamOrderController@addMaterial')->name('work_teamorder_add_material_in_stock_action');
-        Route::post('/work/teamorder/add_skill', 'Work\Team\TeamOrderController@addSkill')->name('work_teamorder_add_skill_in_stock_action');
+        Route::post('/work/teamorder/apply_skill', 'Work\Team\TeamOrderController@applySkill')->name('work_teamorder_apply_skill_in_stock_action');
     });
 
     Route::get('/work/privateteams', 'Work\Team\PrivateTeamController@index')->name('work_privateteams_page');
@@ -106,17 +119,17 @@ Route::group(['middleware' => 'app_auth'], function () {
 
 
 
-    Route::get('/', 'IndexController@index')->name('index_page');
-    Route::get('/test', 'IndexController@test')->name('test_page');
 
     // team-order-constructor
-    Route::get('/admin/orders', 'Admin\OrderBuilder\TeamOrderBuilderController@orderDrafts')->name('admin_orderdrafts_page');
-    Route::get('/admin/create_order_draft_1', 'Admin\OrderBuilder\TeamOrderBuilderController@createOrderDraft')->name('admin_create_orderdraft_page');
-    Route::get('/admin/edit_order_draft_1/{id}', 'Admin\OrderBuilder\TeamOrderBuilderController@editOrderDraft_1')->name('admin_edit_orderdraft_1_page');
+    Route::get('/admin/orders_drafts', 'Admin\OrderBuilder\TeamOrderBuilderController@orderDrafts')->name('admin_orderdrafts_page');
+    Route::get('/admin/order_builder/team_order/new', 'Admin\OrderBuilder\TeamOrderBuilderController@newTeamOrderDraft')->name('admin_create_orderdraft_page');
+    Route::post('/admin/order_builder/team_order/create', 'Admin\OrderBuilder\TeamOrderBuilderController@createOrderDraft')->name('admin_create_teamorder_draft_action');
+    
+    
+    Route::get('/admin/order_builder/team_order/edit_materials/{id}', 'Admin\OrderBuilder\TeamOrderBuilderController@editOrderDraft_1')->name('admin_edit_orderdraft_1_page');
     Route::get('/admin/edit_order_draft_2/{id}', 'Admin\OrderBuilder\TeamOrderBuilderController@editOrderDraft_2')->name('admin_edit_orderdraft_2_page');
     
-    Route::post('/admin/create_orderdraft', 'Admin\OrderBuilder\TeamOrderBuilderController@createOrderDraft')->name('admin_create_orderdraft_action');
-    Route::post('/admin/edit_orderdraft_1', 'Admin\OrderBuilder\TeamOrderBuilderController@editOrderDraftAction_1')->name('admin_edit_orderdraft_1_action');
+    Route::post('/admin/order_builder/team_order/update_materials', 'Admin\OrderBuilder\TeamOrderBuilderController@editOrderDraftAction_1')->name('admin_edit_orderdraft_1_action');
     Route::post('/admin/edit_orderdraft_2', 'Admin\OrderBuilder\TeamOrderBuilderController@editOrderDraftAction_2')->name('admin_edit_orderdraft_2_action');
     Route::post('/admin/accept_orderdraft', 'Admin\OrderBuilder\TeamOrderBuilderController@acceptOrderDraft')->name('admin_accept_orderdraft_action');
 
@@ -145,14 +158,23 @@ Route::group(['middleware' => 'app_auth'], function () {
 
 
     Route::get('/geo/build_route/{id}', 'Geo\TravelRouteController@editRoute')->name('geo_route_build_page');
-    Route::post('/geo/add_route', 'Geo\TravelRouteController@addRoute')->name('geo_add_route_action');
+    Route::post('/geo/create_route', 'Geo\TravelRouteController@createRoute')->name('geo_add_route_action');
     Route::post('/geo/add_routepoint', 'Geo\TravelRouteController@addRoutePoint')->name('geo_add_routepoint_action');
     Route::post('/geo/delete_lastpoint', 'Geo\TravelRouteController@deleteLastpoint')->name('geo_delete_lastpoint_action');
-    Route::post('/geo/final_route', 'Geo\TravelRouteController@finalRoute')->name('geo_final_route_action');
+    Route::post('/geo/commit_route', 'Geo\TravelRouteController@commitRoute')->name('geo_final_route_action');
 
-    Route::get('/geo/business', 'Geo\Business\VoyageController@index')->name('geo_business_page');
+    Route::get('/geo/business', 'Geo\Business\TraderController@profile')->name('geo_business_page');
+    Route::get('/geo/business/tempo_shops', 'Geo\Business\TempoShopController@index')->name('geo_trader_temposhops_page');
+    Route::get('/geo/business/tempo_shop/{id}', 'Geo\Business\TempoShopController@show')->name('geo_trader_show_temposhop_page');
+    Route::post('/geo/business/add_tempo_shop', 'Geo\Business\TempoShopController@addTempoShop')->name('geo_generate_temposhop_action');
+    
+    Route::get('/geo/business/sea_freights', 'Geo\Business\SeaFreightsController@index')->name('geo_sea_freights_page');
+    Route::post('/geo/business/generate_ship', 'Geo\Business\ShipController@generateShip')->name('geo_generate_ship_action');
+    Route::post('/geo/business/bind_ship_route', 'Geo\Business\ShipController@setShipOnRoute')->name('geo_set_ship_on_route_action');
+    
     Route::post('/geo/create_voyage', 'Geo\Business\VoyageController@createVoyage')->name('geo_create_voyage_action');
-    Route::post('/geo/voyage_start_sail', 'Geo\Business\VoyageController@startSail')->name('geo_voyage_start_sail_action');
+    Route::post('/geo/voyage_start_voyage', 'Geo\Business\VoyageController@startVoyage')->name('geo_voyage_start_voyage_action');
+    Route::post('/geo/voyage_sail', 'Geo\Business\VoyageController@sail')->name('geo_voyage_sail_action');
     Route::post('/geo/voyage_moor', 'Geo\Business\VoyageController@moor')->name('geo_voyage_moor_action');
 
     Route::post('/geo/travel/create_order', 'Geo\TravelController@createOrder')->name('sea_create_order_action');
@@ -186,14 +208,11 @@ Route::group(['middleware' => 'app_auth'], function () {
     Route::post('/generate/geo/travel', 'DataGeneratorController@generateTravel')->name('sea_generate_travel_action');
     Route::get('/delete/geo/travel/{id}', 'DataGeneratorController@deleteTravel')->name('sea_delete_travel_action');
 
-    Route::post('/generate/work/order', 'DataGeneratorController@generateWorkOrder')->name('generate_work_order_action');
     Route::post('/generate/work/teamorder', 'DataGeneratorController@generateWorkTeamOrder')->name('generate_work_teamorder_action');
 
-    Route::get('/delete/work/order/{id}', 'DataGeneratorController@deleteWorkOrder')->name('work_delete_order_action');
-    Route::post('/generate/work/create_material', 'DataGeneratorController@createMaterial')->name('create_work_material_action');
-    Route::post('/generate/work/create_skill', 'DataGeneratorController@createSkill')->name('create_work_skill_action');
-    Route::post('/generate/work/create_instrument', 'DataGeneratorController@createInstrument')->name('create_work_instrument_action');
-    Route::get('/delete/work/teamorder/{id}', 'DataGeneratorController@deleteWorkTeamOrder')->name('work_delete_teamorder_action');
+    Route::post('/generate/work/create_material', 'Admin\WorkCatalogsController@createMaterial')->name('create_work_material_action');
+    Route::post('/generate/work/create_skill', 'Admin\WorkCatalogsController@createSkill')->name('create_work_skill_action');
+    Route::post('/generate/work/create_instrument', 'Admin\WorkCatalogsController@createInstrument')->name('create_work_instrument_action');
 
     // inner-api
     Route::get('api/geo/locations', 'Api\Geo\LocationsController@locations')->name('api_geo_locations');
@@ -205,9 +224,3 @@ Route::group(['middleware' => 'app_auth'], function () {
 });
 
 
-Route::get('/sign_in', 'Guest\GuestController@signIn')->name('sign_in_page');
-Route::get('/sign_up', 'Guest\GuestController@signUp')->name('sign_up_page');
-Route::get('/logout', 'Auth\UserController@logout')->name('logout_action');
-
-Route::post('/login', 'Guest\GuestController@login')->name('sign_in_action');
-Route::post('/register', 'Auth\UserController@register')->name('sign_up_action');

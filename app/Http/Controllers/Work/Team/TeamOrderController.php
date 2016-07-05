@@ -2,38 +2,53 @@
 
 namespace App\Http\Controllers\Work\Team;
 
+use App\Commands\Work\TeamOrder\AcceptTeamOrderCommand;
+use App\Commands\Work\TeamOrder\AddMaterialTeamOrderCommand;
+use App\Commands\Work\TeamOrder\ApplySkillTeamOrderCommand;
+use App\Commands\Work\TeamOrder\DeleteTeamOrderCommand;
+use App\Commands\Work\TeamOrder\EstimateTeamOrderCommand;
+use App\Commands\Work\TeamOrder\TakeRewardTeamOrderCommand;
+use App\Exceptions\DefecitMaterialException;
+use App\Exceptions\NotTeamLeaderException;
+use App\Exceptions\WorkerWithoutTeamException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
-use App\Models\Work\Team\PrivateTeam;
 use App\Models\Work\Team\TeamOrder;
 use App\Models\Work\Worker;
-use App\Repositories\Work\PrivateTeamRepository;
-use App\Repositories\Work\SkillRepository;
-use App\Repositories\Work\Team\TeamOrderMaterialRepository;
-use App\Repositories\Work\Team\TeamOrderRepository;
-use App\Repositories\Work\Team\TeamOrderSkillRepository;
-use App\Repositories\Work\Team\WorkerRepository;
-use App\Repositories\Work\WorkerMaterialsRepository;
-use App\Transactions\Work\Team\TeamOrderTransactions;
+use App\Repositories\HeroRepositoryObj;
+use App\Repositories\Work\Team\TeamOrderRepositoryObj;
+use App\Repositories\Work\WorkerRepositoryObj;
+use App\StateMachines\Work\TeamOrderEntity;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
 class TeamOrderController extends Controller
 {
+    /** @var TeamOrderRepositoryObj */
+    protected $teamOrdersRep;
+    /** @var WorkerRepositoryObj */
+    protected $workerRep;
+
+    public function __construct(TeamOrderRepositoryObj $teamOrdersRep, WorkerRepositoryObj $workerRep)
+    {
+        $this->teamOrdersRep = $teamOrdersRep;
+        $this->workerRep = $workerRep;
+        parent::__construct();
+    }
+
     public function index()
     {
+        $worker_id = \Auth::id();
+
         $orders = TeamOrder::
             select('id', 'desc', 'kind_work', 'price', 'acceptor_team_id', 'status')
             ->where('status', 'free')
             ->get();
 
-        $worker = WorkerRepository::findById(\Auth::id());
+        $worker = $this->workerRep->findWithTeamById($worker_id); // WorkerRepository::findById();
 
-        $userTeamOrders = TeamOrderRepository::getTeamOrders($worker->team);
-
-
-//        $worker->team->orders;;
+        $userTeamOrders = $worker->team->orders; // TeamOrderRepository::getTeamOrders($worker->team);
 
         return $this->view('work.teamorder.orders_index', [
             'orders' => $orders,
@@ -43,122 +58,154 @@ class TeamOrderController extends Controller
 
     public function showOrder($id)
     {
-        $order = TeamOrderRepository::getOrderWithMaterialsAndSkillsById($id);
-        $worker = WorkerRepository::findWithMaterialsAndSkillsById(\Auth::id());
+        /** @var Worker $worker*/
+        $worker = $this->workerRep->findWithMaterialsAndSkillsById(\Auth::id());
+        /** @var TeamOrderEntity $order */
+        $order = $this->teamOrdersRep->findOrderWithMaterialsAndSkillsById($id);
 
-        if ($order->status == 'stock_materials') {
 
-//            $userMaterials = $worker->materials;
-            $orderMaterialsCodes = $order->materials()->select('code')->get()->lists('code')->toArray();
+        switch ($order->status) {
+            case 'accepted':
 
-            $userMaterials = $worker->materials()->whereIn('code', $orderMaterialsCodes)->get();
+                return $this->view('work.teamorder.show.accepted', [
+                    'order' => $order,
+                ]);
 
-            return $this->view('work.teamorder.order_state.order_stock_materials', [
-                'order' => $order,
-                'orderMaterials' => $order->materials,
-                'userMaterials' => $userMaterials,
-            ]);
+            case 'stock_materials':
+
+                $orderMaterials = $order->materials;
+                $workerNeedMaterials = $this->workerRep->selectWorkerMaterialsNeedForOrder($order, $worker);
+
+                return $this->view('work.teamorder.show.stock_materials', [
+                    'order' => $order,
+                    'orderMaterials' => $orderMaterials,
+                    'userMaterials' => $workerNeedMaterials,
+                ]);
+
+            case 'stock_skills':
+
+                $orderSkills = $order->skills;
+                $userSkills = $worker->skills;
+
+                return $this->view('work.teamorder.show.stock_skills', [
+                    'order' => $order,
+                    'orderSkills' => $orderSkills,
+                    'userSkills' => $userSkills,
+                ]);
+
+            case 'completed':
+
+                return $this->view('work.teamorder.show.completed', [
+                    'order' => $order,
+                ]);
         }
-        elseif ($order->status == 'stock_skills') {
 
-            $orderSkills = $order->skills;
-            $userSkills = $worker->skills;
-
-            return $this->view('work.teamorder.order_state.order_stock_skills', [
-                'order' => $order,
-                'orderSkills' => $orderSkills,
-                'userSkills' => $userSkills,
-            ]);
-        }
-        elseif ($order->status == 'completed') {
-
-            return $this->view('work.teamorder.order_state.order_completed', [
-                'order' => $order,
-            ]);
-        }
-
-
-        return $this->view('work.teamorder.show_order', [
-            'order' => $order,
-            'orderMaterials' => $order->materials,
-//            'userMaterials' => $userMaterials,
-//            'orderSkills' => $orderSkills,
-//            'userSkills' => $userSkills,
-        ]);
+        throw new \Exception; // UnknownTeamOrderStatus
     }
 
     public function acceptOrder()
     {
         $data = Input::all();
         $order_id = $data['order_id'];
-
-        $order = TeamOrderRepository::getOrderById($order_id);
-        $worker = WorkerRepository::findById(\Auth::id());
-
-        $team = $worker->team;
-
-        // заказ может принимать только лидер? -> да(проверка в мидлваре)
-        $order->acceptor_team_id = $team->id;
+        $user_id = \Auth::id();
 
 
-        $order->status = 'stock_materials';
-        $order->save();
+        try {
+            $cmd = new AcceptTeamOrderCommand($this->teamOrdersRep, $this->workerRep);
 
-        return Redirect::route('work_show_teamorder_page', ['id' => $order->id]);
+            $cmd->acceptTeamOrder($order_id, $user_id);
+        }
+        catch (WorkerWithoutTeamException $e)
+        {
+            Session::flash('message', 'Worker without team cannot accept team-order');
+            return \Redirect::back();
+        }
+        catch (NotTeamLeaderException $e)
+        {
+            Session::flash('message', 'Only Team-Leader can accept team-order');
+            return \Redirect::back();
+        }
+
+        return Redirect::route('work_show_teamorder_page', ['id' => $order_id]);
     }
 
+    public function estimate()
+    {
+        $data = Input::all();
+        $order_id = $data['order_id'];
+        $worker_id = \Auth::id();
+
+        $cmd = new EstimateTeamOrderCommand($this->teamOrdersRep, $this->workerRep);
+
+        $cmd->estimateTeamOrder($order_id, $worker_id);
+
+        return Redirect::route('work_show_teamorder_page', ['id' => $order_id]);
+    }
+    
     public function addMaterial()
     {
         $data = Input::all();
 
         $materialCode = $data['material'];
         $order_id = $data['order_id'];
+        $worker_id = \Auth::id();
 
-        $worker = WorkerRepository::findById(\Auth::id());
-        $order = TeamOrderRepository::getOrderWithMaterialsAndSkillsById($order_id);
+        try {
+            $cmd = new AddMaterialTeamOrderCommand($this->teamOrdersRep, $this->workerRep);
 
-        // validate  $orderMaterial != null
-        // validate
-
-        if (!WorkerRepository::hasAmountMaterialForOrder($worker, $order, $materialCode)) {
-
+            $cmd->addMaterial($order_id, $worker_id, $materialCode);
+        }
+        catch (DefecitMaterialException $e)
+        {
             Session::flash('message', 'Nedostatochno ' . $materialCode);
-            return Redirect::route('work_show_teamorder_page', ['id' => $order->id]);
+            return Redirect::route('work_show_teamorder_page', ['id' => $order_id]);
         }
 
-        // action
-        TeamOrderTransactions::transferMaterialFromUserToOrder($worker, $order, $materialCode);
-//        TeamOrderMaterialRepository::deleteStockedMaterial($orderMaterial);
 
-        if (TeamOrderRepository::isFinishedStockMaterials($order)) {
-            // orderState->apply(finish_stock_materials)
-            $order->update(['status' => 'stock_skills']);
-        }
+        Session::flash('message', 'Stocked ' . $materialCode);
 
-        Session::flash('message', 'Внесено ' . $materialCode);
-        return Redirect::route('work_show_teamorder_page', ['id' => $order->id]);
+        return Redirect::route('work_show_teamorder_page', ['id' => $order_id]);
     }
 
-    public function addSkill()
+    public function applySkill()
     {
         $data = Input::all();
 
         $skillCode = $data['skill'];
         $order_id = $data['order_id'];
+        $worker_id = \Auth::id();
 
-        $worker = WorkerRepository::findWithMaterialsAndSkillsById(\Auth::id());
-        $order = TeamOrderRepository::getOrderById($order_id);
+        $cmd = new ApplySkillTeamOrderCommand($this->teamOrdersRep, $this->workerRep);
+
+        $cmd->applySkill($order_id, $worker_id, $skillCode);
 
 
-        TeamOrderTransactions::applySkillToOrder($worker, $order, $skillCode);
-        Session::flash('message', 'Применен навык ' . $skillCode);
+        Session::flash('message', 'Applyed ' . $skillCode);
 
-        if (TeamOrderRepository::isFinishedStockSkills($order)) {
-            $order->update(['status' => 'completed']);
-        }
+        return Redirect::route('work_show_teamorder_page', ['id' => $order_id]);
+    }
 
-        // midlewareAfter order_actions => actions if order->completed
+    public function takeReward()
+    {
+        $data = Input::all();
+        $order_id = $data['order_id'];
+        $worker_id = \Auth::id();
 
-        return Redirect::route('work_show_teamorder_page', ['id' => $order->id]);
+
+        $cmd = new TakeRewardTeamOrderCommand($this->teamOrdersRep, $this->workerRep, new HeroRepositoryObj());
+        
+        $cmd->takeReward($order_id, $worker_id);
+
+        
+        
+        return Redirect::route('work_teamorders_page');
+    }
+
+    public function deleteTeamOrder($id)
+    {
+        $cmd = new DeleteTeamOrderCommand($this->teamOrdersRep);
+        $cmd->deleteTeamOrder($id);
+
+        return redirect()->route('work_teamorders_page');
     }
 }

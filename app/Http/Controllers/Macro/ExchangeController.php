@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Macro;
 
 use App\Domain\PlayersOperations;
+use App\Factories\MarketFactory;
 use App\Http\Controllers\MacroController;
 use App\Http\Requests\Process\ExchangeChangeRequest;
 use App\Http\Requests\Process\ExchangeOfferRequest;
@@ -43,13 +44,19 @@ class ExchangeController extends PoliticController
     {
         $data = $request->all();
 
-        $good = new ExchangeGood();
-        $good->resource_title = $data['resource_title'];
-        $good->resource_count = $data['resource_count'];
-        $good->intent_resource_title = $data['intent_resource_title'];
-        $good->intent_resource_count = $data['intent_resource_count'];
-        $good->user_id = auth()->user()->id;
-        $good->save();
+        MarketFactory::createExchangeOffer(\Auth::user(), 
+            $data['resource_title'], 
+            $data['resource_count'],
+            $data['intent_resource_title'],
+            $data['intent_resource_count']
+        );
+//        $good = new ExchangeGood();
+//        $good->resource_title = $data['resource_title'];
+//        $good->resource_count = $data['resource_count'];
+//        $good->intent_resource_title = $data['intent_resource_title'];
+//        $good->intent_resource_count = $data['intent_resource_count'];
+//        $good->user_id = auth()->user()->id;
+//        $good->save();
 
         return redirect('/macro/exchange');
     }

@@ -56,7 +56,7 @@
                                     </td>
 
                                     <td>
-                                        {!! Form::open(['action' => ['AuctionController@buy'], 'class' => '']) !!}
+                                        {!! Form::open(['action' => ['Trade\AuctionController@buy'], 'class' => '']) !!}
                                         {!! Form::hidden('lot_id', $lot->id, ['id' =>  '']) !!}
                                         {!! Form::submit('Купить', array('class' => 'btn btn-primary')) !!}
                                         {!! Form::close() !!}

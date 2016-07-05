@@ -2,13 +2,11 @@
 
 namespace App\Http\Middleware\Work;
 
-use App\Models\Work\Order;
 use App\Repositories\Work\OrderRepository;
-use App\Repositories\Work\Team\WorkerRepository;
+use App\Repositories\Work\OrderRepositoryObj;
 use Closure;
-use Illuminate\Routing\Route;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
+use App\Validators\Work\OrderAcceptorValidator;
 
 class OrderAcceptor
 {
@@ -23,22 +21,14 @@ class OrderAcceptor
     {
         if (($order_id = $request->route()->parameter('id')) || ($order_id = $request->get('order_id'))) {
 
-            $worker = WorkerRepository::findWithMaterialsAndSkillsById(\Auth::id());
-            /** @var Order $order */
-            $order = OrderRepository::findOrderWithMateriaslAndSkillsById($order_id);
+            $validator = new OrderAcceptorValidator(new OrderRepositoryObj());
 
-            if ($order->isAcceptedBy($worker)) {
-                $request->attributes->add([
-                    'worker' => $worker,
-                    'order' => $order,
-                ]);
-
+            if ($validator->isOrderAcceptor(\Auth::id(), $order_id)) {
                 return $next($request);
             }
-
         }
 
-        Session::flash('message', 'This order not yours!');
+        Session::flash('message', 'It\'s not your order!');
         return redirect()->back(); // todo danger - > change on concrete path
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Npc\NpcDeal;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesResources;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -23,14 +24,24 @@ class Controller extends BaseController
         $this->user_id = auth()->id();
     }
 
-    public function view($view = null, $data = [])
+    protected function view($view = null, $data = [])
     {
         $id = \Auth::id();
         $res = \App\Models\Macro\Resources::select(['water', 'food', 'tree', 'free_people'])->find($id);
-        $heroResources = \App\Models\Hero\Resources::select(['water', 'oil', 'gold'])->find($id);
+        $heroResources = \App\Models\Core\Hero::select(['water', 'oil', 'gold'])->find($id);
+        
+        $npcOffers = NpcDeal::
+            where('offer_status', 'created')
+            ->whereOr('offer_status', 'waiting')
+            ->get();
+        
+        
+        $npcDeals = NpcDeal::where('offer_status', 'accepted')->get();
 //        $team = User::whe
 
         return view($view, $data, [
+            'npcOffers' => $npcOffers,
+            'npcDeals' => $npcDeals,
             'resources' => $res,
             'heroResources' => $heroResources,
         ]);

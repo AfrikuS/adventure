@@ -73,6 +73,7 @@
                     </ul>
                 </li>
                 <li class="active">{{ link_to_route('admin_page', 'Admin', []) }}</li>
+                <li>{{ link_to_route('mine_index_page', 'Mine', []) }}</li>
 
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Other<span class="caret"></span></a>
@@ -106,10 +107,10 @@
             $('.timer').startTimer(options);
         });
 
-    @yield('scripts')
     </script>
 @show
 
+@yield('scripts')
 
 </body>
 </html>

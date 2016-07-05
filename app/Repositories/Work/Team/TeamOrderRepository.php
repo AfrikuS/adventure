@@ -20,23 +20,23 @@ class TeamOrderRepository
         return $order;
     }
 
-    public static function finishWorks(TeamOrder $order)
-    {
-        $order->update(['status' => 'finished']);
-    }
+//    public static function finishWorks(TeamOrder $order)
+//    {
+//        $order->update(['status' => 'finished']);
+//    }
 
-    /** @deprecated  */
-    public static function orderReadyToWork(TeamOrder $order): bool
-    {
-        return TeamOrderMaterial::select('id')->where('teamorder_id', $order->id)->count() == 0;
-    }
+//    /** @deprecated  */
+//    public static function orderReadyToWork(TeamOrder $order): bool
+//    {
+//        return TeamOrderMaterial::select('id')->where('teamorder_id', $order->id)->count() == 0;
+//    }
+//
+//    public static function isTeamOrderFinishedWorks(TeamOrder $order)
+//    {
+//        return TeamOrderSkill::select('id')->where('teamorder_id', $order->id)->count() == 0;
+//    }
 
-    public static function isTeamOrderFinishedWorks(TeamOrder $order)
-    {
-        return TeamOrderSkill::select('id')->where('teamorder_id', $order->id)->count() == 0;
-    }
-
-    public static function getOrderWithMaterialsAndSkillsById($id): TeamOrder
+    public static function findOrderWithMaterialsAndSkillsById($id): TeamOrder
     {
         return TeamOrder::select('id', 'price', 'status', 'desc', 'kind_work')
             ->with(['materials' => function ($query) {
@@ -66,28 +66,28 @@ class TeamOrderRepository
 //    {
 //    }
 
-    public static function getMaterialByCode(TeamOrder $order, $code)
-    {
-        $index = $order->materials->search(function ($material, $key) use ($code) {
-            return $material->code == $code;
-        });
+//    public static function getMaterialByCode(TeamOrder $order, $code)
+//    {
+//        $index = $order->materials->search(function ($material, $key) use ($code) {
+//            return $material->code == $code;
+//        });
+//
+//        if (is_int($index)) {
+//            return $order->materials->get($index);
+//        }
+//        return false;
+//    }
+//
+//    public static function getSkillByCode(TeamOrder $order, $code)
+//    {
+//        $index = $order->skills->search(function ($skill, $key) use ($code) {
+//            return $skill->code == $code;
+//        });
+//
+//        return $order->skills->get($index);
+//    }
 
-        if (is_int($index)) {
-            return $order->materials->get($index);
-        }
-        return false;
-    }
-
-    public static function getSkillByCode(TeamOrder $order, $code)
-    {
-        $index = $order->skills->search(function ($skill, $key) use ($code) {
-            return $skill->code == $code;
-        });
-
-        return $order->skills->get($index);
-    }
-
-    // attach \ detach todo view
+/*    // attach \ detach todo view
     public static function deleteMaterialByCode(TeamOrder $order, $materialCode)
     {
         $index = $order->materials->search(function ($material, $key) use ($materialCode) {
@@ -101,7 +101,7 @@ class TeamOrderRepository
 
         return false;
 
-    }
+    }*/
 
 //    /** @deprecated  */
 //    public static function isFinishedStockSkillsByCode(TeamOrder $order, string $skillCode)
@@ -111,27 +111,17 @@ class TeamOrderRepository
 //        return $skill->need_times <= $skill->stock_times;
 //    }
 
-    public static function isFinishedStockSkills(TeamOrder $order): bool
-    {
-        foreach ($order->skills as $skill) {
-            if ($skill->need_times > $skill->stock_times) {
-                return false;
-            }
-        }
-        
-        return true;
-    }
 
-    public static function isFinishedStockMaterials($order): bool
-    {
-        foreach ($order->materials as $material) {
-            if ($material->need > $material->stock) {
-                return false;
-            }
-        }
-
-        return true;
-    }
+//    public static function isFinishedStockMaterials($order): bool
+//    {
+//        foreach ($order->materials as $material) {
+//            if ($material->need > $material->stock) {
+//                return false;
+//            }
+//        }
+//
+//        return true;
+//    }
 
     public static function getTeamOrders(PrivateTeam $team)
     {

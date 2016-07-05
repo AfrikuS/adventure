@@ -149,8 +149,9 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Illuminate\Html\HtmlServiceProvider::class,
-        'Form'=> 'Collective\Html\HtmlServiceProvider',
-
+        'Form'=> Collective\Html\HtmlServiceProvider::class,
+//        'Form'=> 'Collective\Html\HtmlServiceProvider',
+//        'Helpers'   => 'App\Libraries\Helpers'
         /*
          * Application Service Providers...
          */
@@ -166,7 +167,6 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Appzcoder\CrudGenerator\CrudGeneratorServiceProvider::class,
         DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
-        App\Providers\FightServiceProvider::class
     ],
 
     /*
@@ -222,6 +222,8 @@ return [
         'Sentinel'   => Cartalyst\Sentinel\Laravel\Facades\Sentinel::class,
         'Bonsai' => Caffeinated\Bonsai\Facades\Bonsai::class,
         'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
+        
+        'TimeHelper' => App\Helpers\TimeHelper::class,
     ],
 
 ];

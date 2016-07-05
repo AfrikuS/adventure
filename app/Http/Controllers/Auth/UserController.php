@@ -2,22 +2,28 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Domain\UserActions;
+use App\Commands\Auth\CreateUserCommand;
+use App\Commands\Auth\CreateUserContext;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\RegisterUserRequest;
-use App\Models\Resources;
-use App\Models\User;
-use App\Models\UserRedis;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
-use Symfony\Component\HttpFoundation\Request;
+use App\Services\AuthService;
 
 class UserController extends Controller
 {
+    /** @var AuthService  */
+    private $authService;
+
+    public function __construct()
+    {
+        $this->authService = new AuthService();
+        
+        parent::__construct();
+    }
+
     public function logout()
     {
-        Auth::logout();
+        $this->authService->logoutUser();
+        
         return redirect()->route('sign_in_page');
     }
 
@@ -25,10 +31,12 @@ class UserController extends Controller
     public function register(RegisterUserRequest $request)
     {
         $data = $request->all();
-        $user = UserActions::createNewUser($data);
+     
+        $context = new CreateUserContext($data['name'], $data['password'], $data['email']);
+        $command = new CreateUserCommand($context);
+        $user = $command->createUser();
 
-        Auth::login($user);
-        UserRedis::loginUser($user);
+        $this->authService->loginUser($user);
 
         return redirect()->route('index_page');
     }

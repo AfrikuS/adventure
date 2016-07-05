@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.admin_layout')
 
 @section('title', 'Orders-Constructor/ Order-Drafts - Admin Page')
 @section('head')
@@ -56,7 +56,7 @@
             <h4>Создать SingleOrder</h4>
         </div>
         <div class="col-lg-4">
-            <h4>Создать TeamOrder</h4>
+            <h4>{{ link_to_route('admin_create_orderdraft_page', 'Создать TeamOrder') }}</h4>
         </div>
         <div class="col-lg-4">
             <h4>Создать ComplexOrder</h4>

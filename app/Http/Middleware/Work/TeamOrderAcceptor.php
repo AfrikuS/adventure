@@ -3,7 +3,9 @@
 namespace App\Http\Middleware\Work;
 
 use App\Repositories\Work\Team\TeamOrderRepository;
+use App\Repositories\Work\Team\TeamOrderRepositoryObj;
 use App\Repositories\Work\Team\WorkerRepository;
+use App\Repositories\Work\WorkerRepositoryObj;
 use Closure;
 use Illuminate\Support\Facades\Session;
 use Redirect;
@@ -21,10 +23,15 @@ class TeamOrderAcceptor
     {
         if ($order_id = $request->get('order_id')) {
 
-            $order = TeamOrderRepository::getOrderById($order_id);
-            $worker = WorkerRepository::findById(\Auth::id());
+            $teamOrdersRepo = new TeamOrderRepositoryObj();
+            $workerRepo = new WorkerRepositoryObj();
+            
+            $order = $teamOrdersRepo->findSimpleOrderById($order_id);
+            $worker = $workerRepo->findSimpleById(\Auth::id());
             $team = $worker->team;
 
+//            if ($worker->hasTeam() && $worker->isLeader() && $worker->team_id == $order->team_id)
+            
             if ($worker->team->id == $order->acceptor_team_id) {
                 Session::flash('message', 'It\'s order of your private-team');
                 return Redirect::route('work_show_teamorder_page', ['id' => $order->id]);

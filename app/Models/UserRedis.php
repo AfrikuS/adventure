@@ -13,7 +13,7 @@ class UserRedis implements Authenticatable
 
     use AppAuthenticatableTrait;
 
-    public static function loginUser($userDb)
+    public static function save($userDb)
     {
 //        $userDb = auth()->user();
         $user = static::getByName($userDb['name']);

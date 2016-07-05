@@ -14,3 +14,13 @@
 
 
 
+@section('right_column')
+    Макро-ресурсы
+    <ul>
+        <li>Еда: {{ $resources->food }}</li>
+        <li>Дерево: {{ $resources->tree}}</li>
+        <li>Вода: {{ $resources->water }}</li>
+        <li>Свободные жители: {{ $resources->free_people }}</li>
+    </ul>
+    <p>
+@endsection

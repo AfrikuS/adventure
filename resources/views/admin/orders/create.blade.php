@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.admin_layout')
 
 @section('title', 'Orders-Constructor. Step_1 - Admin Page')
 @section('head')
@@ -9,7 +9,7 @@
 
     <div class="row row-offcanvas">
         <h4>Cоздать team-order</h4>
-        {!! Form::open(['route' => 'admin_create_orderdraft_action', 'class' => '']) !!}
+        {!! Form::open(['route' => 'admin_create_teamorder_draft_action', 'class' => '']) !!}
         <div class="col-lg-6">
             <h4>Выберите материалы</h4>
 
@@ -72,3 +72,5 @@
     </div>
 
 @endsection
+
+

@@ -2,27 +2,27 @@
 
 namespace App\Factories;
 
-use App\Models\AuctionLot;
-use App\Models\Hero\Thing;
+use App\Models\Core\Thing;
+use App\Models\Trade\AuctionLot;
+use App\Models\User;
+use App\StateMachines\Trade\ThingStateMachine;
 use Carbon\Carbon;
 
 class AuctionFactory
 {
-    public static function createLotByThing(Thing $thing, $user, int $startBid)
+    public static function createLotByThing(ThingStateMachine $thing, User $owner, int $startBid)
     {
         $auctionStartStr = Carbon::create()->addMinutes(200)->toDateTimeString();
 
-        $lot = new AuctionLot();
-        $lot->owner_id = $user->id;
-        $lot->owner_user_name = $user->name;
-        $lot->thing_id = $thing->id;
-        $lot->thing_title = $thing->title;
-        $lot->title  = $thing->title . ' + 1';
-        $lot->bid  = $startBid;
-        $lot->purchaser_id  = null;
-        $lot->date_time = $auctionStartStr;
-        $lot->save();
-
-        return $lot;
+        return AuctionLot::create([
+            'owner_id' => $owner->id,
+            'owner_user_name' => $owner->name,
+            'thing_id' => $thing->id,
+            'thing_title' => $thing->title,
+            'title' => $thing->title . ' + 1',
+            'bid' => $startBid,
+            'purchaser_id' => null,
+            'date_time' => $auctionStartStr,
+        ]);
     }
 }

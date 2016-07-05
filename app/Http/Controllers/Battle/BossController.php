@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Battle;
 
+use App\Deleters\BattleDeleter;
 use App\Domain\MassActions;
 use App\Domain\State\StateBoss;
+use App\Factories\BattleFactory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Requests\MassBossJoinRequest;
@@ -27,12 +29,7 @@ class BossController extends Controller
                 case 'BOSS_END': {
                     $workers = BossRepository::getUsers($boss->id);
 
-                    \DB::beginTransaction();
-
-                    BossTimerRepository::delete($boss->id);
-                    BossRepository::deleteUsers($boss->id);
-                    BossRepository::delete($boss->id);
-                    \DB::commit();
+                    BattleDeleter::deleteBoss($boss);
 
                     return $this->view('battle.boss.boss_end', [
                         'mass_work' => $boss,
@@ -60,7 +57,7 @@ class BossController extends Controller
                 }
                 default: {
                     // ERROR_UNKNOWN_STATE
-                    die('boss');
+//                    die('boss');
                     break;
                 }
             }
@@ -68,7 +65,7 @@ class BossController extends Controller
 
     public function boss_create()
     {
-        MassActions::createBoss();
+        BattleFactory::createBoss(\Auth::user());
         return redirect()->route('boss_page');
     }
 

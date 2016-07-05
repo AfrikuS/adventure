@@ -3,81 +3,102 @@
 namespace App\StateMachines\Work;
 
 use App\Models\Work\Order;
-use App\StateMachines\StateMachineTrait;
-use App\Transactions\Work\OrderTransactions;
-use Finite\Loader\ArrayLoader;
-use Finite\StatefulInterface;
-use Finite\StateMachine\StateMachine;
+use App\StateMachines\ApplicationEntity;
 
-class OrderStateMachine implements StatefulInterface
+class OrderStateMachine extends ApplicationEntity
 {
-    use StateMachineTrait;
-
-    /** @var $order Order */
-    private $order;
-
-    private $loader;
-
-    public $state;
-    /** @var StateMachine */
-    public $stateMachine;
-
     public function __construct(Order $order)
     {
-        $this->order = $order;
-        $this->state = $order->status;
-        
-        $this->initStatesTransitions();
+        parent::__construct($order);
     }
 
-    public function getSM()
+    protected function getModelClass(): string
     {
-        return $this->stateMachine;
+        return Order::class;
     }
 
-    private function initStatesTransitions()
+    protected function getStates(): array
     {
-        $this->stateMachine = new StateMachine;
-        $this->loader       = new ArrayLoader([
-            'class'  => Order::class,  // self ?
-            'states' => [
-                'free'            => ['type' => 'initial', 'properties' => []],
-                'stock_materials' => ['type' => 'normal',  'properties' => []],
-                'stock_skills'    => ['type' => 'normal',  'properties' => []],
-                'completed'       => ['type' => 'final',   'properties' => []],
-            ],
-            'transitions' => [
-                'accept'  =>                ['from' => ['free'],            'to' => 'stock_materials'],
-                'finish_stock_materials' => ['from' => ['stock_materials'], 'to' => 'stock_skills'],
-                'finish_stock_skills'  =>   ['from' => ['stock_skills'],    'to' => 'completed'],
-            ]
-        ]);
+        return [
+            'free'            => ['type' => 'initial', 'properties' => []],
+            'accepted'        => ['type' => 'normal', 'properties' => []],
+            'stock_materials' => ['type' => 'normal',  'properties' => []],
+            'stock_skills'    => ['type' => 'normal',  'properties' => []],
+            'completed'       => ['type' => 'final',   'properties' => []],
+        ];
+    }
 
-        $this->loader->load($this->stateMachine);
-        $this->stateMachine->setObject($this);
-        $this->stateMachine->initialize();
+    protected function getTransitions(): array
+    {
+        return [
+            'accept'  =>                ['from' => ['free'],            'to' => 'accepted'],
+            'estimate'  =>              ['from' => ['accepted'],        'to' => 'stock_materials'],
+            'finish_stock_materials' => ['from' => ['stock_materials'], 'to' => 'stock_skills'],
+            'finish_stock_skills'  =>   ['from' => ['stock_skills'],    'to' => 'completed'],
+        ];
+    }
+
+    public function haveAcceptor()
+    {
+        return is_int($this->model->acceptor_user_id);
+    }
+
+    public function isReadyToWorks()
+    {
+        return $this->state === 'stock_skills';
+    }
+
+    
+    public function getMaterialByCode($code)
+    {
+        $materials = $this->model->materials; //!= null ? $this->materials : $this->model->materials()->get(['id', 'code', 'need', 'stock']);
+
+        $index = $materials->search(function ($material, $key) use ($code) {
+            return $material->code === $code;
+        });
+
+        if (is_int($index)) {
+            return $materials->get($index);
+        }
+
+        return null;
+    }
+
+    public function checkStockMaterials()
+    {
+        if ($this->state === 'stock_materials' && $this->isAllMaterialsStocked()) {
+            $this->finishStockMaterials();
+        }
     }
 
     public function accept($user_id)
     {
         if ($this->stateMachine->can('accept')) {
-
             $this->stateMachine->apply('accept');
 
-            $this->order->update([
+            $this->model->update([
                 'acceptor_user_id' => $user_id,
                 'status' => $this->state,
             ]);
         }
     }
 
-    public function areMaterialsStocked(): bool
+    public function estimate()
     {
-        $restMaterials = $this->order->materials->filter(function ($material) {
+        if ($this->stateMachine->can('estimate')) {
+            $this->stateMachine->apply('estimate');
+
+            $this->model->update(['status' => $this->state]);
+        }
+    }
+
+    private function isAllMaterialsStocked(): bool
+    {
+        $remainingsMaterials = $this->model->materials->filter(function ($material) {
             return $material->need > $material->stock;
         });
         
-        return $restMaterials->count() === 0;
+        return $remainingsMaterials->count() === 0;
     }
     
     public function finishStockMaterials()
@@ -85,18 +106,16 @@ class OrderStateMachine implements StatefulInterface
         if ($this->stateMachine->can('finish_stock_materials')) {
             $this->stateMachine->apply('finish_stock_materials');
 
-            $this->order->update(['status' => $this->state]);
+            $this->model->update(['status' => $this->state]);
         }
     }
 
-    public function finishStockSkills($worker)
+    public function finishStockSkills()
     {
         if ($this->stateMachine->can('finish_stock_skills')) {
             $this->stateMachine->apply('finish_stock_skills');
-
-            $this->order->update(['status' => $this->state]);
-
-            OrderTransactions::transferOrderRewardToWorker($this->order, $worker);
+            
+            $this->model->update(['status' => $this->state]);
         }
     }
 }

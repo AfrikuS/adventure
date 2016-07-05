@@ -2,19 +2,37 @@
 
 namespace App\Http\Controllers\Geo;
 
+use App\Commands\Geo\Business\AddRoutePointCommand;
+use App\Commands\Geo\Business\CommitRouteCommand;
+use App\Commands\Geo\Business\CreateRouteTravelCommand;
+use App\Commands\Geo\Business\DeleteLastRoutePointCommand;
+use App\Exceptions\Commands\Geo\OneRoutePointException;
+use App\Exceptions\Commands\Geo\RouteCommitedException;
+use App\Factories\Geo\RouteTravelFactory;
 use App\Factories\GeoFactory;
 use App\Http\Controllers\Controller;
 use App\Models\Geo\Location;
 use App\Models\Geo\RoutePoint;
 use App\Models\Geo\TravelRoute;
 use App\Repositories\Geo\LocationsRepository;
+use App\Repositories\Geo\RouteTravelRepositoryObj;
+use App\Repositories\Geo\TravelRoutesRepository;
 use App\ViewModel\Geo\LocationsViewModel;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
-// todo review -> add fsm
 class TravelRouteController extends Controller
 {
+    /** @var RouteTravelRepositoryObj */
+    protected $routeRep;
+
+    public function __construct(RouteTravelRepositoryObj $routeRep)
+    {
+        $this->routeRep = $routeRep;
+        parent::__construct();
+    }
+    
     public function editRoute($id)
     {
         $locs = LocationsRepository::getLocationsWithNexts();
@@ -48,13 +66,15 @@ class TravelRouteController extends Controller
         ]);
     }
 
-    public function addRoute()
+    public function createRoute()
     {
         $title = Input::get('title');
         $startLocation_id = Input::get('start_location_id');
-        $user = \Auth::user();
+        $user_id = \Auth::id();
 
-        $route = GeoFactory::createRoute($user, $title, $startLocation_id);
+        $cmd = new CreateRouteTravelCommand();
+        
+        $route = $cmd->createRoute($user_id, $title, $startLocation_id);
 
         return \Redirect::route('geo_route_build_page', ['id' => $route->id]);
     }
@@ -66,35 +86,39 @@ class TravelRouteController extends Controller
         $location_id = $data['location_id'];
         $route_id = $data['route_id'];
 
-        $route = TravelRoute::with('points')->find($route_id);
-
-        if ($route->status === 'commited') { // todo replace == 'forming'
+        try {
+            $cmd = new AddRoutePointCommand($this->routeRep, new RouteTravelFactory());
+            
+            $cmd->addRoutePont($route_id, $location_id);
+        }
+        catch (RouteCommitedException $e)
+        {
             Session::flash('message', 'Route is commited yet!!!');
-        }
-        else {
-            GeoFactory::createRoutePoint($route, $location_id); 
+            return \Redirect::back();
         }
 
-        return \Redirect::route('geo_route_build_page', ['id' => $route->id]);
+        Session::flash('message', 'Route point added!!!');
+        
+        return \Redirect::route('geo_route_build_page', ['id' => $route_id]);
     }
 
-    public function finalRoute()
+    public function commitRoute()
     {
         $data = Input::all();
         $route_id = $data['route_id'];
 
-        $route = TravelRoute::with('points')->find($route_id);
+        try {
+            $cmd = new CommitRouteCommand($this->routeRep);
 
-        if ($route->status == 'commited') {
-            Session::flash('message', 'Route is commited yet!!!');
+            $cmd->commitRoute($route_id);
         }
-        else {
-            $lastPoint = $route->points->last();
-            $lastPoint->update(['status' => 'final']);
-            $route->update(['status', 'commited']);
+        catch (RouteCommitedException $e)
+        {
+            Session::flash('message', 'Route is commited yet!!!');
+            return \Redirect::back();
         }
         
-        return \Redirect::route('geo_route_build_page', ['id' => $route->id]);
+        return \Redirect::route('geo_route_build_page', ['id' => $route_id]);
     }
 
     public function deleteLastpoint()
@@ -102,19 +126,23 @@ class TravelRouteController extends Controller
         $data = Input::all();
         $route_id = $data['route_id'];
 
-        $route = TravelRoute::with('points')->find($route_id);
+        try {
+            $cmd = new DeleteLastRoutePointCommand($this->routeRep);
 
-        if ($route->status == 'commited') {
-            Session::flash('message', 'Route is commited yet!!!');
+            $cmd->deleteLastPointFromRoute($route_id);
         }
-        elseif ($route->points->count() < 2) {
+        catch (OneRoutePointException $e)
+        {
             Session::flash('message', 'Route must include > 1 points!!!');
+            return \Redirect::back();
         }
-        else {
-            $route->points->last()->delete();
+        catch (RouteCommitedException $e)
+        {
+            Session::flash('message', 'Route commited yet');
+            return \Redirect::back();
         }
 
-        return \Redirect::route('geo_route_build_page', ['id' => $route->id]);
+        return \Redirect::route('geo_route_build_page', ['id' => $route_id]);
     }
 
 }

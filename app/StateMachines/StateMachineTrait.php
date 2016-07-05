@@ -2,8 +2,16 @@
 
 namespace App\StateMachines;
 
+use Finite\Loader\ArrayLoader;
+
 trait StateMachineTrait
 {
+    /** @var ArrayLoader $loader  */
+    private $loader;
+
+    /** @var string $state */
+    public $state;
+
     /**
      * Gets the object state.
      *

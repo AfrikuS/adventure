@@ -8,24 +8,20 @@ use Illuminate\Support\Facades\DB;
 
 class BossRepository
 {
-    public static function create($userId)
+
+    public static function joinToBoss($bossId)
     {
-        $boss = new Boss();
-        $boss->user_id = $userId;
+        $boss = Boss::find($bossId)->first();
+        $boss->users_count = $boss->users_count + 1;
+
         $boss->save();
-
-        return $boss;
     }
 
-    public static function joinUserToAttackBoss($userId, $bossId)
-    {
-    }
 
     public static function addKick($userId)
     {
         $boss = BossRepository::getBossByUserId($userId);
-        $boss->kicks = $boss->kicks + 1;
-        $boss->save();
+        $boss->increment('kicks', 1);
     }
 
     public static function getBossByUserId($userId)
@@ -53,12 +49,6 @@ class BossRepository
         $boss = Boss::where('user_id', '=', $userId)->first();
         $boss->delete();
     }
-    public static function delete($massId)
-    {
-        $boss = Boss::find($massId);
-
-        $boss->delete();
-    }
 
     public static function getUsers($bossId)
     {
@@ -73,13 +63,6 @@ class BossRepository
 //            ->find_array();
 
         return $workers;
-    }
-
-    public static function deleteUsers($bossId)
-    {
-        Boss::find($bossId)->users()->detach();
-//        DB::delete('delete from toy_user where toy_id = ? AND user_id = ? AND status = 0', array($toy->id,Auth::id()));
-//        ORM::for_table('mass_boss_users_rels')->where('boss_id', $bossId)->delete_many();
     }
 
     public static function getAll()

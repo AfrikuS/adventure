@@ -2,6 +2,7 @@
 
 namespace App\Models\Work;
 
+use App\Factories\WorkerFactory;
 use App\Models\User;
 use App\Models\Work\Team\PrivateTeam;
 use App\Models\Work\Worker\WorkerInstrument;
@@ -12,8 +13,8 @@ use Illuminate\Database\Eloquent\Model;
 class Worker extends Model
 {
     protected $table      = 'work_team_workers';
-    public $timestamps = false;
     protected $primaryKey = 'id';
+    public $timestamps = false;
     protected $fillable   = ['id', 'team_id', 'status'];
     
     public function user()
@@ -41,7 +42,7 @@ class Worker extends Model
         return $this->hasMany(WorkerInstrument::class, 'worker_id', 'id');
     }
 
-    public function getMaterialByCode($code)
+    public function getMaterialByCode($code): WorkerMaterial
     {
         $materials = $this->materials != null ? $this->materials : $this->materials()->get(['id', 'code', 'value']);
 
@@ -49,11 +50,22 @@ class Worker extends Model
             return $material->code === $code;
         });
 
-        if (is_int($index)) {
-            return $materials->get($index); 
-        }
-        
-        return null; 
+        return is_int($index)
+            ? $materials->get($index)
+            : WorkerFactory::createWorkerMaterial($this, $code);
+    }
+
+    public function getInstrumentByCode($code)
+    {
+        $instruments = $this->instruments != null ? $this->instruments : $this->instruments()->get(['id', 'code', 'skill_level']);
+
+        $index = $instruments->search(function ($material, $key) use ($code) {
+            return $material->code === $code;
+        });
+
+        return is_int($index)
+            ? $instruments->get($index)
+            : WorkerFactory::createWorkerInstrument($this, $code);
     }
 
     public function getSkillByCode($code)
@@ -64,10 +76,8 @@ class Worker extends Model
             return $skill->code === $code;
         });
 
-        if (is_int($index)) {
-            return $skills->get($index);
-        }
-
-        return null;
+        return is_int($index)
+            ? $skills->get($index)
+            : WorkerFactory::createWorkerSkill($this, $code);
     }
 }
