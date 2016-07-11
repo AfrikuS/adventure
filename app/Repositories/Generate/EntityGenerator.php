@@ -3,18 +3,12 @@
 namespace App\Repositories\Generate;
 
 use App\Models\Geo\Trader\Ship;
-use App\Models\Sea\TravelShip;
 use App\Models\Work\Catalogs\Material;
 use App\Models\Work\Catalogs\Skill;
 use App\Models\Work\Order;
 use App\Models\Work\OrderMaterials;
-use App\Models\Work\Team\TeamOrder;
-use App\Models\Work\Team\TeamOrderMaterial;
-use App\Models\Work\Team\TeamOrderSkill;
-use App\Models\Work\UserMaterial;
-use App\Repositories\Work\Team\TeamOrderMaterialRepository;
-use App\Repositories\Work\Team\TeamOrderRepository;
-use App\Repositories\Work\Team\TeamOrderSkillRepository;
+use App\Models\Work\OrderSkill;
+use App\Repositories\Work\OrderRepositoryObj;
 use Carbon\Carbon;
 use Faker\Factory;
 
@@ -43,37 +37,38 @@ class EntityGenerator
 
     public static function createWorkOrderWithMaterials()
     {
+        $orderRepo = new OrderRepositoryObj();
         $skill = Skill::get()->random();
 
-        \DB::transaction(function () use ($skill) {
+        \DB::beginTransaction();
             $desc = 'order_desc';
-            $order = Order::create([
-                'desc' => $desc,
-                'kind_work_title' => $skill->code,
-                'price' => rand(74, 90),
-                'acceptor_user_id' => null,
-                'status' => 'free' // accept -> user_id
-            ]);
+            $price = rand(74, 90);
 
-            static::searchRandomMaterials(2, $order);
-        });
+            $order = $orderRepo->createOrderModel($desc, $skill->code, $price); 
+
+            static::generateMaterials(2, $order);
+        
+        \DB::commit();
     }
 
     public static function createTeamWorkOrderWithMaterials()
     {
         $skill = Skill::get()->random();
 
-        \DB::transaction(function () use ($skill) {
+        \DB::beginTransaction();
             $desc = 'order_desc';
-            $order = TeamOrder::create([
+            $order = Order::create([
                 'desc' => $desc,
                 'kind_work' => $skill->code,
                 'price' => rand(74, 90),
+                'acceptor_worker_id' => null,
                 'acceptor_team_id' => null,
-                'status' => 'free' // accept -> user_id
+                'status' => 'free',
+                'type' => 'team',
             ]);
 
 
+            $orderRepo = new OrderRepositoryObj();
             $count = 2;
             $faker = \Faker\Factory::create();
             
@@ -81,12 +76,8 @@ class EntityGenerator
             $materialsCodes = Material::get(['id', 'code'])->pluck('code');
             for ($i = 0; $i < $count; $i++) {
                 $materialCode = $faker->unique()->randomElement($materialsCodes->toArray());
-                TeamOrderMaterial::create([
-                    'teamorder_id' => $order->id,
-                    'code' => $materialCode,
-                    'need' => 2,
-                    'stock' => 0,
-                ]);
+
+                $material = $orderRepo->createMaterial($order->id, $materialCode, $need = 2);
             }
 
             // skills for order
@@ -94,14 +85,12 @@ class EntityGenerator
             $skillsCodes = Skill::get(['id', 'code'])->pluck('code');
             for ($i = 0; $i < $count; $i++) {
                 $skillCode = $faker->unique()->randomElement($skillsCodes->toArray());
-                TeamOrderSkill::create([
-                    'teamorder_id' => $order->id,
-                    'code' => $skillCode,
-                    'need_times' => 2,
-                    'stock_times' => 0,
-                ]);
+
+
+                $skill = $orderRepo->createSkill($order, $skillCode, $need = 2);
             }
-        });
+        
+        \DB::commit();
     }
 
     public static function createShip()
@@ -113,19 +102,17 @@ class EntityGenerator
         ]);
     }
 
-    private static function searchRandomMaterials($count, Order $order)
+    private static function generateMaterials($count, Order $order)
     {
+        $orderRepo = new OrderRepositoryObj();
+
         $faker = \Faker\Factory::create();
         $materialsCodes = Material::get(['id', 'code'])->pluck('code');
 
         for ($i = 0; $i < $count; $i++) { // wtf todo
             $materialCode = $faker->unique()->randomElement($materialsCodes->toArray());
-            $material = OrderMaterials::create([
-                'order_id' => $order->id,
-                'code' => $materialCode,
-                'need' => 2,
-                'stock' => 0,
-            ]);
+            
+            $material = $orderRepo->createMaterial($order->id, $materialCode, $need = 2);
         }
     }
     

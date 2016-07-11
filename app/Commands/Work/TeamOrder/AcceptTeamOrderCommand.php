@@ -7,7 +7,7 @@ use App\Exceptions\WorkerWithoutTeamException;
 use App\Models\Work\Worker;
 use App\Repositories\Work\Team\TeamOrderRepositoryObj;
 use App\Repositories\Work\WorkerRepositoryObj;
-use App\StateMachines\Work\TeamOrderEntity;
+use App\Entities\Work\TeamOrderEntity;
 
 class AcceptTeamOrderCommand
 {
@@ -47,6 +47,7 @@ class AcceptTeamOrderCommand
         }
         catch(\Exception $e) {
             \DB::rollBack();
+            throw $e;
         }
         \DB::commit();
 

@@ -6,11 +6,11 @@
 @endsection
 
 @section('left_column')
-    <dl>
-        <dt>Profile LINKS</dt>
-        <dd><a href="/work">Виды работ</a></dd>
-        <dd><a href="/work/mine">Работы под добыче ресурсов</a></dd>
-    </dl>
+    <ul>
+        <li>Profile LINKS</li>
+        <li><a href="/work">Виды работ</a></li>
+        <li><a href="/work/mine">Работы под добыче ресурсов</a></li>
+    </ul>
 
 @endsection
 

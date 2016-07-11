@@ -19,9 +19,10 @@
                 <tr>
                     <th>Order ID</th>
                     <th>desc</th>
-                    <th>kind_work</th>
+                    {{--<th>kind_work</th>--}}
                     <th>price</th>
                     <th>acceptor</th>
+                    <th>type</th>
                     <th>status</th>
                     <th>show</th>
                     <th>del</th>
@@ -38,10 +39,11 @@
                             {!! Form::close() !!}
                         </td>
 {{--                        <td>{{ $order->desc }}</td>--}}
-                        <td>{{ $order->kind_work }}</td>
+                        {{--<td>{{ $order->kind_work }}</td>--}}
                         <td>{{ $order->price }}</td>
 {{--                        <td>{{ $order->team->creator->name | 'no' }}</td>--}}
                         <td>{{ $order->acceptor_team_id | 'no' }}</td>
+                        <td>{{ $order->type }}</td>
                         <td>{{ $order->status }}</td>
                         <td>{{ link_to_route('work_show_teamorder_page', 'Выбрать', ['id' => $order->id]) }}</td>
                         <td>{{ link_to_route('work_delete_teamorder_action', 'Del', ['id' => $order->id]) }}</td>
@@ -51,10 +53,11 @@
             </table>
         </table>
     @else
-        Заказов сйечас нет
+        <p>Заказов сейчас нет
+
     @endif
 
-    Ваши заказы
+    <p><p>Ваши заказы
     <p>
     @if(count($userTeamOrders) > 0)
         <table class="table table-condensed">
@@ -88,7 +91,7 @@
             </table>
         </table>
     @else
-        Заказов сйечас нет
+        <p>Заказов сейчас нет
     @endif
 
 

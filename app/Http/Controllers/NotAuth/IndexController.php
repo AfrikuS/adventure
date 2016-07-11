@@ -55,7 +55,7 @@ class IndexController extends GuestController
         $order_id = 9;
 
         $order = OrderRepository::findOrderById($order_id);
-        $orderSM = new OrderStateMachine($order);
+        $orderSM = new OrderEntity($order);
         $sm = $orderSM->getSM();
 
         // Retrieve current state

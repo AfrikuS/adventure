@@ -62,6 +62,7 @@ class RouteServiceProvider extends ServiceProvider
                         
                 require app_path('Http/Controllers/Profile/routes.php');
                 require app_path('Http/Controllers/Npc/routes.php');
+                require app_path('Http/Controllers/Drive/drive_routes.php');
             });
 
             require app_path('Http/routes.php');

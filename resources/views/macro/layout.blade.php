@@ -2,13 +2,13 @@
 
 @section('left_column')
 
-    <dl>
-        <dt>Macro links</dt>
-        <dd><a href="/macro">На площадь</a></dd>
-        <dd><a href="/macro/buildings">Минитср строитеьства</a></dd>
-        <dd><a href="/macro/exchange">Точка обмена</a></dd>
-        <dd><a href="/macro/obtain">Добыча ресурсов</a></dd>
-    </dl>
+    <ul>
+        <li>Macro links</li>
+        <li><a href="/macro">На площадь</a></li>
+        <li><a href="/macro/buildings">Минитср строитеьства</a></li>
+        <li><a href="/macro/exchange">Точка обмена</a></li>
+        <li><a href="/macro/obtain">Добыча ресурсов</a></li>
+    </ul>
 
 @endsection
 

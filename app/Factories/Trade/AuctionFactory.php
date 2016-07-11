@@ -4,8 +4,8 @@ namespace App\Factories;
 
 use App\Models\Core\Thing;
 use App\Models\Trade\AuctionLot;
-use App\Models\User;
-use App\StateMachines\Trade\ThingStateMachine;
+use App\Models\Auth\User;
+use App\Entities\Trade\ThingStateMachine;
 use Carbon\Carbon;
 
 class AuctionFactory

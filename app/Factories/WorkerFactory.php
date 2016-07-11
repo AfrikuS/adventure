@@ -2,7 +2,7 @@
 
 namespace App\Factories;
 
-use App\Models\User;
+use App\Models\Auth\User;
 use App\Models\Work\Team\PrivateTeam;
 use App\Models\Work\Worker;
 use App\Models\Work\Worker\WorkerInstrument;
@@ -11,10 +11,10 @@ use App\Models\Work\Worker\WorkerSkill;
 
 class WorkerFactory
 {
-    public static function createWorker($user): Worker
+    public static function createWorker($user_id): Worker
     {
         return Worker::create([
-            'id' => $user->id,
+            'id' => $user_id,
             'status' => 'free',
         ]);
     }

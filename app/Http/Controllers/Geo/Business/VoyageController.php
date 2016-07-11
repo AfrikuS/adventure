@@ -10,7 +10,7 @@ use App\Repositories\Geo\LocationsRepository;
 use App\Repositories\Geo\TravelRepository;
 use App\Repositories\Geo\TravelRoutesRepository;
 use App\Repositories\Geo\VoyagesRepository;
-use App\StateMachines\Geo\VoyageStateMachine;
+use App\Entities\Geo\VoyageStateMachine;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Battle;
 
+use App\Commands\Battle\DeleteBossCommand;
 use App\Deleters\BattleDeleter;
 use App\Domain\MassActions;
-use App\Domain\State\StateBoss;
 use App\Factories\BattleFactory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
@@ -29,7 +29,9 @@ class BossController extends Controller
                 case 'BOSS_END': {
                     $workers = BossRepository::getUsers($boss->id);
 
-                    BattleDeleter::deleteBoss($boss);
+                    $cmd = new DeleteBossCommand();
+                    
+                    $cmd->deleteBoss($boss);
 
                     return $this->view('battle.boss.boss_end', [
                         'mass_work' => $boss,

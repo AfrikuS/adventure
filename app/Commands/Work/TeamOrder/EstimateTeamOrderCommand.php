@@ -6,7 +6,7 @@ use App\Factories\WorkerFactory;
 use App\Models\Work\Worker;
 use App\Repositories\Work\Team\TeamOrderRepositoryObj;
 use App\Repositories\Work\WorkerRepositoryObj;
-use App\StateMachines\Work\TeamOrderEntity;
+use App\Entities\Work\TeamOrderEntity;
 use Illuminate\Support\Collection;
 
 class EstimateTeamOrderCommand
@@ -43,16 +43,14 @@ class EstimateTeamOrderCommand
             if ($missingSkillCodes->count() > 0) {
                 $this->createMissingSkills($worker, $missingMaterialCodes);
             }
-            
+
+            $order->estimate();
         }
         catch(\Exception $e)
         {
             \DB::rollback();
             throw $e;
         }
-
-        $order->estimate();
-
         \DB::commit();
     }
 

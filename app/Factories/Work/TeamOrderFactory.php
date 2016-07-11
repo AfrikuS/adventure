@@ -2,26 +2,25 @@
 
 namespace App\Factories\Work;
 
-use App\Models\Work\Team\TeamOrder;
-use App\Models\Work\Team\TeamOrderMaterial;
-use App\Models\Work\Team\TeamOrderSkill;
+use App\Models\Work\OrderMaterials;
+use App\Models\Work\OrderSkill;
 
 class TeamOrderFactory
 {
-    public static function createTeamOrderMaterial(TeamOrder $order, string $code)
+    public static function createTeamOrderMaterial($order, string $code)
     {
-        return TeamOrderMaterial::create([
-            'teamorder_id' => $order->id,
+        return OrderMaterials::create([
+            'order_id' => $order->id,
             'code' => $code,
             'need' => 0,
             'stock' => 0,
         ]);
     }
 
-    public static function createTeamOrderSkill(TeamOrder $order, string $code)
+    public static function createTeamOrderSkill($order, string $code)
     {
-        return TeamOrderSkill::create([
-            'teamorder_id' => $order->id,
+        return OrderSkill::create([
+            'order_id' => $order->id,
             'code' => $code,
             'need_times' => 0,
             'stock_times' => 0,

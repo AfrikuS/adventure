@@ -3,7 +3,7 @@
 namespace App\Models\Work;
 
 use App\Factories\WorkerFactory;
-use App\Models\User;
+use App\Models\Auth\User;
 use App\Models\Work\Team\PrivateTeam;
 use App\Models\Work\Worker\WorkerInstrument;
 use App\Models\Work\Worker\WorkerMaterial;
@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Worker extends Model
 {
-    protected $table      = 'work_team_workers';
+    protected $table      = 'work_workers';
     protected $primaryKey = 'id';
     public $timestamps = false;
     protected $fillable   = ['id', 'team_id', 'status'];

@@ -4,29 +4,42 @@ namespace App\Commands\Auth;
 
 use App\Factories\AppFactory;
 use App\Factories\Macro\MacroFactory;
+use App\Models\Auth\User;
+use App\Repositories\Core\UserRepository;
+use App\Repositories\HeroRepositoryObj;
+use App\Repositories\Macro\ResourcesRepository;
 
 class CreateUserCommand
 {
-    /** @var CreateUserContext  */
-    private $context;
+    /** @var UserRepository */
+    private $userRepo;
+    /** @var  HeroRepositoryObj */
+    private $heroRepo;
 
-    public function __construct(CreateUserContext $context)
+    public function __construct(UserRepository $userRepo, HeroRepositoryObj $heroRepo)
     {
-        $this->context = $context;
+        $this->userRepo = $userRepo;
+        $this->heroRepo = $heroRepo;
     }
 
-    public function createUser()
+    public function createUser(array $data): User
     {
-        $context = $this->context;
-        
-        return \DB::transaction(function () use ($context) {
+
+        \DB::beginTransaction();
+        try {
+            $user = $this->userRepo->createUser($data['name'], $data['password'], $data['email']);
+
+            $this->heroRepo->createHero($user->id);
             
-            $user = AppFactory::createUser($context->name, $context->password, $context->email);
-
-            AppFactory::createHero($user->id);
-            MacroFactory::createPolitic($user->id);
-
-            return $user;
-        });
+            ResourcesRepository::createPolitic($user->id);
+        }
+        catch(\Exception $e) {
+            \DB::rollBack();
+            throw  $e;
+        }
+        
+        \DB::commit();
+        
+        return $user;
     }
 }

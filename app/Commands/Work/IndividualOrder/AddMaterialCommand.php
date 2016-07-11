@@ -8,7 +8,7 @@ use App\Repositories\Work\Team\WorkerRepository;
 use App\Repositories\Work\WorkerRepositoryObj;
 use App\Services\Transfers\OrderMaterialTransfer;
 use App\Services\Transfers\TransferExecutor;
-use App\StateMachines\Work\OrderStateMachine;
+use App\Entities\Work\OrderEntity;
 
 class AddMaterialCommand
 {
@@ -28,7 +28,7 @@ class AddMaterialCommand
 
     public function addMaterial($order_id, $worker_id, $materialCode)
     {
-        /** @var OrderStateMachine $order */
+        /** @var OrderEntity $order */
         $order = $this->orderRepo->findOrderWithMaterialsById($order_id);
         /** @var Worker $worker */
         $worker = $this->workerRepo->findWithMaterialsAndSkillsById($worker_id);
@@ -50,6 +50,7 @@ class AddMaterialCommand
         }
         catch(\Exception $e) {
             \DB::rollBack();
+            throw  $e;
         }
 
         $order->checkStockMaterials();

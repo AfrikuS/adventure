@@ -2,9 +2,11 @@
 
 namespace App\Repositories\Work;
 
-use App\Models\User;
+use App\Models\Auth\User;
 use App\Models\Work\Team\PrivateTeam;
+use App\Models\Work\Team\TeamJoinOffer;
 use App\Models\Work\Worker;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class PrivateTeamRepository
@@ -58,25 +60,33 @@ class PrivateTeamRepository
         return $privateteam;
     }
 
-    public static function getLeader(PrivateTeam $privateTeam)
+    public function findTeamWithPartnersById($id): PrivateTeam
     {
-        return Worker::find($privateTeam->leader_worker_id);
-    }
-
-    /** @deprecated  */ // todo review
-    public static function getWorkersByTeam(PrivateTeam $team)
-    {
-        $workers = Worker::
-            select('id',  'status', 'privateteam_id', 'worker_user_id')
-            ->where('privateteam_id', $team->id)
-            ->with(['user' => function ($query) {
-                $query->select('id', 'name');
+        $privateteam = PrivateTeam::
+            with(['partners' => function ($query) {
+                $query->select('id', 'team_id');
             }])
-            ->get();
+            ->find($id, ['id', 'leader_worker_id']);
 
-        return $workers;
+        return $privateteam;
     }
 
+
+//    /** @deprecated  */ // todo review
+//    public static function getWorkersByTeam(PrivateTeam $team)
+//    {
+//        $workers = Worker::
+//            select('id',  'status', 'privateteam_id', 'worker_user_id')
+//            ->where('privateteam_id', $team->id)
+//            ->with(['user' => function ($query) {
+//                $query->select('id', 'name');
+//            }])
+//            ->get();
+//
+//        return $workers;
+//    }
+
+// todo extract to command
     public static function deleteTeamById($id)
     {
         $team = PrivateTeamRepository::getTeamWithCreatorAndPartnersById($id);
@@ -93,18 +103,26 @@ class PrivateTeamRepository
         });
     }
 
+    
+    
     public static function addWorkerToTeam(Worker $worker, PrivateTeam $team)
     {
         $team->partners()->save($worker);
     }
 
-    public static function excludeWorkerFromTeam(Worker $worker, PrivateTeam $team)
-    {
-        \DB::transaction(function () use ($worker) {
-            $worker->team_id = null;
-            $worker->save();
-        });
-    }
 
+    public function getJoinOffersByTeamId($team_id)
+    {
+        return TeamJoinOffer::with(['user' => function($query) {
+            $query->select('id', 'name');
+        }])
+        ->where('team_id', $team_id)
+        ->get();
+    }
+    
+    public function getOfferJoinById($offer_id)
+    {
+        return TeamJoinOffer::find($offer_id);
+    }
 
 }

@@ -3,10 +3,10 @@
 namespace App\Commands\Trade\Auction;
 
 use App\Factories\AuctionFactory;
-use App\Models\User;
+use App\Models\Auth\User;
 use App\Repositories\HeroRepositoryObj;
 use App\Serializers\RedisAuctionLot;
-use App\StateMachines\Trade\ThingStateMachine;
+use App\Entities\Trade\ThingStateMachine;
 
 class CreateLotCommand
 {

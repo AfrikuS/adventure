@@ -7,7 +7,7 @@ use App\Repositories\Work\Team\TeamOrderRepositoryObj;
 use App\Repositories\Work\WorkerRepositoryObj;
 use App\Services\Transfers\TeamOrder\TeamOrderApplySkillTransfer;
 use App\Services\Transfers\TransferExecutor;
-use App\StateMachines\Work\TeamOrderEntity;
+use App\Entities\Work\TeamOrderEntity;
 
 class ApplySkillTeamOrderCommand
 {

@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers\Work\Team;
 
+use App\Commands\Work\Team\OfferJoinToTeamCommand;
+use App\Commands\Work\Team\UpdateTeamPiesCommand;
+use App\Entities\Work\Team\TeamWorker;
+use App\Exceptions\WorkerBelongTeamException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
-use App\Models\User;
+use App\Models\Auth\User;
 use App\Models\Work\Team\PrivateTeam;
+use App\Models\Work\Team\TeamRewardPie;
 use App\Models\Work\Worker;
 use App\Repositories\Work\PrivateTeamRepository;
 use App\Repositories\Work\Team\WorkerRepository;
@@ -13,11 +18,16 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
-class PrivateTeamController extends Controller
+class PrivateTeamController extends \App\Http\Controllers\Work\AppController
 {
     public function index ()
     {
         $teams = PrivateTeamRepository::getAllTeamsWithWorkers();
+
+/*        $cmd = new UpdateTeamPiesCommand(new PrivateTeamRepository());
+        foreach ($teams as $team) {
+            $cmd->updateTeamPies($team->id);
+        }*/
 
         return $this->view('work.team.teams_index', [
             'teams' => $teams,
@@ -28,9 +38,32 @@ class PrivateTeamController extends Controller
     {
         $privateteam = PrivateTeamRepository::getTeamWithCreatorAndPartnersById($id);
 
-        return $this->view('work.team.show_privateteam', [
-            'privateteam' => $privateteam,
-        ]);
+
+        if ($this->worker->id == $privateteam->leader_worker_id) {
+
+            $teamRepo = new PrivateTeamRepository();
+            $joinOffers = $teamRepo->getJoinOffersByTeamId($id);
+            
+            $pies = TeamRewardPie::where('team_id', $id)->get();
+
+            return $this->view('work.team.show.leader', [
+                'privateteam' => $privateteam,
+                'joinOffers' => $joinOffers,
+                'pies' => $pies,
+            ]);
+        }
+        elseif ($this->worker->team_id == $privateteam->id) {
+
+            return $this->view('work.team.show.partner', [
+                'privateteam' => $privateteam,
+            ]);
+        }
+        else {
+            return $this->view('work.team.show.guest', [
+                'privateteam' => $privateteam,
+            ]);
+        }
+
     }
 
     public function createPrivateteam()
@@ -49,7 +82,7 @@ class PrivateTeamController extends Controller
         return Redirect::route('work_show_privateteam_page', ['id' => $team->id]);
     }
 
-    public function addPartnerToPrivateteamAction()
+/*    public function addPartnerToPrivateteamAction()
     {
         $data = Input::all();
         $worker_id = $data['worker_id'];
@@ -72,7 +105,7 @@ class PrivateTeamController extends Controller
 
 
         return Redirect::route('work_show_privateteam_page', ['id' => $team->id]);
-    }
+    }*/
 
     public function deletePrivateteamAction()
     {
@@ -90,24 +123,50 @@ class PrivateTeamController extends Controller
     {
         $data = Input::all();
         $team_id = $data['privateteam_id'];
+        $worker_id = \Auth::id();
 
-//        $name = \Auth::getName();
-
-        $worker = WorkerRepository::findById(\Auth::id());
+        $worker = WorkerRepository::findById($worker_id);
         $team = PrivateTeamRepository::getTeamWithCreatorAndPartnersById($team_id);
 
-        if ($worker->id == $team->leader->id) {
+        if ($worker->id == $team->leader_worker_id) {
             Session::flash('message', 'Leader cannot leave own team!');
             return Redirect::route('work_show_privateteam_page', ['id' => $team->id]);
         }
 
-        PrivateTeamRepository::excludeWorkerFromTeam($worker, $team);
+        /** @var TeamWorker */
+        $teamWorker = $this->workerRep->getTeamWorkerSimpleById($worker_id);
+        $teamWorker->leftTeam();
+
+//        if ($candidate->team_id !== null) {
+//
+//            throw new WorkerBelongTeamException;
+//        }
+
+
 
         Session::flash('message', 'You are left team ' . $team_id . ' !');
         return Redirect::route('work_show_privateteam_page', ['id' => $team->id]);
-//        return Redirect::route('work_privateteams_page');
+    }
 
+    public function offerJoin()
+    {
+        $data = Input::all();
+        $team_id = $data['privateteam_id'];
 
+        try {
+            
+            $cmd = new OfferJoinToTeamCommand();
+
+            $cmd->createOfferJoin($this->worker, $team_id);
+        }
+        catch (WorkerBelongTeamException $e) {
+
+            Session::flash('message', 'You are belong to team yet !');
+            return Redirect::back();
+        }
+        
+        Session::flash('message', 'Offer was sended!');
+        return Redirect::back();
     }
 
 /*    public function commitPrivateteamAction()

@@ -4,7 +4,7 @@ namespace App\Models\Work\Team;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TeamOrderMaterial extends Model
+/*class TeamOrderMaterial extends Model
 {
     protected $table      = 'work_teamorder_materials';
     protected $primaryKey = 'id';
@@ -16,4 +16,4 @@ class TeamOrderMaterial extends Model
         return $this->belongsTo('App\Models\Work\Team\TeamOrder');
     }
 
-}
+}*/

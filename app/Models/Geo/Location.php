@@ -21,12 +21,19 @@ class Location extends Model
 //        $srcLocation->locationsTo()->attach($destLocation);
 //    }
 
-    public function locationsTo() {
+    public function addNextLocation(int $location_id) 
+    {
+        $this->locationsTo()->attach($location_id);
+    }
+
+    public function locationsTo() 
+    {
         return $this->belongsToMany(Location::class, 'geo_location_paths',
             'from_id', 'to_id');
     }
 
-    public function locationsFrom() {
+    public function locationsFrom() 
+    {
         return $this->belongsToMany(Location::class, 'geo_location_paths',
             'to_id', 'from_id');
     }

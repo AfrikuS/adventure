@@ -53,8 +53,9 @@ class TimersCommand extends Command
                 $res = Resources::find($timer->user_id);
 
                 // ставка за 1 рабочего + учет времени todo
-//                $resValue = (2 * (int) $timer->people_count);
-                $resValue = EmploymentResultCalculator::calculateFoodObtain($timer->people_count, 2);
+                $stavka = 2;
+                $resValue = $stavka * (int) $timer->people_count;
+                
                 switch($timer->kind) {
                     case 'obtain_food':
                         $res->food += $resValue;
@@ -69,7 +70,7 @@ class TimersCommand extends Command
                     default:
                         break;
                 }
-                DB::beginTransaction();
+                \DB::beginTransaction();
 
                 $res->free_people += $timer->people_count;
 

@@ -2,7 +2,7 @@
 
 namespace App\Models\Work\Team;
 
-class TeamOrderInstrument
+/*class TeamOrderInstrument
 {
     protected $table      = 'work_teamorder_instruments';
     protected $primaryKey = 'id';
@@ -14,4 +14,4 @@ class TeamOrderInstrument
         return $this->belongsTo(TeamOrder::class);
     }
 
-}
+}*/

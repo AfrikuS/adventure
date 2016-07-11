@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\NotAuth;
 
 use App\Http\Requests\LoginUserRequest;
-use App\Models\UserRedis;
+use App\Models\Auth\UserRedis;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

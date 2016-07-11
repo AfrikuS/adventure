@@ -7,7 +7,7 @@ use App\Models\Core\Hero;
 use App\Repositories\HeroRepositoryObj;
 use App\Repositories\Work\Team\TeamOrderRepositoryObj;
 use App\Repositories\Work\WorkerRepositoryObj;
-use App\StateMachines\Work\TeamOrderEntity;
+use App\Entities\Work\TeamOrderEntity;
 
 class TakeRewardTeamOrderCommand
 {
@@ -30,8 +30,8 @@ class TakeRewardTeamOrderCommand
         /** @var TeamOrderEntity */
         $order =  $this->teamOrderRepo->findSimpleOrderById($order_id);
         
-        /** @var Hero $hero */
-        $hero = $this->heroRepo->findById($worker_id);
+//        /** @var Hero $hero */
+//        $hero = $this->heroRepo->findById($worker_id);
 
         
         if (!$order->isCompleted()) {
@@ -41,7 +41,9 @@ class TakeRewardTeamOrderCommand
         \DB::beginTransaction();
         try {
 
-            $this->heroRepo->incrementGold($hero, $order->price);
+//            $this->heroRepo->incrementGold($hero, $order->price);
+            $cmd = new DivisionOrderRewardCommand($this->heroRepo);
+            $cmd->divideOrderReward($order->acceptor_team_id, $order->price);
 
             $cmd = new DeleteTeamOrderCommand($this->teamOrderRepo);
             $cmd->deleteTeamOrder($order_id);
@@ -52,7 +54,6 @@ class TakeRewardTeamOrderCommand
             \DB::rollback();
             throw $e;
         }
-
         \DB::commit();
     }
 }

@@ -8,7 +8,7 @@ use App\Repositories\Work\Team\TeamOrderRepositoryObj;
 use App\Repositories\Work\WorkerRepositoryObj;
 use App\Services\Transfers\OrderMaterialTransfer;
 use App\Services\Transfers\TransferExecutor;
-use App\StateMachines\Work\TeamOrderEntity;
+use App\Entities\Work\TeamOrderEntity;
 
 class AddMaterialTeamOrderCommand
 {
@@ -50,6 +50,7 @@ class AddMaterialTeamOrderCommand
         }
         catch(\Exception $e) {
             \DB::rollBack();
+            throw $e;
         }
 
         $teamOrderEntity->checkStockMaterials();

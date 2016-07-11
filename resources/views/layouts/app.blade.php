@@ -59,6 +59,11 @@
                     {!! Form::close() !!}
                     <p>
                     <p>
+                    <p>
+                    {{--{!! Form::open(['route' => 'npc_generate_offer_page', 'class' => '']) !!}--}}
+                    {{--{!! Form::submit('Normalize user', array('class' => 'btn btn-warning')) !!}--}}
+                    {{--{!! Form::close() !!}--}}
+                    <p>
                 @yield('right_column')
             </div>
         </div>

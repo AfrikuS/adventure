@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Work;
 
+use App\Entities\Work\Team\TeamWorker;
 use App\Factories\WorkerFactory;
 use App\Models\Work\Order;
 use App\Models\Work\Worker;
@@ -30,7 +31,7 @@ class WorkerRepositoryObj
 
     public function getAcceptedOrders($worker_id)
     {
-        return Order::where('acceptor_user_id', $worker_id)->get();
+        return Order::where('acceptor_worker_id', $worker_id)->get();
     }
 
     public function upSkillByCode(Worker $worker, $skillCode, $amount)
@@ -85,6 +86,13 @@ class WorkerRepositoryObj
     public function findSimpleById($id): Worker
     {
         return Worker::select('id', 'team_id', 'status')->find($id);
+    }
+
+    public function getTeamWorkerSimpleById($id)
+    {
+        $worker = Worker::select('id', 'team_id', 'status')->find($id);
+        
+        return new TeamWorker($worker);
     }
 
 }

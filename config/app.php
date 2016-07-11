@@ -167,6 +167,8 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Appzcoder\CrudGenerator\CrudGeneratorServiceProvider::class,
         DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
+        GrahamCampbell\Exceptions\ExceptionsServiceProvider::class,
+        ProAI\Handlebars\HandlebarsServiceProvider::class
     ],
 
     /*

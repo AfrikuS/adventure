@@ -2,7 +2,7 @@
 
 namespace App\Models\Macro;
 
-use App\Models\User;
+use App\Models\Auth\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Building extends Model
@@ -15,7 +15,7 @@ class Building extends Model
 
     public function ownerUser()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\Auth\User');
     }
 
     public function concrete()

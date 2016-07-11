@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Work;
 
 use App\Domain\Work\TeamworkCalculator;
-use App\Models\User;
+use App\Models\Auth\User;
 use App\Models\Work\Worker;
 use App\Repositories\TeamworkRepository;
 use Illuminate\Http\Request;
@@ -42,7 +42,12 @@ class TeamworksController extends Controller
         if (TeamworkValidator::isWorkersReadyToWork($team))
         {
             // all workers are ready, start_working
-            TeamworkCalculator::privateTeamWork($team);
+            foreach ($team->partners as $partner) {
+                $res = $partner->resources;
+                $res->water += 5;
+                $res->save();
+            }
+
             // end of work
 
             // change worker status after work

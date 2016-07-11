@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('work.work_layout')
 
 @section('title', 'Sea -> Travel Port')
 @section('head')
@@ -9,10 +9,10 @@
 
     Список команд private-teams
     <p></p>
-    <dl>
-        <dt>TEAMS</dt>
-        <dd>{{ link_to_route('work_create_privateteam_page', 'Create Own Private Team') }}</dd>
-    </dl>
+    <ul>
+        <li>TEAMS</li>
+        <li>{{ link_to_route('work_create_privateteam_page', 'Create Own Private Team') }}</li>
+    </ul>
 
 
     @if(count($teams) > 0)

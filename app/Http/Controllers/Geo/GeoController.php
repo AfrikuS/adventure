@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Geo;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Repositories\Geo\LocationsRepository;
-use App\ViewModel\Geo\LocationsViewModel;
+use App\ViewData\Geo\LocationsViewData;
 
 class GeoController extends Controller
 {
@@ -13,7 +13,7 @@ class GeoController extends Controller
     {
         $locations = LocationsRepository::getLocationsWithNexts();
 
-        $locationsTableRows = LocationsViewModel::geoListLocationsPage($locations);
+        $locationsTableRows = LocationsViewData::geoListLocationsPage($locations);
         
         return $this->view('geo.geo_index', [
             'locationsTableRows'  => $locationsTableRows,

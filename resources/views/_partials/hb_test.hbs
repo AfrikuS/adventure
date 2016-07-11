@@ -1,0 +1,10 @@
+<script id="entry-template" type="text/x-handlebars-template">
+    <h1>Comments</h1>
+
+    <div id="comments">
+        {{#each orders}}
+            <h2><a href="/posts/{{../permalink}}#{{id}}">{{type}}</a></h2>
+            <div>{{price}}</div>
+        {{/each}}
+    </div>
+</script>

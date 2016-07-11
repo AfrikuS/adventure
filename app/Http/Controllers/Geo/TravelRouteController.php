@@ -17,7 +17,7 @@ use App\Models\Geo\TravelRoute;
 use App\Repositories\Geo\LocationsRepository;
 use App\Repositories\Geo\RouteTravelRepositoryObj;
 use App\Repositories\Geo\TravelRoutesRepository;
-use App\ViewModel\Geo\LocationsViewModel;
+use App\ViewData\Geo\LocationsViewData;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -46,7 +46,7 @@ class TravelRouteController extends Controller
             ->select('id', 'title')
             ->find($id);
 
-        $locationsTableRows = LocationsViewModel::geoBuildRoutePage($locs);
+        $locationsTableRows = LocationsViewData::geoBuildRoutePage($locs);
         
         $lastPoint = $route->points->last();
 

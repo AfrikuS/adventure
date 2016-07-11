@@ -15,12 +15,14 @@
         "barryvdh/laravel-ide-helper": "^2.1",
         "nesbot/carbon": "^1.21",
         "appzcoder/crud-generator": "^1.0",
-        "laravelcollective/html": "~5.0",
         "phing/phing": "^2.14",
         "davejamesmiller/laravel-breadcrumbs": "^3.0",
         "pda/pheanstalk": "^3.1",
         "robmorgan/phinx": "^0.6.2",
-        "yohang/finite": "^1.1"
+        "yohang/finite": "^1.1",
+        "graham-campbell/exceptions": "^8.6",
+        "laravelcollective/html": "5.2.*",
+        "proai/laravel-handlebars": "^1.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

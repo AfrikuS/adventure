@@ -72,8 +72,27 @@
                         <li>{{ link_to_route('geo_travels_page', 'Travels \ Orders') }}</li>
                     </ul>
                 </li>
-                <li class="active">{{ link_to_route('admin_page', 'Admin', []) }}</li>
-                <li>{{ link_to_route('mine_index_page', 'Mine', []) }}</li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Drive<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>{{ link_to_route('drive_garage_vehicle_page', 'Garage') }}</li>
+                        <li>{{ link_to_route('drive_service_station_page', 'Pit-Stop') }}</li>
+                    </ul>
+                </li>
+
+                {{--<li class="dropdown">--}}
+{{--                <li class="active">{{ link_to_route('admin_index_page', 'Admin', []) }}</li>--}}
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>{{ link_to_route('admin_index_page', 'Index', []) }}</li>
+                        <li>{{ link_to_route('admin_module_drive_page', 'Drive', []) }}</li>
+                        <li>{{ link_to_route('admin_module_work_page', 'Work', []) }}</li>
+                        <li>{{ link_to_route('mine_index_page', 'Mine', []) }}</li>
+                    </ul>
+                </li>
 
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Other<span class="caret"></span></a>

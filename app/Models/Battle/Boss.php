@@ -2,7 +2,7 @@
 
 namespace App\Models\Battle;
 
-use App\Models\User;
+use App\Models\Auth\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Boss extends Model

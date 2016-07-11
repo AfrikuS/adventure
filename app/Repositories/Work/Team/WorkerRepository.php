@@ -30,6 +30,7 @@ class WorkerRepository
     }
 
 
+    /** @deprecated  */
     public static function belongToTeam(Worker $worker, PrivateTeam $team)
     {
         return $team->id == $worker->team_id;

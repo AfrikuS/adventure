@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\UserRedis;
+use App\Models\Auth\UserRedis;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Auth\UserProvider;

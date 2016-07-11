@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Commands\Trade\Auction\CommitPurchasingCommand;
 use App\Commands\Trade\Auction\RemoveLotFromAuction;
-use App\Models\User;
+use App\Models\Auth\User;
 use App\Repositories\HeroRepositoryObj;
 use App\Repositories\Trade\AuctionRepository;
 use App\Transactions\Trade\AuctionTransactions;

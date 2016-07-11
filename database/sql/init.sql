@@ -316,31 +316,31 @@ CREATE TABLE IF NOT EXISTS `macro_exchange_goods` (
 );
 -- deal - сделка
 -- old ?
-CREATE TABLE IF NOT EXISTS `work_skills` (
-    `user_id` INT UNSIGNED NOT NULL,
-    `mine_skill_level` INT UNSIGNED NOT NULL DEFAULT 0,
-    `mines_total` INT UNSIGNED NOT NULL DEFAULT 0,
-    `single_works_times` INT UNSIGNED NOT NULL DEFAULT 0,
-    `mass_works_partner_times` INT UNSIGNED NOT NULL DEFAULT 0,
-    `mass_works_leader_times` INT UNSIGNED NOT NULL DEFAULT 0,
-    PRIMARY KEY (`user_id`),
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
+--CREATE TABLE IF NOT EXISTS `work_skills` (
+--    `user_id` INT UNSIGNED NOT NULL,
+--    `mine_skill_level` INT UNSIGNED NOT NULL DEFAULT 0,
+--    `mines_total` INT UNSIGNED NOT NULL DEFAULT 0,
+--    `single_works_times` INT UNSIGNED NOT NULL DEFAULT 0,
+--    `mass_works_partner_times` INT UNSIGNED NOT NULL DEFAULT 0,
+--    `mass_works_leader_times` INT UNSIGNED NOT NULL DEFAULT 0,
+--    PRIMARY KEY (`user_id`),
+--    FOREIGN KEY (user_id) REFERENCES users(id)
+--);
 -- //////////////////////////////////////////
 
-CREATE TABLE IF NOT EXISTS `work_team_workers` (
+CREATE TABLE IF NOT EXISTS `work_workers` (
     `id` INT UNSIGNED NOT NULL,
     `team_id` INT UNSIGNED,
     `status` varchar(255) NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (id) REFERENCES users(id),
-    FOREIGN KEY (team_id) REFERENCES work_privateteams(id)
+    FOREIGN KEY (team_id) REFERENCES work_teams(id)
 );
 -- add unique (id, team_id) воркер может быть тольков  одной команде
 --ALTER TABLE `work_team_workers` ADD UNIQUE( `id`, `team_id`);
 
 -- тимоврк где все участники равны, // работа не начнется пока не включатся все участники
-CREATE TABLE IF NOT EXISTS `work_privateteams` (
+CREATE TABLE IF NOT EXISTS `work_teams` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `leader_worker_id` INT UNSIGNED NOT NULL,
     `status` varchar(255) NOT NULL,
@@ -353,17 +353,6 @@ CREATE TABLE IF NOT EXISTS `work_privateteams` (
 
 -- роль участника раб процесса в команде для юзера
 
--- single order for one\single worker
-CREATE TABLE IF NOT EXISTS `work_orders` (
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `desc` varchar(255) NOT NULL,
-    `kind_work_title` varchar(255) NOT NULL,
-    `price` INT UNSIGNED NOT NULL,
-    `acceptor_user_id` INT UNSIGNED,
-    `status` varchar(255) NOT NULL,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (acceptor_user_id) REFERENCES users(id)
-);
 -- //////////////////////////////////////
 CREATE TABLE IF NOT EXISTS `work_catalog_materials` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -373,16 +362,6 @@ CREATE TABLE IF NOT EXISTS `work_catalog_materials` (
     UNIQUE KEY `unique_material_code` (`code`)
 );
 
-CREATE TABLE IF NOT EXISTS `work_order_materials` (
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `order_id` INT UNSIGNED NOT NULL,
-    `code` varchar(255) NOT NULL,
-    `need` INT UNSIGNED NOT NULL,
-    `stock` INT UNSIGNED NOT NULL DEFAULT 0,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (order_id) REFERENCES work_orders(id),
-    UNIQUE KEY `unique_order_material` (`code`,`order_id`)
-);
 
 CREATE TABLE IF NOT EXISTS `work_shop_materials` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -394,7 +373,7 @@ CREATE TABLE IF NOT EXISTS `work_shop_materials` (
     UNIQUE KEY `unique_material_code` (`code`)
 );
 
-CREATE TABLE IF NOT EXISTS `work_user_materials` (
+CREATE TABLE IF NOT EXISTS `work_worker_materials` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `user_id` INT UNSIGNED NOT NULL,
     `code` varchar(255) NOT NULL,
@@ -420,7 +399,7 @@ CREATE TABLE IF NOT EXISTS `work_worker_skills` (
     `code` varchar(255) NOT NULL,
     `value` INT UNSIGNED NOT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (worker_id) REFERENCES work_team_workers(id),
+    FOREIGN KEY (worker_id) REFERENCES work_workers(id),
     UNIQUE KEY `unique_worker_skill` (`code`,`worker_id`)
 );
 -- //////////////////////////////////////
@@ -438,7 +417,7 @@ CREATE TABLE IF NOT EXISTS `work_worker_instruments` (
     `code` varchar(255) NOT NULL,
     `skill_level` INT UNSIGNED NOT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (worker_id) REFERENCES work_team_workers(id),
+    FOREIGN KEY (worker_id) REFERENCES work_workers(id),
     UNIQUE KEY `unique_worker_instrument` (`code`,`worker_id`)
 );
 
@@ -454,36 +433,161 @@ CREATE TABLE IF NOT EXISTS `work_shop_instruments` (
 -- //////////////////////////////////////
 
 -- add complex order for team-worker
-CREATE TABLE IF NOT EXISTS `work_teamorders` (
+--CREATE TABLE IF NOT EXISTS `work_teamorders` (
+--    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+--    `desc` varchar(255) NOT NULL,
+--    `kind_work` varchar(255) NOT NULL,
+--    `price` INT UNSIGNED NOT NULL,
+--    `acceptor_team_id` INT UNSIGNED,
+--    `status` varchar(255) NOT NULL,
+--    PRIMARY KEY (`id`),
+--    FOREIGN KEY (acceptor_team_id) REFERENCES work_teams(id)
+--);
+--
+--CREATE TABLE IF NOT EXISTS `work_teamorder_materials` (
+--    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+--    `teamorder_id` INT UNSIGNED NOT NULL,
+--    `code` varchar(255) NOT NULL,
+--    `need` INT UNSIGNED NOT NULL,
+--    `stock` INT UNSIGNED NOT NULL DEFAULT 0,
+--    PRIMARY KEY (`id`),
+--    FOREIGN KEY (teamorder_id) REFERENCES work_teamorders(id),
+--    UNIQUE KEY `unique_teamorder_material` (`code`,`teamorder_id`)
+--);
+--
+--CREATE TABLE IF NOT EXISTS `work_teamorder_skills` (
+--    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+--    `teamorder_id` INT UNSIGNED NOT NULL,
+--    `code` varchar(255) NOT NULL,
+--    `need_times` INT UNSIGNED NOT NULL DEFAULT 0,
+--    `stock_times` INT UNSIGNED NOT NULL DEFAULT 0,
+--    PRIMARY KEY (`id`),
+--    FOREIGN KEY (teamorder_id) REFERENCES work_teamorders(id),
+--    UNIQUE KEY `unique_teamorder_skill` (`code`,`teamorder_id`)
+--);
+-- //////////////////////////////////////
+CREATE TABLE IF NOT EXISTS `work_order_skills` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `desc` varchar(255) NOT NULL,
-    `kind_work` varchar(255) NOT NULL,
-    `price` INT UNSIGNED NOT NULL,
-    `acceptor_team_id` INT UNSIGNED,
-    `status` varchar(255) NOT NULL,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (acceptor_team_id) REFERENCES work_privateteams(id)
-);
-
-CREATE TABLE IF NOT EXISTS `work_teamorder_materials` (
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `teamorder_id` INT UNSIGNED NOT NULL,
-    `code` varchar(255) NOT NULL,
-    `need` INT UNSIGNED NOT NULL,
-    `stock` INT UNSIGNED NOT NULL DEFAULT 0,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (teamorder_id) REFERENCES work_teamorders(id),
-    UNIQUE KEY `unique_teamorder_material` (`code`,`teamorder_id`)
-);
-
-CREATE TABLE IF NOT EXISTS `work_teamorder_skills` (
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `teamorder_id` INT UNSIGNED NOT NULL,
+    `order_id` INT UNSIGNED NOT NULL,
     `code` varchar(255) NOT NULL,
     `need_times` INT UNSIGNED NOT NULL DEFAULT 0,
     `stock_times` INT UNSIGNED NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (teamorder_id) REFERENCES work_teamorders(id),
-    UNIQUE KEY `unique_teamorder_skill` (`code`,`teamorder_id`)
+    FOREIGN KEY (order_id) REFERENCES work_orders(id),
+    UNIQUE KEY `unique_order_skill` (`code`,`order_id`)
 );
--- //////////////////////////////////////
+CREATE TABLE IF NOT EXISTS `work_order_materials` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `order_id` INT UNSIGNED NOT NULL,
+    `code` varchar(255) NOT NULL,
+    `need` INT UNSIGNED NOT NULL,
+    `stock` INT UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (order_id) REFERENCES work_orders(id),
+    UNIQUE KEY `unique_order_material` (`code`,`order_id`)
+);
+
+-- single order for one\single worker
+CREATE TABLE IF NOT EXISTS `work_orders` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `desc` varchar(255) NOT NULL,
+    `type` varchar(255) NOT NULL,
+    `status` varchar(255) NOT NULL,
+    `kind_work_title` varchar(255) NOT NULL,
+    `price` INT UNSIGNED NOT NULL,
+    `acceptor_worker_id` INT UNSIGNED,
+    `acceptor_team_id` INT UNSIGNED,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (acceptor_worker_id) REFERENCES work_workers(id),
+    FOREIGN KEY (acceptor_team_id) REFERENCES work_teams(id)
+);
+
+-- предложения вступить в группу\команду - исходят от свободного воркера
+CREATE TABLE IF NOT EXISTS `work_team_joinoffers` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `worker_id` INT UNSIGNED NOT NULL,
+    `team_id` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (worker_id) REFERENCES work_workers(id),
+    FOREIGN KEY (team_id) REFERENCES work_teams(id),
+    UNIQUE KEY `unique_team_worker` (`worker_id`,`team_id`)
+);
+
+-- доли доходов от выполнения заказа\ордера
+CREATE TABLE IF NOT EXISTS `work_team_reward_pies` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `worker_id` INT UNSIGNED NOT NULL,
+    `team_id` INT UNSIGNED NOT NULL,
+    `amount_percent` INT UNSIGNED,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (worker_id) REFERENCES work_workers(id),
+    FOREIGN KEY (team_id) REFERENCES work_teams(id),
+    UNIQUE KEY `unique_pie_worker_team` (`worker_id`,`team_id`)
+);
+
+
+
+
+
+-- BOUNDED CONTEXT        DRIVE
+CREATE TABLE IF NOT EXISTS `drive_drivers` (
+    `id` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS `drive_vehicles` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `driver_id` INT UNSIGNED NOT NULL,
+    `acceleration` INT UNSIGNED NOT NULL,
+    `stability` INT UNSIGNED NOT NULL,
+    `mobility` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (driver_id) REFERENCES drive_drivers(id)
+);
+
+CREATE TABLE IF NOT EXISTS `drive_catalog_detail_kinds` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `title` varchar(255) NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+-- конкретные названия авто-деталей с возможным указанием изготовителя + тип детали (движок, подвеска, ...)
+CREATE TABLE IF NOT EXISTS `drive_catalog_details_titles` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `kind_id` INT UNSIGNED NOT NULL,
+    `title` varchar(255) NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (kind_id) REFERENCES drive_catalog_detail_kinds(id)
+);
+
+-- детали для покупки, список обновляется каждый день как в гладах - рынок деталей
+CREATE TABLE IF NOT EXISTS `drive_detail_offers` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `title` varchar(255) NOT NULL,
+    `kind_id` INT UNSIGNED NOT NULL,
+    `nominal_value` INT UNSIGNED NOT NULL,
+    `driver_id` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (kind_id) REFERENCES drive_catalog_detail_kinds(id),
+    FOREIGN KEY (driver_id) REFERENCES drive_drivers(id)
+);
+
+
+-- все те детали, к-ые есть у дривера
+-- детали поставленные у машин, доп атрибуты : текущее состояние, ремонт...
+CREATE TABLE IF NOT EXISTS `drive_details` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `title` varchar(255) NOT NULL,
+    `kind_id` INT UNSIGNED NOT NULL,
+    `nominal_value` INT UNSIGNED NOT NULL,
+    `mount_status` varchar(255) NOT NULL,
+    `status` varchar(255) NOT NULL,
+    `state_percent` INT UNSIGNED NOT NULL,
+    `owner_driver_id` INT UNSIGNED NOT NULL,
+    `vehicle_id` INT UNSIGNED,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (kind_id) REFERENCES drive_catalog_detail_kinds(id),
+    FOREIGN KEY (owner_driver_id) REFERENCES drive_drivers(id),
+    FOREIGN KEY (vehicle_id) REFERENCES drive_vehicles(id)
+);

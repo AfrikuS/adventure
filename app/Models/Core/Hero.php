@@ -3,7 +3,7 @@
 namespace App\Models\Core;
 
 use App\Exceptions\DefecitHeroResException;
-use App\Models\User;
+use App\Models\Auth\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Hero extends Model

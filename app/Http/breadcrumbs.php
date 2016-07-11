@@ -55,7 +55,7 @@ Breadcrumbs::register('work_index_page', function($breadcrumbs) {
     });
 
         Breadcrumbs::register('work_show_teamorder_page', function($breadcrumbs, $id) {
-            $order = TeamOrder::select('desc')->findOrFail($id);
+            $order = Order::select('desc')->findOrFail($id);
             $breadcrumbs->parent('work_teamorders_page');
             $breadcrumbs->push($order->desc, route('work_show_teamorder_page',  $id));
         });

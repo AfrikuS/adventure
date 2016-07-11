@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Exceptions\DefecitHeroResException;
 use App\Models\Core\Hero;
 use App\Models\Core\Thing;
-use App\StateMachines\Trade\ThingStateMachine;
+use App\Entities\Trade\ThingStateMachine;
 
 class HeroRepositoryObj
 {
@@ -37,6 +37,17 @@ class HeroRepositoryObj
     public function incrementGold(Hero $hero, $amount)
     {
         $hero->increment('gold', $amount);
+    }
+
+    public function createHero($user_id)
+    {
+        // default data for hero
+        return Hero::create([
+            'id' => $user_id,
+            'gold'  => 500,
+            'oil'   => 600,
+            'water' => 700,
+        ]);
     }
 
 }

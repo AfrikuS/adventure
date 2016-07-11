@@ -6,7 +6,7 @@ use App\Models\Work\Order;
 use App\Repositories\Work\OrderRepository;
 use App\Repositories\Work\OrderRepositoryObj;
 use App\Repositories\Work\Team\WorkerRepository;
-use App\StateMachines\Work\OrderStateMachine;
+use App\Entities\Work\OrderEntity;
 
 class OrderAcceptorValidator
 {
@@ -20,10 +20,10 @@ class OrderAcceptorValidator
 
     public function isOrderAcceptor($user_id, $order_id): bool
     {
-        /** @var OrderStateMachine $order */
+        /** @var OrderEntity $order */
         $order = $this->orderRepository->findSimpleOrderById($order_id);
 
-        if ($order->haveAcceptor() && ($order->acceptor_user_id == $user_id)) {
+        if ($order->haveAcceptor() && ($order->acceptor_worker_id == $user_id)) {
             return true;
         }
         

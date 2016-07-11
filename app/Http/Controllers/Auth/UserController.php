@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Commands\Auth\CreateUserCommand;
-use App\Commands\Auth\CreateUserContext;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterUserRequest;
+use App\Repositories\Core\UserRepository;
+use App\Repositories\HeroRepositoryObj;
 use App\Services\AuthService;
 
 class UserController extends Controller
@@ -32,9 +33,9 @@ class UserController extends Controller
     {
         $data = $request->all();
      
-        $context = new CreateUserContext($data['name'], $data['password'], $data['email']);
-        $command = new CreateUserCommand($context);
-        $user = $command->createUser();
+        $command = new CreateUserCommand(new UserRepository(), new HeroRepositoryObj());
+        
+        $user = $command->createUser($data);
 
         $this->authService->loginUser($user);
 

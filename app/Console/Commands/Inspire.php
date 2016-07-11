@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Models\AuctionLot;
 use App\Models\Sea\TravelOrder;
 use App\Models\Sea\TravelShip;
-use App\Models\User;
+use App\Models\Auth\User;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\DB;

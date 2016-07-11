@@ -2,11 +2,11 @@
 
 namespace App\Commands\Work\TeamOrder;
 
-use App\Models\Work\Team\TeamOrder;
-use App\Models\Work\Team\TeamOrderMaterial;
-use App\Models\Work\Team\TeamOrderSkill;
+use App\Models\Work\Order;
+use App\Models\Work\OrderMaterials;
+use App\Models\Work\OrderSkill;
 use App\Repositories\Work\Team\TeamOrderRepositoryObj;
-use App\StateMachines\Work\TeamOrderEntity;
+use App\Entities\Work\TeamOrderEntity;
 
 class DeleteTeamOrderCommand
 {
@@ -20,6 +20,7 @@ class DeleteTeamOrderCommand
 
     public function deleteTeamOrder($order_id)
     {
+        // todo validate on completed status
         /** @var TeamOrderEntity $teamOrderEntity */
         $teamOrderEntity = $this->teamOrderRepo->findOrderWithMaterialsAndSkillsById($order_id);
 
@@ -30,7 +31,7 @@ class DeleteTeamOrderCommand
                 return $material->id;
             })->toArray();
             
-            TeamOrderMaterial::destroy($material_ids);
+            OrderMaterials::destroy($material_ids);
 
             
             
@@ -39,11 +40,11 @@ class DeleteTeamOrderCommand
                 return $skill->id;
             })->toArray();
             
-            TeamOrderSkill::destroy($skills_ids);
+            OrderSkill::destroy($skills_ids);
 
             
             
-            TeamOrder::destroy($order_id);
+            Order::destroy($order_id);
         }
         catch(\Exception $e) {
             \DB::rollBack();

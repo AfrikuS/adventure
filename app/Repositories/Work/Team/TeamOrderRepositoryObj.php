@@ -2,22 +2,22 @@
 
 namespace App\Repositories\Work\Team;
 
-use App\Models\Work\Team\TeamOrder;
-use App\Models\Work\Team\TeamOrderMaterial;
-use App\Models\Work\Team\TeamOrderSkill;
-use App\StateMachines\Work\TeamOrderEntity;
+use App\Models\Work\Order;
+use App\Entities\Work\TeamOrderDraftEntity;
+use App\Entities\Work\TeamOrderEntity;
 
 class TeamOrderRepositoryObj
 {
     public function findOrderWithMaterialsAndSkillsById($id): TeamOrderEntity
     {
-        $order = TeamOrder::select('id', 'price', 'status', 'desc', 'kind_work')
+        $order = Order::select('id', 'price', 'status', 'desc', 'acceptor_team_id', 'type', 'acceptor_worker_id')
             ->with(['materials' => function ($query) {
-                $query->select('id', 'teamorder_id', 'code', 'need', 'stock');
+                $query->select('id', 'order_id', 'code', 'need', 'stock');
             }])
             ->with(['skills' => function ($query) {
-                $query->select('id', 'teamorder_id', 'code', 'need_times', 'stock_times');
+                $query->select('id', 'order_id', 'code', 'need_times', 'stock_times');
             }])
+//            ->where('type', 'team')
             ->find($id);
 
         return new TeamOrderEntity($order);
@@ -25,8 +25,9 @@ class TeamOrderRepositoryObj
 
     public function findSimpleOrderById($id): TeamOrderEntity
     {
-        $order = TeamOrder::
-            select(['id', 'desc', 'kind_work', 'price', 'acceptor_team_id', 'status' ])
+        $order = Order::
+            select(['id', 'desc', 'price', 'acceptor_team_id', 'status', 'type'])
+//            ->where('type', 'team')
             ->find($id);
 
         return new TeamOrderEntity($order);
@@ -34,19 +35,56 @@ class TeamOrderRepositoryObj
 
     public function getOrdersDrafts()
     {
-        return TeamOrder::where('status', 'draft')->get();
+        return Order::where('status', 'draft')->get();
 
     }
 
     public function createTeamOrderDraft()
     {
-        return TeamOrder::create([
-            'desc' => 'desc',
-            'kind_work' => 'pokraska',
+        return Order::create([
+            'desc' => '',
+            'kind_work_title' => '',
             'price' => 0,
+            'acceptor_worker_id' => null,
             'acceptor_team_id' => null,
             'status' => 'draft',
+            'type' => 'team',
         ]);
+    }
+
+    public function findOrderDraft($draft_id)
+    {
+        $order = Order::select('id', 'price', 'status', 'desc', 'kind_work_title')
+            ->with(['materials' => function ($query) {
+                $query->select('id', 'order_id', 'code', 'need', 'stock');
+            }])
+            ->with(['skills' => function ($query) {
+                $query->select('id', 'order_id', 'code', 'need_times', 'stock_times');
+            }])
+            ->find($draft_id);
+
+        return new TeamOrderDraftEntity($order);
+    }
+
+    public function deleteOrderMaterials(TeamOrderDraftEntity $orderDraft)
+    {
+        $materials = $orderDraft->materials;
+        foreach ($materials as $material) {
+            $material->delete();
+        }
+        // todo review
+//        $orderDraft->materials()->delete();
+
+    }
+
+    public function deleteOrderSkills(TeamOrderDraftEntity $orderDraft)
+    {
+        $skills = $orderDraft->skills;
+        foreach ($skills as $skill) {
+            $skill->delete();
+        }
+//        $orderDraft->skills()->delete();
+
     }
 
 }

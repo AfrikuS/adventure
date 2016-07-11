@@ -43,6 +43,7 @@ Route::group(['middleware' => 'app_auth'], function () {
 
 
     Route::get('/work/orders', 'Work\OrderController@index')->name('work_orders_page');
+    Route::get('/work/orders/ajax/{chunk_number}', 'Api\Work\AjaxComponentsController@orderLoading')->name('work_orders_ajax_page');
     // single-order actions
     Route::post('/work/order/accept', 'Work\OrderController@acceptOrder')->name('work_accept_order_action');
 //    Route::group(['middleware' => 'work_order_acceptor'], function () {
@@ -66,18 +67,21 @@ Route::group(['middleware' => 'app_auth'], function () {
 //    });
     
     
-    Route::group(['middleware' => 'work_teamorder_partner'], function () {
+//    Route::group(['middleware' => 'work_teamorder_partner'], function () {
         Route::get('/work/teamorder/{id}', 'Work\Team\TeamOrderController@showOrder')->name('work_show_teamorder_page');
         Route::post('/work/teamorder/add_material', 'Work\Team\TeamOrderController@addMaterial')->name('work_teamorder_add_material_in_stock_action');
         Route::post('/work/teamorder/apply_skill', 'Work\Team\TeamOrderController@applySkill')->name('work_teamorder_apply_skill_in_stock_action');
-    });
+//    });
 
-    Route::get('/work/privateteams', 'Work\Team\PrivateTeamController@index')->name('work_privateteams_page');
+    Route::get('/work/teams', 'Work\Team\PrivateTeamController@index')->name('work_privateteams_page');
 
-    Route::group(['middleware' => 'work_worker_belong_team'], function () {
-        Route::get('/work/privateteams/{id}', 'Work\Team\PrivateTeamController@showPrivateTeam')->name('work_show_privateteam_page');
-        Route::post('/work/privateteams/leave_privateteam', 'Work\Team\PrivateTeamController@leavePrivateTeam')->name('work_leave_privateteam_action');
-    });
+//    Route::group(['middleware' => 'work_worker_belong_team'], function () {
+        Route::get('/work/teams/{id}', 'Work\Team\PrivateTeamController@showPrivateTeam')->name('work_show_privateteam_page');
+        Route::post('/work/teams/leave_team', 'Work\Team\PrivateTeamController@leavePrivateTeam')->name('work_leave_privateteam_action');
+        Route::post('/work/teams/offer_join', 'Work\Team\PrivateTeamController@offerJoin')->name('work_privateteam_offerjoin_action');
+        Route::post('/work/team/accept_joinoffer', 'Work\Team\TeamLeaderController@acceptJoinOffer')->name('work_team_accept_offer_action');
+        Route::post('/work/team/refuse_joinoffer', 'Work\Team\TeamLeaderController@refuseJoinOffer')->name('work_team_refuse_offer_action');
+    //    });
     
     Route::group(['middleware' => 'work_worker_one_leader'], function () {
         Route::get('/work/create_privateteam', 'Work\Team\PrivateTeamController@createPrivateteam')->name('work_create_privateteam_page');
@@ -85,7 +89,6 @@ Route::group(['middleware' => 'app_auth'], function () {
     });
 
     Route::group(['middleware' => 'work_leader_team'], function () {
-        Route::post('/work/add_partner_to_privateteam_action', 'Work\Team\PrivateTeamController@addPartnerToPrivateteamAction')->name('work_add_partner_to_privateteam_action');
         Route::post('/work/delete_privateteam_action', 'Work\Team\PrivateTeamController@deletePrivateteamAction')->name('work_delete_privateteam_action');
     });
 
@@ -115,23 +118,27 @@ Route::group(['middleware' => 'app_auth'], function () {
 
 
     // admin
-    Route::get('/admin', 'Admin\AdminController@index')->name('admin_page');
+    Route::get('/admin/', 'Admin\AdminController@index')->name('admin_index_page');
+    Route::get('/admin/module/work', 'Admin\AdminController@work')->name('admin_module_work_page');
 
 
 
 
     // team-order-constructor
     Route::get('/admin/orders_drafts', 'Admin\OrderBuilder\TeamOrderBuilderController@orderDrafts')->name('admin_orderdrafts_page');
-    Route::get('/admin/order_builder/team_order/new', 'Admin\OrderBuilder\TeamOrderBuilderController@newTeamOrderDraft')->name('admin_create_orderdraft_page');
-    Route::post('/admin/order_builder/team_order/create', 'Admin\OrderBuilder\TeamOrderBuilderController@createOrderDraft')->name('admin_create_teamorder_draft_action');
+
+
+    Route::get('/admin/order_builder/team_order/main/{id}', 'Admin\OrderBuilder\TeamOrderBuilderController@mainTeamOrderDraft')->name('teamorder_draft_main_page');
+    Route::post('/admin/order_builder/team_order/create', 'Admin\OrderBuilder\TeamOrderBuilderController@createOrderDraft')->name('teamorder_draft_create_action');
+
+
+    Route::get('/admin/order_builder/selectRequirements/{id}', 'Admin\OrderBuilder\TeamOrderBuilderController@selectRequirements')->name('teamorder_draft_select_requires_page');
+    Route::get('/admin/order_builder/settingValues/{id}', 'Admin\OrderBuilder\TeamOrderBuilderController@settingValues')->name('teamorder_draft_setting_page');
     
-    
-    Route::get('/admin/order_builder/team_order/edit_materials/{id}', 'Admin\OrderBuilder\TeamOrderBuilderController@editOrderDraft_1')->name('admin_edit_orderdraft_1_page');
-    Route::get('/admin/edit_order_draft_2/{id}', 'Admin\OrderBuilder\TeamOrderBuilderController@editOrderDraft_2')->name('admin_edit_orderdraft_2_page');
-    
-    Route::post('/admin/order_builder/team_order/update_materials', 'Admin\OrderBuilder\TeamOrderBuilderController@editOrderDraftAction_1')->name('admin_edit_orderdraft_1_action');
-    Route::post('/admin/edit_orderdraft_2', 'Admin\OrderBuilder\TeamOrderBuilderController@editOrderDraftAction_2')->name('admin_edit_orderdraft_2_action');
-    Route::post('/admin/accept_orderdraft', 'Admin\OrderBuilder\TeamOrderBuilderController@acceptOrderDraft')->name('admin_accept_orderdraft_action');
+    Route::post('/admin/order_builder/team_order/update_materials', 'Admin\OrderBuilder\TeamOrderBuilderController@setRequirements')->name('teamorder_draft_recheck_action');
+    Route::post('/admin/edit_orderdraft_2', 'Admin\OrderBuilder\TeamOrderBuilderController@fillValues')->name('teamorder_draft_fill_action');
+    Route::post('/admin/publish_orderdraft', 'Admin\OrderBuilder\TeamOrderBuilderController@publish')->name('admin_publish_orderdraft_action');
+    Route::post('/admin/order_builder/delete_draft', 'Admin\OrderBuilder\TeamOrderBuilderController@deleteDraft')->name('teamorder_draft_delete_action');
 
     // admin-geo
     Route::get('/admin/locations', 'Admin\Geo\LocationsEditorController@index')->name('admin_locations_page');
@@ -210,9 +217,14 @@ Route::group(['middleware' => 'app_auth'], function () {
 
     Route::post('/generate/work/teamorder', 'DataGeneratorController@generateWorkTeamOrder')->name('generate_work_teamorder_action');
 
-    Route::post('/generate/work/create_material', 'Admin\WorkCatalogsController@createMaterial')->name('create_work_material_action');
-    Route::post('/generate/work/create_skill', 'Admin\WorkCatalogsController@createSkill')->name('create_work_skill_action');
-    Route::post('/generate/work/create_instrument', 'Admin\WorkCatalogsController@createInstrument')->name('create_work_instrument_action');
+    Route::post('/generate/work/create_material', 'Admin\Work\CatalogsController@createMaterial')->name('create_work_material_action');
+    Route::post('/generate/work/create_skill', 'Admin\Work\CatalogsController@createSkill')->name('create_work_skill_action');
+    Route::post('/generate/work/create_instrument', 'Admin\Work\CatalogsController@createInstrument')->name('create_work_instrument_action');
+
+    Route::get('/admin/drive', 'Admin\Drive\CatalogsController@index')->name('admin_module_drive_page');
+    Route::post('/generate/drive/create_detail_kind', 'Admin\Drive\CatalogsController@createDetailKind')->name('create_detail_kind_action');
+    Route::post('/generate/drive/create_detail_title', 'Admin\Drive\CatalogsController@createDetailTitle')->name('create_detail_title_action');
+
 
     // inner-api
     Route::get('api/geo/locations', 'Api\Geo\LocationsController@locations')->name('api_geo_locations');

@@ -4,7 +4,7 @@ namespace App\Services\Transfers\TeamOrder;
 
 use App\Models\Work\Worker;
 use App\Services\Transfers\ITransfer;
-use App\StateMachines\Work\TeamOrderEntity;
+use App\Entities\Work\TeamOrderEntity;
 
 class TeamOrderApplySkillTransfer implements ITransfer
 {

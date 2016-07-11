@@ -16,12 +16,6 @@ use Carbon\Carbon;
 
 class GeoFactory
 {
-    public static function createLocation(string $title)
-    {
-        return Location::create([
-            'title' => $title,
-        ]);
-    }
 
     public static function createRoute(int $trader_id, string $routeTitle, int $startLocation_id)
     {
@@ -42,7 +36,7 @@ class GeoFactory
     }
 
 
-    public static function createTempShopWithMaterials(Carbon $dateEnding)
+    public static function generateTempShopWithMaterials(Carbon $dateEnding)
     {
         \DB::transaction(function () use ($dateEnding) {
 

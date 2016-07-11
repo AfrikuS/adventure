@@ -12,4 +12,18 @@ class LocationsRepository
                     $query->select('geo_locations.title', 'geo_locations.id');
                 }])->get();
     }
+
+    public function createLocation($title)
+    {
+        $location = Location::create([
+            'title' => $title,
+        ]);
+
+        return $location;
+    }
+
+    public function findById($id)
+    {
+        return Location::find($id);
+    }
 }

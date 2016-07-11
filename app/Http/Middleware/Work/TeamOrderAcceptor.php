@@ -32,7 +32,7 @@ class TeamOrderAcceptor
 
 //            if ($worker->hasTeam() && $worker->isLeader() && $worker->team_id == $order->team_id)
             
-            if ($worker->team->id == $order->acceptor_team_id) {
+            if (false) {//($worker->team->id == $order->acceptor_team_id) {
                 Session::flash('message', 'It\'s order of your private-team');
                 return Redirect::route('work_show_teamorder_page', ['id' => $order->id]);
             }
@@ -40,7 +40,7 @@ class TeamOrderAcceptor
                 Session::flash('message', 'Accept order can ONLY team-leader!');
                 return Redirect::route('work_teamorders_page');
             }
-            elseif ($order->acceptor_team_id != null) {
+            elseif ($order->acceptor_worker_id != null) {
                 Session::flash('message', 'Order is accepted yet!');
                 return Redirect::route('work_teamorders_page');
             }

@@ -3,35 +3,35 @@
 namespace App\Http\Controllers\Work;
 
 use App\Commands\Work\IndividualOrder\AddMaterialCommand;
-use App\Commands\Work\IndividualOrder\DefecitMaterialException;
+use App\Commands\Work\IndividualOrder\DeleteOrderCommand;
 use App\Commands\Work\IndividualOrder\EstimateOrderCommand;
 use App\Commands\Work\IndividualOrder\TakeRewardCommand;
 use App\Deleters\WorkDeleter;
+use App\Exceptions\DefecitMaterialException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\Work\Worker;
 use App\Repositories\Generate\EntityGenerator;
+use App\Repositories\HeroRepositoryObj;
 use App\Repositories\Work\OrderRepositoryObj;
 use App\Repositories\Work\WorkerRepositoryObj;
-use App\StateMachines\Work\OrderStateMachine;
+use App\Entities\Work\OrderEntity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
-class OrderController extends Controller
+class OrderController extends AppController
 {
     /** @var OrderRepositoryObj */
     protected $ordersRep;
-    /** @var WorkerRepositoryObj */
-    protected $workerRep;
 
     public function __construct(OrderRepositoryObj $teamOrdersRep, WorkerRepositoryObj $workerRep)
     {
         $this->ordersRep = $teamOrdersRep;
-        $this->workerRep = $workerRep;
-        parent::__construct();
+
+        parent::__construct($workerRep);
     }
 
     public function index()
@@ -39,6 +39,8 @@ class OrderController extends Controller
         $freeOrders = $this->ordersRep->getFreeOrders();
 
         $workerOrders = $this->workerRep->getAcceptedOrders(\Auth::id());
+
+//        $ch = $workerOrders->chunk(2);
 
         return $this->view('work.order.orders_index', [
             'orders' => $freeOrders,
@@ -49,8 +51,9 @@ class OrderController extends Controller
     public function showOrder(Request $request, $id)
     {
         /** @var Worker $worker*/
+        // worker_load_materials_and_skills
         $worker = $this->workerRep->findWithMaterialsAndSkillsById(\Auth::id());
-        /** @var OrderStateMachine $order */
+        /** @var OrderEntity $order */
         $order = $this->ordersRep->findOrderWithMaterialsById($id);
 
 
@@ -80,11 +83,12 @@ class OrderController extends Controller
             
             case 'completed':
                 
-                return $this->view('work.teamorder.order_state.order_completed', [
+                return $this->view('work.order.show.completed', [
                     'order' => $order,
                 ]);
         }
 
+        // order not accepted, free
         throw new Exception;
     }
 
@@ -132,7 +136,7 @@ class OrderController extends Controller
         $worker_id = \Auth::id();
 
 
-        $cmd = new TakeRewardCommand($this->ordersRep, $this->workerRep);
+        $cmd = new TakeRewardCommand($this->ordersRep, $this->workerRep, new HeroRepositoryObj());
         $cmd->takeReward($order_id, $worker_id);
         
         return Redirect::route('work_show_order_page', ['id' => $order_id]);
@@ -140,7 +144,12 @@ class OrderController extends Controller
 
     public function deleteOrder($id)
     {
-        WorkDeleter::deleteOrder($id);
+//        WorkDeleter::deleteOrder($id);
+        
+        $cmd = new DeleteOrderCommand($this->ordersRep);
+        
+        $cmd->deleteOrder($id);
+        
         return redirect()->route('work_orders_page');
     }
 

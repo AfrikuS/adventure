@@ -2,7 +2,7 @@
 
 namespace App\Models\Mine;
 
-use App\Models\User;
+use App\Models\Auth\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Miner extends Model

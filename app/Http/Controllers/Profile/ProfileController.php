@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers\Profile;
 
+use App\Factories\WorkerFactory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\Battle\ResourceChannel;
-use App\Repositories\Work\SkillRepository;
+use App\Models\Work\Worker;
 use App\Repositories\Work\Team\WorkerRepository;
 
 class ProfileController extends Controller
 {
     public function index()
     {
+        if (null === Worker::find(\Auth::id())) {
+            WorkerFactory::createWorker(\Auth::id());
+        }
+        
         $worker = WorkerRepository::findWithMaterialsAndSkillsById(\Auth::id());
         $skills = $worker->skills;
 

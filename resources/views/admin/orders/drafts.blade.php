@@ -21,8 +21,9 @@
                         <tr>
                             <th>Order ID</th>
                             <th>desc</th>
-                            <th>kind_work</th>
+                            <th>kind_work_title</th>
                             <th>price</th>
+                            <th>type</th>
                             <th>status</th>
                             <th>show</th>
                             <th>del</th>
@@ -33,11 +34,19 @@
                             <tr>
                                 <td>{{ $order->id }}</td>
                                 <td>{{ $order->desc }}</td>
-                                <td>{{ $order->kind_work }}</td>
+                                <td>{{ $order->kind_work_title }}</td>
                                 <td>{{ $order->price }}</td>
+                                <td>{{ $order->type }}</td>
                                 <td>{{ $order->status }}</td>
-                                <td>{{ link_to_route('admin_edit_orderdraft_1_page', 'Выбрать', ['id' => $order->id]) }}</td>
-                                <td>{{ link_to_route('work_delete_order_action', 'Del', ['id' => $order->id]) }}</td>
+                                <td>{{ link_to_route('teamorder_draft_select_requires_page', 'Изменить', ['id' => $order->id]) }}</td>
+
+                                <td>
+                                    {!! Form::open(['route' => 'teamorder_draft_delete_action', 'class' => '']) !!}
+                                    {!! Form::hidden('draft_id', $order->id) !!}
+                                    {!! Form::submit('Delete', ['class' => 'btn btn-success']) !!}
+                                    {!! Form::close() !!}
+
+                                </td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -56,7 +65,9 @@
             <h4>Создать SingleOrder</h4>
         </div>
         <div class="col-lg-4">
-            <h4>{{ link_to_route('admin_create_orderdraft_page', 'Создать TeamOrder') }}</h4>
+            {!! Form::open(['route' => 'teamorder_draft_create_action', 'class' => '']) !!}
+            {!! Form::submit('Create Team-Order', ['class' => 'btn btn-success']) !!}
+            {!! Form::close() !!}
         </div>
         <div class="col-lg-4">
             <h4>Создать ComplexOrder</h4>

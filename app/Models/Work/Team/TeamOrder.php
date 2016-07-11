@@ -4,9 +4,9 @@ namespace App\Models\Work\Team;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TeamOrder extends Model
+/*class TeamOrder extends Model
 {
-    protected $table      = 'work_teamorders';
+    protected $table      = 'work_orders';
     protected $primaryKey = 'id';
     public    $timestamps = false;
     protected $fillable   = ['desc', 'kind_work', 'price', 'acceptor_team_id', 'status'];
@@ -31,4 +31,4 @@ class TeamOrder extends Model
         return $this->belongsTo(PrivateTeam::class, 'acceptor_team_id', 'id');
     }
 
-}
+}*/

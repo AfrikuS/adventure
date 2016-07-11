@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Macro;
 
+use App\Commands\Macro\ExchangeResourcesCommand;
 use App\Domain\PlayersOperations;
 use App\Factories\MarketFactory;
 use App\Http\Controllers\MacroController;
 use App\Http\Requests\Process\ExchangeChangeRequest;
 use App\Http\Requests\Process\ExchangeOfferRequest;
 use App\Models\Macro\ExchangeGood;
-use App\Models\User;
+use App\Models\Auth\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -35,7 +36,9 @@ class ExchangeController extends PoliticController
         $offerUser = User::find($good->user_id);
         $changerUser = auth()->user();
 
-        PlayersOperations::exchangeResources($good, $changerUser, $offerUser);
+        $cmd = new ExchangeResourcesCommand();
+        
+        $cmd->exchange($good, $changerUser, $offerUser);
 
         return redirect('/macro/exchange');
     }

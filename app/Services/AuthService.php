@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\User;
-use App\Models\UserRedis;
+use App\Models\Auth\User;
+use App\Models\Auth\UserRedis;
 use Illuminate\Support\Facades\Auth;
 
 class AuthService

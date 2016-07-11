@@ -7,18 +7,18 @@
 
 @section('center')
 
-{{--<dl>--}}
-    {{--<dt>Profile LINKS</dt>--}}
-    {{--<dd>{{ link_to_route('work_shop_page', 'Shop') }}</dd>--}}
-    {{--<dd>{{ link_to_route('work_orders_page', 'Orders list') }}</dd>--}}
-    {{--<dd>{{ link_to_route('work_teamorders_page', 'TeamOrders list') }}</dd>--}}
-{{--    <dd>{{ link_to_route('work_mine_page', 'Работы под добыче ресурсов') }}</dd>--}}
-    {{--<dd>{{ link_to_route('work_show_privateteam_page', 'My TEam', ['id' => 1]) }}</dd>--}}
-{{--</dl>--}}
-{{--<dl>--}}
-    {{--<dt>TEAMS</dt>--}}
-    {{--<dd>{{ link_to_route('work_privateteams_page', 'Teams LIST') }}</dd>--}}
-{{--</dl>--}}
+{{--<ul>--}}
+    {{--<li>Profile LINKS</li>--}}
+    {{--<li>{{ link_to_route('work_shop_page', 'Shop') }}</li>--}}
+    {{--<li>{{ link_to_route('work_orders_page', 'Orders list') }}</li>--}}
+    {{--<li>{{ link_to_route('work_teamorders_page', 'TeamOrders list') }}</li>--}}
+{{--    <li>{{ link_to_route('work_mine_page', 'Работы под добыче ресурсов') }}</li>--}}
+    {{--<li>{{ link_to_route('work_show_privateteam_page', 'My TEam', ['id' => 1]) }}</li>--}}
+{{--</ul>--}}
+{{--<ul>--}}
+    {{--<li>TEAMS</li>--}}
+    {{--<li>{{ link_to_route('work_privateteams_page', 'Teams LIST') }}</li>--}}
+{{--</ul>--}}
 
 http://mirnefti.ru/index.php?id=33&char=14
 <p></p>

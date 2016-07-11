@@ -3,11 +3,11 @@
 namespace App\Services\Transfers;
 
 use App\Models\Work\Worker;
-use App\StateMachines\Work\OrderStateMachine;
+use App\Entities\Work\OrderEntity;
 
 class OrderMaterialTransfer implements ITransfer
 {
-    /** @var  OrderStateMachine */
+    /** @var  OrderEntity */
     private $order;
     /** @var  string */
     private $materialCode;

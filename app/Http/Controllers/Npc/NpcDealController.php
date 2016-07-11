@@ -2,55 +2,64 @@
 
 namespace App\Http\Controllers\Npc;
 
-use App\Commands\Npc\OfferAcceptCommand;
-use App\Commands\Npc\OfferAcceptValidator;
-use App\Commands\Npc\OfferRefuseCommand;
+use App\Commands\Npc\DemonstrateNpcOfferCommand;
+use App\Commands\Npc\NpcOfferAcceptCommand;
+use App\Commands\Npc\NpcOfferRefuseCommand;
+use App\Entities\Npc\NpcOfferEntity;
+use App\Exceptions\TooLongNpcOfferWaitingException;
 use App\Factories\NpcFactory;
-use App\Models\Npc\NpcDeal;
-use App\Repositories\Npc\OfferRepository;
-use App\StateMachines\Npc\DealStateMachine;
-use App\StateMachines\Npc\OfferStateMachine;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Requests;
+use App\Repositories\Npc\NpcDealRepository;
 use Illuminate\Support\Facades\Input;
 
 class NpcDealController extends Controller
 {
+    /** @var  NpcDealRepository */
+    private $npcDealRepo;
+
+    /**
+     * NpcDealController constructor.
+     * @param NpcDealRepository $npcDealRepo
+     */
+    public function __construct(NpcDealRepository $npcDealRepo)
+    {
+        $this->npcDealRepo = $npcDealRepo;
+        
+        parent::__construct();
+    }
+
     public function showOffer($id)
     {
-        $offer = OfferRepository::findById($id);
+        /** @var  NpcOfferEntity */
+        $npcOfferEntity = $this->npcDealRepo->findOfferById($id);
 
-        $offerSM = new OfferStateMachine($offer);
-        $offerSM->show();
-        
-        if ($offer->isOfferExpired()) {
-            $offerSM->tooLongWait();
 
+        try {
+            $cmd = new DemonstrateNpcOfferCommand($this->npcDealRepo);
+
+            $cmd->demonstrateOffer($npcOfferEntity);
+            
+        }
+        catch (TooLongNpcOfferWaitingException $e)
+        {
             return $this->view('npc.show_offer_expired', [
-                'offer' => $offer,
+                'offer' => $npcOfferEntity,
             ]);
         }
-
+        
         return $this->view('npc.show_offer', [
-            'offer' => $offer,
+            'offer' => $npcOfferEntity,
         ]);
     }
 
     public function acceptOffer()
     {
         $offer_id = Input::get('offer_id');
-        $command = new OfferAcceptCommand(new OfferAcceptValidator(), $offer_id);
+        
+        $command = new NpcOfferAcceptCommand($this->npcDealRepo);
 
-        $command->execute();
-//        $offer = OfferRepository::findById($offer_id);
-//
-//        $offerSM = new OfferStateMachine($offer);
-//        if ($offerSM->state === 'shown') {
-//            $offerSM->accept();
-//        }
+        $command->acceptOffer($offer_id);
 
         return \Redirect::route('npc_show_deal_page', ['id' => $offer_id]);
     }
@@ -58,9 +67,10 @@ class NpcDealController extends Controller
     public function refuseOffer()
     {
         $offer_id = Input::get('offer_id');
-        $command = new OfferRefuseCommand($offer_id);
+        
+        $command = new NpcOfferRefuseCommand($this->npcDealRepo);
 
-        $command->execute();
+        $command->refuseOffer($offer_id);
 
 
         return \Redirect::route('profile_page');
@@ -68,7 +78,7 @@ class NpcDealController extends Controller
 
     public function showDeal($id)
     {
-        $deal = NpcDeal::find($id);
+        $deal = $this->npcDealRepo->findDealEntityById($id);
 
         return $this->view('npc.show_deal', [
             'offer' => $deal,
@@ -78,17 +88,17 @@ class NpcDealController extends Controller
     public function performDeal()
     {
         $deal_id = Input::get('deal_id');
-        $deal = NpcDeal::find($deal_id);
 
-        $dealSM = new DealStateMachine($deal);
-        $dealSM->performTask();
+        $deal = $this->npcDealRepo->findDealEntityById($deal_id);
+
+        $deal->performTask();
 
         return \Redirect::route('npc_show_deal_page', ['id' => $deal_id]);
     }
 
     public function showReward($id)
     {
-        $deal = NpcDeal::find($id);
+        $deal = $this->npcDealRepo->findDealEntityById($id);
 
         return $this->view('npc.show_reward', [
             'offer' => $deal,

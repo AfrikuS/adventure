@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Battle;
 use App\Domain\Game\Fight;
 use App\Domain\PlayersOperations;
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Auth\User;
 use App\Repositories\AttackRepository;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;

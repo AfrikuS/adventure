@@ -12,4 +12,16 @@ class ResourcesRepository
     {
         return Resources::find($user_id)->decrement($resource, $value);
     }
+
+    public static function createPolitic($user_id)
+    {
+        return Resources::create([
+            'id' => $user_id,
+            'food' => 5000,
+            'tree' => 9000,
+            'water' => 4000,
+            'free_people' => 700,
+        ]);
+    }
+
 }

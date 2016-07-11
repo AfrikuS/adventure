@@ -20,8 +20,8 @@ class Controller extends BaseController
      */
     public function __construct()
     {
-        $this->user_id = auth()->user()->id;
-        $this->user_id = auth()->id();
+//        $this->user_id = auth()->user()->id;
+        $this->user_id = \Auth::id();
     }
 
     protected function view($view = null, $data = [])

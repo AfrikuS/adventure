@@ -4,17 +4,19 @@ namespace App\Http\Controllers\Drive;
 
 use App\Http\Controllers\Controller;
 
-class PitStopController extends Controller
+class PitStopController extends AppController
 {
     public function index()
     {
 
+        return $this->view('drive.pit_stop', [
+        ]);
     }
 
     public function diagnosticVehicle($id)
     {
-        $vehicle;
-        $troubles = diagnostic($vehicle);
+//        $vehicle;
+//        $troubles = diagnostic($vehicle);
 
 //        show troubles:   curr: 45 % < max: 100 %
     }

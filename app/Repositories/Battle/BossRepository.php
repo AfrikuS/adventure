@@ -3,7 +3,7 @@
 namespace App\Repositories\Battle;
 
 use App\Models\Battle\Boss;
-use App\Models\User;
+use App\Models\Auth\User;
 use Illuminate\Support\Facades\DB;
 
 class BossRepository

@@ -3,7 +3,7 @@
 namespace App\Repositories\Geo;
 
 use App\Models\Geo\TravelRoute;
-use App\StateMachines\Geo\TravelRouteEntity;
+use App\Entities\Geo\TravelRouteEntity;
 
 class RouteTravelRepositoryObj
 {

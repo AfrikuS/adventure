@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\UserRedis;
+use App\Models\Auth\UserRedis;
+use App\Models\Work\Team\TeamOrder;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Auth;
@@ -32,5 +33,8 @@ class AuthServiceProvider extends ServiceProvider
             return new RedisUserProvider(UserRedis::class);
         });
         //
+
+        $gate->define('view-teamorder', 'App\Policies\ViewTeamOrderPolicy@check');
+        $gate->define('teamorder-accepted', 'App\Policies\TeamOrderAcceptedPolicy@check');
     }
 }

@@ -7,12 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class Vehicle extends Model
 {
     protected $table      = 'drive_vehicles';
-    public $timestamps = false;
     protected $primaryKey = 'id';
+    public $timestamps = false;
     protected $fillable   = ['driver_id', 'acceleration', 'stability', 'mobility'];
 
     public function driver()
     {
-        return $this->hasOne(Driver::class, 'id');
+        return $this->belongsTo(Driver::class, 'driver_id', 'id');
+    }
+
+    public function details()
+    {
+        return $this->hasMany(Detail::class, 'vehicle_id', 'id');
     }
 }

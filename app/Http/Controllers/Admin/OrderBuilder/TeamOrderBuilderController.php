@@ -2,72 +2,65 @@
 
 namespace App\Http\Controllers\Admin\OrderBuilder;
 
-use App\Factories\Work\TeamOrderFactory;
+use App\Commands\Work\OrderBuilder\CreateEmptyTeamOrderCommand;
+use App\Commands\Work\OrderBuilder\DeleteTeamOrderDraftCommand;
+use App\Commands\Work\OrderBuilder\ReCheckMaterialsCommand;
+use App\Commands\Work\OrderBuilder\ReCheckSkillsCommand;
+use App\Commands\Work\OrderBuilder\SettingMaterialsValuesCommand;
+use App\Commands\Work\OrderBuilder\SettingOrderDataCommand;
+use App\Commands\Work\OrderBuilder\SettingSkillsValuesCommand;
 use App\Http\Controllers\Controller;
 use App\Models\Work\Catalogs\Instrument;
 use App\Models\Work\Catalogs\Material;
 use App\Models\Work\Catalogs\Skill;
-use App\Models\Work\Team\TeamOrder;
-use App\Repositories\Work\Team\TeamOrderRepository;
 use App\Repositories\Work\Team\TeamOrderRepositoryObj;
-use App\Transactions\Admin\TeamOrderBuilder;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Redirect;
 
 class TeamOrderBuilderController extends Controller
 {
     /** @var TeamOrderRepositoryObj */
-    protected $teamOrdersRep;
+    protected $teamOrderRepo;
 
-    public function __construct(TeamOrderRepositoryObj $teamOrdersRep)
+    public function __construct(TeamOrderRepositoryObj $teamOrderRepo)
     {
-        $this->teamOrdersRep = $teamOrdersRep;
+        $this->teamOrderRepo = $teamOrderRepo;
+        
         parent::__construct();
     }
 
     public function orderDrafts()
     {
-        $draftOrders = $this->teamOrdersRep->getOrdersDrafts();
+        $draftOrders = $this->teamOrderRepo->getOrdersDrafts();
 
         return $this->view('admin.orders.drafts', [
             'draftOrders' => $draftOrders,
         ]);
     }
 
-    public function newTeamOrderDraft()
-    {
-        $materials = Material::get();
-        $instruments = Instrument::get();
-        $skills = Skill::get();
-
-        return $this->view('admin.orders.create', [
-            'materials' => $materials,
-            'instruments' => $instruments,
-            'skills' => $skills,
-        ]);
-    }
-
     public function createOrderDraft()
     {
-        $draft = $this->teamOrdersRep->createTeamOrderDraft();
+        $cmd = new CreateEmptyTeamOrderCommand($this->teamOrderRepo);
 
-        return \Redirect::route('admin_edit_orderdraft_1_page', ['id' => $draft->id]);
+        $draft = $cmd->createEmptyTeamOrder();
+
+        return \Redirect::route('teamorder_draft_select_requires_page', ['id' => $draft->id]);
     }
-    
-    public function editOrderDraft_1($id)
+
+
+    public function selectRequirements($id)
     {
+        $orderDraft = $this->teamOrderRepo->findOrderDraft($id);
 
-        $orderDraft = TeamOrderRepository::findOrderWithMaterialsAndSkillsById($id); // add condition ('status', 'draft')
+        $orderMaterialsCodes = $orderDraft->getMaterialsCodes();
 
-        $orderMaterialsCodes = $orderDraft->materials()->select('code')->get()->lists('code')->toArray();
-        $orderSkillsCodes = $orderDraft->skills()->select('code')->get()->lists('code')->toArray();
-        $orderIstrumentsCodes = [];//$orderDraft->instruments()->select('code')->get()->lists('code')->toArray();
+        $orderSkillsCodes = $orderDraft->getSkillsCodes();
+        $orderIstrumentsCodes = [];
 
         $materials = Material::get();
         $instruments = Instrument::get();
         $skills = Skill::get();
 
-        return $this->view('admin.orders.edit_1', [
+        return $this->view('admin.orders.select_requires', [
             'draft' => $orderDraft,
             'materials' => $materials,
             'instruments' => $instruments,
@@ -79,111 +72,134 @@ class TeamOrderBuilderController extends Controller
         ]);
     }
 
-    public function editOrderDraftAction_1()
-    {
-        $data = Input::all();
-        $draft_id = $data['draft_id']; 
-
-        $orderDraft = TeamOrderRepository::findOrderWithMaterialsAndSkillsById($draft_id); // add condition ('status', 'draft')
-
-        // update draft-order materials
-        if (isset($data['materials'])) {
-            $checkedMaterialsCodes = $data['materials'];
-
-            TeamOrderBuilder::updateCheckedMaterials($orderDraft, $checkedMaterialsCodes);
-        }
-        else {
-            $orderDraft->materials()->delete();
-        }
-
-        // update draft-order skills
-        if (isset($data['skills'])) {
-            $checkedSkillsCodes = $data['skills'];
-
-            TeamOrderBuilder::updateCheckedSkills($orderDraft, $checkedSkillsCodes);
-        }
-        else {
-            $orderDraft->skills()->delete();
-        }
-
-        return \Redirect::route('admin_edit_orderdraft_2_page', ['id' => $orderDraft->id]);
-//        return \Redirect::route('admin_edit_orderdraft_1_page', ['id' => $orderDraft->id]);
-    }
-
-
-    public function editOrderDraft_2($id)
-    {
-        $orderDraft = TeamOrderRepository::findOrderWithMaterialsAndSkillsById($id); // add condition ('status', 'draft')
-
-        $draftMaterials = $orderDraft->materials;
-        $draftSkills = $orderDraft->skills;
-
-
-        return $this->view('admin.orders.edit_2', [
-            'draftMaterials' => $draftMaterials,
-            'draftSkills' => $draftSkills,
-            'orderDraft' => $orderDraft,
-            'draftOrder' => $orderDraft,
-        ]);
-    }
-
-
-    public function editOrderDraftAction_2()
+    public function setRequirements ()
     {
         $data = Input::all();
         $draft_id = $data['draft_id'];
 
-        $orderDraft = TeamOrderRepository::findOrderWithMaterialsAndSkillsById($draft_id);
+        $orderDraft = $this->teamOrderRepo->findOrderDraft($draft_id);
+
+        // update/re-check draft-order materials
+        if (isset($data['materials'])) {
+
+            $checkedMaterialsCodes = $data['materials'];
+
+            $cmd = new ReCheckMaterialsCommand($this->teamOrderRepo);
+            
+            $cmd->reCheckMaterials($orderDraft, $checkedMaterialsCodes);
+        }
+        else 
+        {
+            $this->teamOrderRepo->deleteOrderMaterials($orderDraft);
+        }
+
+        // update/re-check draft-order skills
+        if (isset($data['skills'])) {
+            
+            $checkedSkillsCodes = $data['skills'];
+
+            $cmd = new ReCheckSkillsCommand(/*$this->teamOrderRepo*/);
+
+            $cmd->reCheckSkills($orderDraft, $checkedSkillsCodes);
+        }
+        else 
+        {
+            $this->teamOrderRepo->deleteOrderSkills($orderDraft);
+        }
+
+        return \Redirect::route('teamorder_draft_setting_page', ['id' => $orderDraft->id]);
+    }
+
+
+    public function settingValues($id)
+    {
+        $orderDraft = $this->teamOrderRepo->findOrderDraft($id);
+
+        $draftMaterials = $orderDraft->materials;
+        $draftSkills = $orderDraft->skills;
+        
+        $skills = Skill::get();
+
+        return $this->view('admin.orders.setting_values', [
+            'draftMaterials' => $draftMaterials,
+            'draftSkills' => $draftSkills,
+            'orderDraft' => $orderDraft,
+            'draftOrder' => $orderDraft,
+            
+            'skills' => $skills,
+        ]);
+    }
+
+
+    // commands-mutator-entity
+    
+    public function fillValues()
+    {
+        $data = Input::all();
+        $draft_id = $data['draft_id'];
+
+        $orderDraft = $this->teamOrderRepo->findOrderDraft($draft_id);
 
         if (isset($data['order'])) {
-            $orderValues = $data['order'];
 
-            foreach ($orderValues as $field => $value) {
-//                $material = TeamOrderRepository::getMaterialByCode($orderDraft, $field);
-//                $material->update(['need' => $value]);
-                $orderDraft->$field = $value;
-            }
-            $orderDraft->save();
+            $cmd = new SettingOrderDataCommand();
+            $cmd->fillOrderData($orderDraft, $data['order']);
+
         }
 
         if (isset($data['materials'])) {
-            $materialsValues = $data['materials'];
 
-            foreach ($materialsValues as $code => $value) {
-                $material = TeamOrderRepository::getMaterialByCode($orderDraft, $code);
-                $material->update(['need' => $value]);
-            }
+            $cmd = new SettingMaterialsValuesCommand();
+            $cmd->fillMaterialValues($orderDraft, $data['materials']);
+
         }
 
         if (isset($data['skills'])) {
-            $skillsValues = $data['skills'];
+            
+            $cmd = new SettingSkillsValuesCommand();
+            $cmd->fillSkillsValues($orderDraft, $data['skills']);
 
-            foreach ($skillsValues as $code => $value) {
-                $skill = TeamOrderRepository::getSkillByCode($orderDraft, $code);
-                $skill->update(['need_times' => $value]);
-            }
         }
 
-
-        $orderDraft->update(['status' => 'free']);
-
-        return \Redirect::route('admin_edit_orderdraft_2_page', ['id' => $draft_id]);
+        return \Redirect::route('teamorder_draft_main_page', ['id' => $draft_id]);
     }
 
-    public function createTeamOrderAction() //Request $request for protocol
+    public function mainTeamOrderDraft($id)
+    {
+        $orderDraft = $this->teamOrderRepo->findOrderDraft($id);
+        
+        $materials = $orderDraft->materials;
+        $skills = $orderDraft->skills;
+
+        return $this->view('admin.orders.main', [
+            'orderDraft' => $orderDraft,
+            'materials' => $materials,
+            'skills' => $skills,
+        ]);
+    }
+
+    
+    public function publish()
     {
         $data = Input::all();
+        $draft_id = $data['draft_id'];
 
-        $constructor = new TeamOrderBuilder($data);
+        $orderDraft = $this->teamOrderRepo->findOrderDraft($draft_id);
 
-        try {
-            $constructor->createOrder();
-        }
-        catch (\Exception $e) {
-            
-        }
+        $orderDraft->publish();
 
-        return \Redirect::back();
-//        return \Redirect::route('admin_teamorder_create_action');
+        return \Redirect::route('admin_orderdrafts_page');
+    }
+
+    // how delete aggregate correct ?
+    public function deleteDraft()
+    {
+        $data = Input::all();
+        $draft_id = $data['draft_id'];
+
+        $cmd = new DeleteTeamOrderDraftCommand($this->teamOrderRepo);
+        $cmd->deleteTeamOrder($draft_id);
+
+        return \Redirect::route('admin_orderdrafts_page');
     }
 }
