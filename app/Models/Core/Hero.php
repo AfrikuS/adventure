@@ -4,6 +4,7 @@ namespace App\Models\Core;
 
 use App\Exceptions\DefecitHeroResException;
 use App\Models\Auth\User;
+use App\Models\Macro\Building;
 use Illuminate\Database\Eloquent\Model;
 
 class Hero extends Model
@@ -23,7 +24,7 @@ class Hero extends Model
 
     public function user ()
     {
-        return $this->belongsTo(User::class, 'id');
+        return $this->hasOne(User::class, 'id');
     }
 
     public function things()
@@ -31,4 +32,8 @@ class Hero extends Model
         return $this->hasMany(Thing::class, 'owner_id', 'id');
     }
 
+    public function buildings()
+    {
+        return $this->hasOne(Building::class, 'id');
+    }
 }

@@ -10,10 +10,12 @@ class Driver extends Model
     protected $table      = 'drive_drivers';
     protected $primaryKey = 'id';
     public $timestamps = false;
-    protected $fillable   = ['id'];
+    protected $fillable   = ['id', 'status', 'active_vehicle_id'];
 
     public function user()
     {
         return $this->hasOne(User::class, 'id');
     }
+    
+    
 }

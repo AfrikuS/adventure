@@ -57,5 +57,9 @@ class Kernel extends HttpKernel
         'work_worker_belong_team' => \App\Http\Middleware\Work\WorkerBelongTeam::class,
         'work_leader_team' => \App\Http\Middleware\Work\WorkerLeaderTeam::class,
         'work_teamorder_acceptor' => \App\Http\Middleware\Work\TeamOrderAcceptor::class,
+        
+        
+        'drive_driver' => \App\Http\Middleware\DriverMiddleware::class,
+        'drive_vehicle_broken' => \App\Http\Middleware\VehicleBrokenMiddleware::class,
     ];
 }

@@ -10,11 +10,11 @@ use App\Models\Drive\Driver;
 use App\Models\Drive\Vehicle;
 use Illuminate\Support\Facades\Redirect;
 
-class GarageController extends AppController
+class GarageController extends DriveController
 {
-    public function vehiclePage()
-    {
-    }
+//    public function vehiclePage()
+//    {
+//    }
 
     public function repairPage()
     {

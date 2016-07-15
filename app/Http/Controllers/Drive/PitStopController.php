@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Drive;
 
 use App\Http\Controllers\Controller;
 
-class PitStopController extends AppController
+class PitStopController extends DriveController
 {
     public function index()
     {

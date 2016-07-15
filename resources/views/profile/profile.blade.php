@@ -35,7 +35,9 @@
 
     <div class="row row-offcanvas">
         <div class="col-lg-4">
-            Бойцовские достижения
+            {!! Form::open(['route' => 'drive_raid_search_victim_action', 'class' => '']) !!}
+            {!! Form::submit('Вступить в ряды драйверов', array('class' => 'btn btn-primary')) !!}
+            {!! Form::close() !!}
         </div>
     </div>
 @endsection

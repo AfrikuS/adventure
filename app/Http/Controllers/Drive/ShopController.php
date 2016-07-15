@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
-class ShopController extends AppController
+class ShopController extends DriveController
 {
     public function index()
     {

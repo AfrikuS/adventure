@@ -9,32 +9,24 @@ use App\Exceptions\DetailNotFoundExeption;
 use App\Models\Drive\Vehicle;
 use App\Repositories\Drive\DetailRepository;
 use App\Repositories\Drive\DriverRepository;
+use App\Repositories\Drive\VehicleRepository;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
-class VehicleController extends AppController
+class VehicleController extends DriveController
 {
-    /** @var Vehicle  */
-    protected $vehicle;
 
     /** @var DetailRepository */
     private $detailRepo;
-
-    public function __construct(DriverRepository $driverRepo, DetailRepository $detailRepo)
+    
+    public function __construct(DriverRepository $driverRepo,
+                                DetailRepository $detailRepo)
     {
         parent::__construct($driverRepo);
 
         $this->detailRepo = $detailRepo;
 
-        $this->vehicle = Vehicle::where('driver_id', $this->driver->id)->first();
-
-        if (null === $this->vehicle) {
-            
-            $cmd = new CreateVehicleCommand();
-            
-            $this->vehicle = $cmd->createVehicle($this->driver->id);
-        }
     }
 
     public function index()
@@ -43,7 +35,7 @@ class VehicleController extends AppController
         $driverDetails = $this->detailRepo->getUnmountedDetailsByDriverId($this->driver->id);
         
         // details on vehicle
-        $detailsOnVehicle = $this->vehicle->details(); 
+        $detailsOnVehicle = $this->vehicle->details; //getRelation('details');
 
         return $this->view('drive.garage.vehicle', [
             'driverDetails' => $driverDetails,
@@ -52,6 +44,20 @@ class VehicleController extends AppController
         ]);
     }
 
+    public function equipToRaid()
+    {
+        $driverDetails = $this->detailRepo->getUnmountedDetailsByDriverId($this->driver->id);
+
+        // details on vehicle
+        $detailsOnVehicle = $this->vehicle->details;
+
+        return $this->view('drive.garage.vehicle_equip', [
+            'driverDetails' => $driverDetails,
+            'vehicleDetails' => $detailsOnVehicle,
+            'vehicle' => $this->vehicle,
+        ]);
+    }
+    
     public function mountDetail()
     {
         $data = Input::all();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Npc\NpcDeal;
+use App\Repositories\HeroRepositoryObj;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesResources;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -14,6 +15,9 @@ class Controller extends BaseController
     use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
 
     protected $user_id;
+    
+    /** @var  HeroRepositoryObj */
+    protected $heroRepo;
 
     /**
      * Controller constructor.
@@ -22,6 +26,8 @@ class Controller extends BaseController
     {
 //        $this->user_id = auth()->user()->id;
         $this->user_id = \Auth::id();
+        
+        $this->heroRepo = new HeroRepositoryObj();
     }
 
     protected function view($view = null, $data = [])

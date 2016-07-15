@@ -9,7 +9,8 @@ class Vehicle extends Model
     protected $table      = 'drive_vehicles';
     protected $primaryKey = 'id';
     public $timestamps = false;
-    protected $fillable   = ['driver_id', 'acceleration', 'stability', 'mobility'];
+    protected $fillable   = ['driver_id', 'acceleration', 'stability', 'mobility', 
+        'fuel_level', 'damage_percent', 'status'];
 
     public function driver()
     {

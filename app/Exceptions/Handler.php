@@ -49,7 +49,8 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
         if ($e instanceof NotFoundHttpException) {
-            return response()->view('errors.404', [], 404);
+            return redirect('/profile');
+//            return response()->view('errors.404', [], 404);
         }
         elseif ($e instanceof DefecitHeroResException) {
             Session::flash('message', 'Nedostatochno gold');

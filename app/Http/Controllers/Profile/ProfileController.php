@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Profile;
 
+use App\Commands\Drive\CreateDriverCommand;
 use App\Factories\WorkerFactory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\Battle\ResourceChannel;
 use App\Models\Work\Worker;
+use App\Repositories\Drive\DriverRepository;
 use App\Repositories\Work\Team\WorkerRepository;
+use Illuminate\Support\Facades\Redirect;
 
 class ProfileController extends Controller
 {
@@ -47,5 +50,15 @@ class ProfileController extends Controller
             'channels' => $channels,
             'lossChannels' => $lossChannels,
         ]);
+    }
+
+    public function becomeDriver()
+    {
+        $cmd = new CreateDriverCommand(new DriverRepository());
+        
+        $cmd->createDriver($this->user_id);
+            
+        
+        return \Redirect::route('profile_become_driver_action');
     }
 }

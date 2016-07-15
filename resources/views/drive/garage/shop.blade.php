@@ -41,8 +41,8 @@
             @else
                 Деталей нет
             @endif
-
         </div>
+
         <div class="col-lg-3">
             <ul>
                 <li>Колеса - </li>

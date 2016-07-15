@@ -23,11 +23,11 @@ class BattleFactory
         });
     }
 
-    public static function createResourceChannel($atacker, $victim)
+    public static function createResourceChannel($atacker_id, $victim_id)
     {
         ResourceChannel::create([
-            'to_user_id' => $atacker->id,
-            'from_user_id' => $victim->id,
+            'to_user_id' => $atacker_id,
+            'from_user_id' => $victim_id,
             'resource' => 'gold',
             'tax_percent' => 3,
         ]);

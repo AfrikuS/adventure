@@ -1,17 +1,8 @@
 @extends('layouts.app')
 
-@section('head')
-    @parent
+@section('title', 'Battle -  Search Result')
 
-@endsection
-
-
-@section('left_column')
-    @parent
-@endsection
-
-
-@section('content')
+@section('center')
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
@@ -19,15 +10,15 @@
 
                 <div class="panel-body">
 
-                    {{ var_dump($users_ids) }}
+                    {{--{{ var_dump($users_ids) }}--}}
                     {{ $user->name }}
 
                     <p>
-                    {!! Form::open(['action' => ['AttackController@searchOpponent'], 'class' => '']) !!}
+                    {!! Form::open(['action' => ['Battle\AttackController@searchOpponent'], 'class' => '']) !!}
                     {!! Form::submit('Искать снова', array('class' => 'btn btn-primary')) !!}
                     {!! Form::close() !!}
                     <p>
-                    {!! Form::open(['action' => ['AttackController@attack'], 'class' => '']) !!}
+                    {!! Form::open(['action' => ['Battle\AttackController@attack'], 'class' => '']) !!}
                     {!! Form::hidden('user_id', $user->id, ['id' =>  '']) !!}
                     {!! Form::submit('Напасть', array('class' => 'btn btn-primary')) !!}
                     {!! Form::close() !!}
@@ -39,6 +30,3 @@
     </div>
 @endsection
 
-@section('right_column')
-    @parent
-@endsection

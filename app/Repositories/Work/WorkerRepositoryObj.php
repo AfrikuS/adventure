@@ -47,7 +47,6 @@ class WorkerRepositoryObj
         }
     }
     
-    
     public function addMaterialToWorker(Worker $worker, $code, $amount)
     {
         $material = $worker->getMaterialByCode($code);

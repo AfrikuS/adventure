@@ -38,7 +38,6 @@ class BuyDetailCommand
             \DB::rollBack();
             throw $e;
         }
-
         \DB::commit();
     }
 }

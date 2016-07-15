@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Exceptions\DefecitHeroResException;
+use App\Models\Core\Buildings;
 use App\Models\Core\Hero;
 use App\Models\Core\Thing;
 use App\Entities\Trade\ThingStateMachine;
@@ -48,6 +49,23 @@ class HeroRepositoryObj
             'oil'   => 600,
             'water' => 700,
         ]);
+    }
+
+    public function createBuildings($hero_id)
+    {
+        return Buildings::create([
+            'id' => $hero_id,
+            'gates_level' => 34,
+            'fence_level' => 35,
+            'door_house_level' => 36,
+            'door_ambar_level' => 37,
+            'door_resource_warehause_level' => 38,
+        ]);
+    }
+
+    public function findHeroWithBuildings($id): Hero
+    {
+        return Hero::with('buildings')->find($id);
     }
 
 }
