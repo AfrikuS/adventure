@@ -7,14 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\Geo\Travel\MaterialPrice;
 use App\Models\Geo\Travel\TempShop;
-use App\Models\Work\WorkerMaterial;
+use App\Models\Work\Worker\WorkerMaterial;
 use App\Repositories\Geo\TravelRepository;
 use App\Repositories\HeroRepositoryObj;
 use App\Repositories\ShopRepository;
-use App\Repositories\Work\Team\WorkerRepository;
-use App\Repositories\Work\WorkerMaterialsRepository;
 use App\Repositories\Work\WorkerRepositoryObj;
-use App\Transactions\Work\ShopTransactions;
 use Illuminate\Support\Facades\Input;
 
 class DockMarketController extends Controller

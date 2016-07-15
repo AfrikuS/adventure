@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
+/** @deprecated  */
 class MineController extends Controller
 {
     public function index()
@@ -28,7 +29,7 @@ class MineController extends Controller
 //        Session::flash('message', 'Lot is bought yet!');
 //        Session::put('errors', [10,22,31]);
 
-        return $this->view('work/mine', [
+        return $this->view('work/mine', [ // todo <- review
             'offers' => $offers,
         ]);
     }

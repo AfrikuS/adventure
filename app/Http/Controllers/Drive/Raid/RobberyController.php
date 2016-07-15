@@ -38,44 +38,44 @@ class RobberyController extends RaidController
         switch ($status) {
             case 'far_gates':
 
-                return $this->view('drive.robbery.gates_far', [
+                return $this->view('drive.raid.robbery.gates_far', [
                 ]);
 
             case 'detailed_view_gates':  // больше инфы о жилище\постройках
 
 
-                return $this->view('drive.robbery.detail_view_gates', [
+                return $this->view('drive.raid.robbery.detail_view_gates', [
                 ]);
 
             case 'gates': // выбор действий при взломе ворот
 
-                return $this->view('drive.robbery.gates_near', [
+                return $this->view('drive.raid.robbery.gates_near', [
                     'gates_durability' => $victimBuildings->gates_level,
                 ]);
 
             case 'fence':  // забор, выбор действий
 
-                return $this->view('drive.robbery.fence_near', [
+                return $this->view('drive.raid.robbery.fence_near', [
                 ]);
 
             case 'courtyard':  // после забора - 3 двери, выбор действий
 
-                return $this->view('drive.robbery.courtyard', [
+                return $this->view('drive.raid.robbery.courtyard', [
                 ]);
 
             case 'house':
 
-                return $this->view('drive.robbery.house', [
+                return $this->view('drive.raid.robbery.house', [
                 ]);
 
             case 'ambar':
 
-                return $this->view('drive.robbery.ambar', [
+                return $this->view('drive.raid.robbery.ambar', [
                 ]);
 
             case 'warehouse':
 
-                return $this->view('drive.robbery.warehouse', [
+                return $this->view('drive.raid.robbery.warehouse', [
                 ]);
 
             case 'final':
@@ -83,7 +83,7 @@ class RobberyController extends RaidController
 //                $query = robberyReport($this->robbery);
 
 
-                return $this->view('drive.robbery.final', [
+                return $this->view('drive.raid.robbery.final', [
                     'report' => 'ROBBERY REPORT'
                 ]);
         }

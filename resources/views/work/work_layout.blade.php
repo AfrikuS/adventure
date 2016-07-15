@@ -23,18 +23,18 @@
 
     @parent
 
-    Team Info
-    <p>
-    @if ($worker['team_id'] == null)
-        Вы не состоите в группе
-    @else
-        {{ link_to_route('work_show_privateteam_page', 'Ваша группа', ['id' => $worker['team_id']]) }}
-    @endif
+    {{--Team Info--}}
+    {{--<p>--}}
+    {{--@if ($worker['team_id'] == null)--}}
+        {{--Вы не состоите в группе--}}
+    {{--@else--}}
+        {{--{{ link_to_route('work_show_privateteam_page', 'Ваша группа', ['id' => $worker['team_id']]) }}--}}
+    {{--@endif--}}
 
-    <p>
-    <p>
-    Worker INFO
-    <p>
+    {{--<p>--}}
+    {{--<p>--}}
+    {{--Worker INFO--}}
+    {{--<p>--}}
 
 
 @endsection

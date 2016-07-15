@@ -2,36 +2,41 @@
 
 namespace App\Http\Controllers\Work;
 
-use App\Factories\WorkerFactory;
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
 use App\Models\Work\Worker;
+use App\Repositories\Work\WorkerRepositoryObj;
+use Illuminate\Support\Facades\Session;
 
-class WorkController extends AppController
+class WorkController extends Controller
 {
-    public function index()
+    /** @var WorkerRepositoryObj */
+    protected $workerRepo;
+    
+    /** @var  Worker */
+    protected $worker;
+
+    public function __construct(WorkerRepositoryObj $workerRep)
     {
-        if (null === Worker::find(\Auth::id())) {
-            WorkerFactory::createWorker(\Auth::id());
+        parent::__construct();
+
+        $this->workerRepo = $workerRep;
+
+        try {
+            $this->worker = $this->workerRepo->findSimpleById($this->user_id);
         }
-
-        return $this->view('work.work_index', [
-        ]);
+        catch (\Exception $e) {
+            
+            Session::flash('message', 'You are not worker');
+            return \Redirect::back();
+        }
+        
     }
+    
+    protected function view($view = null, $data = [])
+    {
+        $data['worker'] = (object) $this->worker->toArray();
 
-//    protected function view($view = null, $data = [])
-//    {
-////        $id = \Auth::id();
-////        $res = \App\Models\Macro\Resources::select(['water', 'food', 'tree', 'free_people'])->find($id);
-////        $heroResources = \App\Models\Core\Hero::select(['water', 'oil', 'gold'])->find($id);
-////        $team = User::whe
-//
-//
-//
-//        return parent::view($view, $data, [
-////            'resources' => $res,
-////            'heroResources' => $heroResources,
-//        ]);
-//    }
+        return parent::view($view, $data);
+    }
 
 }

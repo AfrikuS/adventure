@@ -37,7 +37,7 @@ class TempoShopController extends Controller
             'status' => 'active',
         ]);
 
-        return redirect()->route('geo_trader_temposhops_page');
+        return \Redirect::route('geo_trader_temposhops_page');
     }
 
     public function show($id)

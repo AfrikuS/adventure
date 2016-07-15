@@ -1,4 +1,4 @@
-@extends('drive.garage.garage_layout')
+@extends('drive.garage._layout')
 
 @section('title', 'Drive - Garage Vehicle')
 

@@ -1,6 +1,6 @@
-@extends('drive.raid.layout')
+@extends('drive.raid._layout')
 
-@section('title', 'Raid - Search Victims')
+@section('title', 'Raid - Broken Vehicle')
 
 
 @section('center')
@@ -12,7 +12,7 @@
     Выход один - катиться в гараж.
     <p></p>
     <p></p>
-    {!! Form::open(['route' => 'drive_raid_finish_action', 'class' => '']) !!}
+    {!! Form::open(['route' => 'drive_workroom_page', 'class' => '']) !!}
     {!! Form::submit('Закончить рейд', array('class' => 'btn btn-danger')) !!}
     {!! Form::close() !!}
 

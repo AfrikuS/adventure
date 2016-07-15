@@ -40,7 +40,7 @@ class DriveInController extends RobberyController
             $cmd->handleCollision($this->raid, $this->robbery, $this->vehicle);
 
 
-            return $this->view('drive.robbery.crush_result_success', [
+            return $this->view('drive.raid.robbery.crush_result_success', [
                 'result' => $collisionResult,
             ]);
         }
@@ -52,7 +52,7 @@ class DriveInController extends RobberyController
             $handler->handle($this->vehicle);
 
 
-            return $this->view('drive.robbery.crush_result_fail', [
+            return $this->view('drive.raid.robbery.crush_result_fail', [
                 'result' => $collisionResult,
             ]);
 
@@ -75,7 +75,7 @@ class DriveInController extends RobberyController
             $cmd->handleCollision($this->raid, $this->robbery, $this->vehicle);
 
 
-            return $this->view('drive.robbery.crush_result_success', [
+            return $this->view('drive.raid.robbery.crush_result_success', [
                 'result' => $collisionResult,
             ]);
         }
@@ -87,7 +87,7 @@ class DriveInController extends RobberyController
             $handler->handle($this->vehicle);
 
 
-            return $this->view('drive.robbery.crush_result_fail', [
+            return $this->view('drive.raid.robbery.crush_result_fail', [
                 'result' => $collisionResult,
             ]);
 
@@ -107,7 +107,7 @@ class DriveInController extends RobberyController
 
             $this->robbery->driveInHouse();
 
-            return $this->view('drive.robbery.house', [
+            return $this->view('drive.raid.robbery.house', [
             ]);
         }
 
@@ -118,7 +118,7 @@ class DriveInController extends RobberyController
             $handler->handle($this->vehicle);
 
 
-            return $this->view('drive.robbery.crush_result_fail', [
+            return $this->view('drive.raid.robbery.crush_result_fail', [
                 'result' => $collisionResult,
             ]);
 
@@ -138,7 +138,7 @@ class DriveInController extends RobberyController
 
             $this->robbery->driveInAmbar();
 
-            return $this->view('drive.robbery.ambar', [
+            return $this->view('drive.raid.robbery.ambar', [
             ]);
         }
 
@@ -149,7 +149,7 @@ class DriveInController extends RobberyController
             $handler->handle($this->vehicle);
 
 
-            return $this->view('drive.robbery.crush_result_fail', [
+            return $this->view('drive.raid.robbery.crush_result_fail', [
                 'result' => $collisionResult,
             ]);
 
@@ -169,7 +169,7 @@ class DriveInController extends RobberyController
 
             $this->robbery->driveInWarehouse();
 
-            return $this->view('drive.robbery.warehouse', [
+            return $this->view('drive.raid.robbery.warehouse', [
             ]);
         }
 
@@ -180,7 +180,7 @@ class DriveInController extends RobberyController
             $handler->handle($this->vehicle);
 
 
-            return $this->view('drive.robbery.crush_result_fail', [
+            return $this->view('drive.raid.robbery.crush_result_fail', [
                 'result' => $collisionResult,
             ]);
         }

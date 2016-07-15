@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('geo._layout')
 
 @section('title', 'Travel Ship-Shop - Geo Travel Page')
 @section('head')

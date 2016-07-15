@@ -36,17 +36,29 @@ class RaidVehicle extends ApplicationEntity
         if ($summaryDamage < 0) {
             $summaryDamage = 0;
         }
-        
-        
-        if ($this->stateMachine->can('recovery') && ($summaryDamage <= 80)) {
-            
-            $this->stateMachine->apply('recovery');
-        }
 
         $this->model->update([
             'status' => $this->state,
             'damage_percent' => $summaryDamage,
         ]);
+    }
+
+    public function recoveryAfterBreaking()
+    {
+        if ($this->stateMachine->can('recovery')) {
+            $this->stateMachine->apply('recovery');
+
+            $this->model->update([
+                'status' => $this->state,
+                'damage_percent' => 80,
+            ]);
+            
+        }
+    }
+
+    public function refuel($amount)
+    {
+        $this->model->increment('fuel_level', $amount);
     }
 
     protected function getModelClass(): string

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('geo._layout')
 
 @section('title', 'Geo - Dock Index')
 
@@ -15,44 +15,6 @@
 
 @section('center')
 
-    <div class="row row-offcanvas">
-        <div class="col-lg-12">
-            <ul>
-                <li>{{ link_to_route('geo_travels_page', 'Рейсы \ Отправления') }}</li>
-                <li>{{ link_to_route('geo_live_voyage_page', 'Live Travels (new)') }}</li>
-            </ul>
-
-        </div>
-    </div>
-
-    <div class="row row-offcanvas">
-        <div class="col-lg-4">
-            Sea freights \ Морские грузоперевозки
-        </div>
-
-        <div class="col-lg-4">
-            {{ link_to_route('geo_dock_market_page', 'Dock market \ Торговые точки') }}
-        </div>
-
-        <div class="col-lg-4">
-            {{ link_to_route('geo_business_page', 'Личный кабинет \ Бизнес')  }}
-        </div>
-    </div>
-
-    <div class="row row-offcanvas">
-        <div class="col-lg-4">
-            {{ link_to_route('geo_index_page', 'Порт - Главная') }}
-        </div>
-
-        <div class="col-lg-4">
-            Директор порта - Дон Спрут
-        </div>
-
-        <div class="col-lg-4">
-            <p><p>
-                Рейсы \ Voyages
-        </div>
-    </div>
 
     <div class="row row-offcanvas">
         <div class="col-lg-12">

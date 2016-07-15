@@ -26,7 +26,7 @@ class EstimateOrderCommand
         $order = $this->orderRepo->findOrderWithMaterialsById($order_id);
         /** @var Worker $worker */
         $worker = $this->workerRepo->findWithMaterialsAndSkillsById($worker_id);
-        
+
         \DB::beginTransaction();
         try {
 
@@ -41,7 +41,8 @@ class EstimateOrderCommand
             if ($missingSkillCodes->count() > 0) {
                 $this->createMissingSkills($worker, $missingMaterialCodes);
             }
-            
+
+            $order->estimate();
         }
         catch(\Exception $e)
         {
@@ -49,7 +50,6 @@ class EstimateOrderCommand
             throw $e;
         }
 
-        $order->estimate($worker_id);
 
         \DB::commit();
     }

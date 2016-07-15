@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('geo._layout')
 
 @section('title', 'Geo - Locations -> Main Map')
 @section('head')

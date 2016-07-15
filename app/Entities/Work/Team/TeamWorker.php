@@ -22,9 +22,6 @@ class TeamWorker extends ApplicationEntity
         return [
             'free'          => ['type' => 'initial', 'properties' => []],
             'joined'        => ['type' => 'normal', 'properties' => []],
-//            'stock_materials' => ['type' => 'normal',  'properties' => []],
-//            'stock_skills'    => ['type' => 'normal',  'properties' => []],
-//            'completed'       => ['type' => 'final',   'properties' => []],
         ];
     }
 
@@ -33,9 +30,6 @@ class TeamWorker extends ApplicationEntity
         return [
             'join'  =>                ['from' => ['free'],            'to' => 'joined'],
             'left_team'  =>           ['from' => ['joined'],          'to' => 'free'],
-//            'estimate'  =>              ['from' => ['accepted'],        'to' => 'stock_materials'],
-//            'finish_stock_materials' => ['from' => ['stock_materials'], 'to' => 'stock_skills'],
-//            'finish_stock_skills'  =>   ['from' => ['stock_skills'],    'to' => 'completed'],
         ];
     }
 

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('geo._layout')
 
 @section('title', 'Sea -> Travel Port')
 @section('head')
@@ -7,11 +7,6 @@
 
 @section('center')
 
-    <ul>
-        <li>{{ link_to_route('geo_travels_page', 'Рейсы \ Отправления') }}</li>
-        <li>{{ link_to_route('geo_index_page', 'Порт - Главная') }}</li>
-        <li>{{ link_to_route('geo_live_voyage_page', 'Live Travels (new)') }}</li>
-    </ul>
     <p></p>
     Список кораблей, уходящих в дальние страны.
     <p>Можно заказать привезти оттуда разных ресов

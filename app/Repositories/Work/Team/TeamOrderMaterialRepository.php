@@ -2,12 +2,6 @@
 
 namespace App\Repositories\Work\Team;
 
-use App\Models\Work\Material;
-use App\Models\Work\Order;
-use App\Models\Work\OrderMaterials;
-use App\Models\Work\Team\TeamOrder;
-use App\Models\Work\Team\TeamOrderMaterial;
-use App\Models\Work\UserMaterial;
 use Illuminate\Database\Eloquent\Collection;
 
 class TeamOrderMaterialRepository

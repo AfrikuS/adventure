@@ -1,4 +1,4 @@
-@extends('drive.raid.layout')
+@extends('drive.raid._layout')
 
 @section('title', 'Raid - Search Victims')
 
