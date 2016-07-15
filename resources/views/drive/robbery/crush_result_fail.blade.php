@@ -25,7 +25,7 @@
     {{--<h3>*Забор после ворот*</h3>--}}
     <p></p>
 
-    <b>{{ link_to_route('drive_robbery_page', 'Back') }}</b>
+    <b>{{ link_to_route('drive_robbery_page', 'Попробовать снова') }}</b>
 
 {{--    {!! Form::open(['route' => 'drive_robbery_drivein_fence_action', 'class' => '']) !!}--}}
 

@@ -10,14 +10,17 @@ use App\Models\Drive\Vehicle;
 class CollisionProcessor
 {
     private $vehicle;
-//    private $buildings;
+
+    /** @var  Buildings */
+    private $buildings;
+
     /** @var DamageCalculator */
     private $damageCalculator;
 
-    public function __construct(RaidVehicle $vehicle)
+    public function __construct(RaidVehicle $vehicle, Buildings $buildings)
     {
-//        $this->buildings = $buildings;
         $this->vehicle = $vehicle;
+        $this->buildings = $buildings;
         $this->damageCalculator = new DamageCalculator();
     }
 
@@ -25,8 +28,10 @@ class CollisionProcessor
     {
         srand();// init random
 
+        $buildingLevel = $this->getBuildingLevel($this->buildings, $buildingCode);
+
         $vehiclePower = $this->calculateVehiclePower();
-        $buildingDuracity = $this->calculateBuildingDuracity($buildingCode);
+        $buildingDuracity = $this->calculateBuildingDuracity($buildingLevel);
 
         $reward = 0;
         $status = 'failed';
@@ -63,15 +68,15 @@ class CollisionProcessor
         return $resultVehiclePower;
     }
 
-    private function calculateBuildingDuracity($buildingCode)
+    private function calculateBuildingDuracity($buildingLevel)
     {
-        $victimFortune = (rand(1000, 1500) / 1000);
+        $victimFortune = (rand(1200, 1500) / 1000);
 
 //        $buidlingField = $buildingCode.'_level';
 
 
 //        $resultBuildingPower = $this->buildings->$buidlingField * 12 * $victimFortune; // armor
-        $resultBuildingPower = 39 * 12 * $victimFortune; // armor
+        $resultBuildingPower = $buildingLevel * 12 * $victimFortune; // armor
 
         return $resultBuildingPower;
     }
@@ -79,5 +84,29 @@ class CollisionProcessor
     private function calculateCollisionReward($buildingCode, $buildingDuracity)
     {
         return CollisionBuildingRewardCharger::collisionGatesReward();
+    }
+
+    private function getBuildingLevel($buildings, $buildingCode)
+    {
+        switch ($buildingCode) 
+        {
+            case 'gates':
+                return $buildings->gates_level;
+
+            case 'fence':
+                return $buildings->fence_level;
+
+            case 'house':
+                return $buildings->door_house_level;
+
+            case 'ambar':
+                return $buildings->door_ambar_level;
+
+            case 'warehouse':
+                return $buildings->door_resource_warehause_level;
+
+            default:
+                throw new \Exception;
+        }
     }
 }

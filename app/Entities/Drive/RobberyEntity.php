@@ -29,29 +29,34 @@ class RobberyEntity extends ApplicationEntity
             'far_gates'               => ['type' => 'normal',  'properties' => []],
             'detailed_view_gates'     => ['type' => 'normal',  'properties' => []],
 //            'drive_to_gates_wait'          => ['type' => 'normal',  'properties' => []],
-            'near_gates'              => ['type' => 'normal',  'properties' => []],
+            'gates'              => ['type' => 'normal',  'properties' => []],
 //            'drive_gates_success'          => ['type' => 'normal',  'properties' => []],
         
-            'near_fence'          => ['type' => 'normal',  'properties' => []],
+            'fence'          => ['type' => 'normal',  'properties' => []],
 //            'drive_in_fence_wait'          => ['type' => 'normal',  'properties' => []],
-            'courtyard'          => ['type' => 'normal',  'properties' => []],
-            'final'              => ['type' => 'final',  'properties' => []],
+            'courtyard'      => ['type' => 'normal',  'properties' => []],
+
+            'house'          => ['type' => 'normal',  'properties' => []],
+            'ambar'          => ['type' => 'normal',  'properties' => []],
+            'warehouse'      => ['type' => 'normal',  'properties' => []],
+
+            'final'          => ['type' => 'final',  'properties' => []],
         ];
     }
 
     protected function getTransitions(): array
     {
         return [
-            'drive_to_gates'          =>   ['from' => ['far_gates', 'detailed_view_gates'],  'to' => 'near_gates'],
+            'drive_to_gates'          =>   ['from' => ['far_gates', 'detailed_view_gates'],  'to' => 'gates'],
             'detailed_view_on_gates'  =>   ['from' => ['far_gates'],    'to' => 'detailed_view_gates'],
 
-            'drive_in_gates'          =>   ['from' => ['near_gates'],    'to' => 'final'],
-//            'drive_in_gates'          =>   ['from' => ['near_gates'],    'to' => 'near_fence'],
-            'drive_in_fence'          =>   ['from' => ['near_fence'],    'to' => 'final'],
+            'drive_in_gates'          =>   ['from' => ['gates'],    'to' => 'fence'],
+//            'drive_in_gates'          =>   ['from' => ['gates'],    'to' => 'fence'],
+            'drive_in_fence'          =>   ['from' => ['fence'],    'to' => 'courtyard'],
 //
-//            'drive_in_ambar'          =>   ['from' => ['courtyard'],    'to' => 'final'],
-//            'drive_in_house'          =>   ['from' => ['courtyard'],    'to' => 'final'],
-//            'drive_in_warehouse'      =>   ['from' => ['courtyard'],    'to' => 'final'],
+            'drive_in_house'          =>   ['from' => ['courtyard'],    'to' => 'house'],
+            'drive_in_ambar'          =>   ['from' => ['courtyard'],    'to' => 'ambar'],
+            'drive_in_warehouse'      =>   ['from' => ['courtyard'],    'to' => 'warehouse'],
         ];
     }
 

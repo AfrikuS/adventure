@@ -1,11 +1,10 @@
 @extends('drive.robbery.layout')
 
-@section('title', 'Robbery - Warehouse Result')
+@section('title', 'Robbery - House Result')
 
 @section('center')
 
-    Вы въехали в <b>ресурс. склад</b>. Осмотревшись по сторонам вы нашли ___ кг голды,
-    и пара галлонов нефти
+    Вы въехали в <b>дом</b>. Осмотревшись по сторонам вы нашли ___ кг годы, и пара галлонов нефти
     <p></p>
     <p></p>
     <p></p>

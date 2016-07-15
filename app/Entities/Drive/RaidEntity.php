@@ -102,7 +102,7 @@ class RaidEntity extends ApplicationEntity
 
             $this->model->update([
                 'status' => $this->state,
-                'robbery_status' => 'near_fence', //'far_gates',
+                'robbery_status' => 'fence', //'far_gates',
             ]);
         }
     }

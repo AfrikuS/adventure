@@ -52,9 +52,9 @@ Route::group(['middleware' => 'drive_driver'], function () {
         Route::post('/drive/robbery/drivein_gates', 'Drive\Raid\DriveInController@driveInGates')->name('drive_robbery_drivein_gates_action');
         Route::post('/drive/robbery/drivein_fence', 'Drive\Raid\DriveInController@driveInFence')->name('drive_robbery_drivein_fence_action');
         
-        Route::post('/drive/robbery/drivein_ambar', 'Drive\Raid\RobberyController@driveInAmbar')->name('drive_robbery_drivein_ambar_action');
-        Route::post('/drive/robbery/drivein_house', 'Drive\Raid\RobberyController@driveInHouse')->name('drive_robbery_drivein_house_action');
-        Route::post('/drive/robbery/drivein_warehouse', 'Drive\Raid\RobberyController@driveInWarehouse')->name('drive_robbery_drivein_warehouse_action');
+        Route::post('/drive/robbery/drivein_ambar', 'Drive\Raid\DriveInController@driveInAmbar')->name('drive_robbery_drivein_ambar_action');
+        Route::post('/drive/robbery/drivein_house', 'Drive\Raid\DriveInController@driveInHouse')->name('drive_robbery_drivein_house_action');
+        Route::post('/drive/robbery/drivein_warehouse', 'Drive\Raid\DriveInController@driveInWarehouse')->name('drive_robbery_drivein_warehouse_action');
         
         Route::post('/drive/robbery/finish', 'Drive\Raid\RobberyController@finish')->name('drive_robbery_finish_action');
         Route::post('/drive/robbery/abort', 'Drive\Raid\RobberyController@abort')->name('drive_robbery_abort_action');

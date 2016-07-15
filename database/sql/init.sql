@@ -595,7 +595,7 @@ CREATE TABLE IF NOT EXISTS `hero_buildings` (
     `fence_level` INT UNSIGNED NOT NULL,
     `door_house_level` INT UNSIGNED NOT NULL,
     `door_ambar_level` INT UNSIGNED NOT NULL,
-    `door_resource_warehause_level` INT UNSIGNED NOT NULL,
+    `door_resource_warehause_level` INT UNSIGNED NOT NULL, -- todo rename house
     PRIMARY KEY (id),
     FOREIGN KEY (id) REFERENCES hero_resources(id)
 );

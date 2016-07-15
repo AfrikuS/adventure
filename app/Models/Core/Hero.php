@@ -2,9 +2,7 @@
 
 namespace App\Models\Core;
 
-use App\Exceptions\DefecitHeroResException;
 use App\Models\Auth\User;
-use App\Models\Macro\Building;
 use Illuminate\Database\Eloquent\Model;
 
 class Hero extends Model
@@ -34,6 +32,6 @@ class Hero extends Model
 
     public function buildings()
     {
-        return $this->hasOne(Building::class, 'id');
+        return $this->hasOne(Buildings::class, 'id');
     }
 }

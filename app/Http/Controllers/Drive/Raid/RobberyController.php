@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Drive\Raid;
 
 use App\Commands\Drive\Raid\Robbery\FinishRobberyCommand;
 use App\Entities\Drive\RobberyEntity;
+use App\Models\Core\Hero;
 use App\Repositories\Drive\DriverRepository;
 use App\Repositories\Drive\RaidRepository;
 use Illuminate\Support\Facades\Redirect;
@@ -13,6 +14,7 @@ class RobberyController extends RaidController
     /** @var RobberyEntity */
     protected $robbery;
 
+    /** @var Hero */
     protected $victim;
 
     public function __construct(DriverRepository $driverRepo, RaidRepository $raidRepo)
@@ -45,23 +47,35 @@ class RobberyController extends RaidController
                 return $this->view('drive.robbery.detail_view_gates', [
                 ]);
 
-            case 'near_gates': // выбор действий при взломе ворот
+            case 'gates': // выбор действий при взломе ворот
 
                 return $this->view('drive.robbery.gates_near', [
                     'gates_durability' => $victimBuildings->gates_level,
                 ]);
 
-            case 'near_fence':  // забор, выбор действий
+            case 'fence':  // забор, выбор действий
 
                 return $this->view('drive.robbery.fence_near', [
                 ]);
 
             case 'courtyard':  // после забора - 3 двери, выбор действий
 
-                $damageStateVehicle = 'calculate';
-
                 return $this->view('drive.robbery.courtyard', [
-                    'damageState' => 'damageState'
+                ]);
+
+            case 'house':
+
+                return $this->view('drive.robbery.house', [
+                ]);
+
+            case 'ambar':
+
+                return $this->view('drive.robbery.ambar', [
+                ]);
+
+            case 'warehouse':
+
+                return $this->view('drive.robbery.warehouse', [
                 ]);
 
             case 'final':
@@ -85,36 +99,36 @@ class RobberyController extends RaidController
         return \Redirect::route('drive_robbery_page');
     }
 
-    public function driveToGates()
-    {
-        $this->robbery->driveToGates();
-
-        return \Redirect::route('drive_robbery_page');
-    }
-
-
+//    public function driveToGates()
+//    {
+//        $this->robbery->driveToGates();
+//
+//        return \Redirect::route('drive_robbery_page');
+//    }
 
 
-    public function driveInHouse()  // въехать в жилище
-    {
-        $this->robbery->driveInHouse();
 
-        return \Redirect::route('drive_robbery_page');
-    }
 
-    public function driveInAmbar()  // въехать в амбар
-    {
-        $this->robbery->driveInAmbar();
-
-        return \Redirect::route('drive_robbery_page');
-    }
-
-    public function driveInWarehouse() // въехать в склад ресурсов
-    {
-        $this->robbery->driveInWarehouse();
-
-        return \Redirect::route('drive_robbery_page');
-    }
+//    public function driveInHouse()  // въехать в жилище
+//    {
+//        $this->robbery->driveInHouse();
+//
+//        return \Redirect::route('drive_robbery_page');
+//    }
+//
+//    public function driveInAmbar()  // въехать в амбар
+//    {
+//        $this->robbery->driveInAmbar();
+//
+//        return \Redirect::route('drive_robbery_page');
+//    }
+//
+//    public function driveInWarehouse() // въехать в склад ресурсов
+//    {
+//        $this->robbery->driveInWarehouse();
+//
+//        return \Redirect::route('drive_robbery_page');
+//    }
 
     public function finish()
     {
