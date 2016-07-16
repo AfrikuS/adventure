@@ -59,7 +59,7 @@
 
     <p><p>Ваши заказы
     <p>
-    @if(count($userTeamOrders) > 0)
+    @if(count($workerTeamOrders) > 0)
         <table class="table table-condensed">
             <table class="table table-bordered table-hover">
                 <thead>
@@ -74,7 +74,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($userTeamOrders as $order)
+                @foreach($workerTeamOrders as $order)
                     <tr>
                         <td>{{ $order->id }}</td>
                         <td>{{ $order->kind_work }}</td>

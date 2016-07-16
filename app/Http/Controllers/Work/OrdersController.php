@@ -6,6 +6,7 @@ use App\Commands\Work\IndividualOrder\DeleteOrderCommand;
 use App\Http\Requests;
 use App\Models\Work\Worker;
 use App\Repositories\Generate\EntityGenerator;
+use App\Repositories\OrdersRepository;
 use App\Repositories\Work\OrderRepositoryObj;
 use App\Repositories\Work\WorkerRepositoryObj;
 use Illuminate\Support\Facades\Input;
@@ -16,9 +17,9 @@ class OrdersController extends WorkController
     /** @var OrderRepositoryObj */
     protected $ordersRepo;
 
-    public function __construct(OrderRepositoryObj $teamordersRepo, WorkerRepositoryObj $workerRep)
+    public function __construct(OrdersRepository $ordersRepo, WorkerRepositoryObj $workerRep)
     {
-        $this->ordersRepo = $teamordersRepo;
+        $this->ordersRepo = $ordersRepo;
 
         parent::__construct($workerRep);
     }
@@ -27,9 +28,7 @@ class OrdersController extends WorkController
     {
         $freeOrders = $this->ordersRepo->getFreeOrders();
 
-        $workerOrders = $this->workerRepo->getAcceptedOrders(\Auth::id());
-
-//        $ch = $workerOrders->chunk(2);
+        $workerOrders = $this->ordersRepo->getAcceptedOrders($this->worker->id);
 
         return $this->view('work.order.orders_index', [
             'orders' => $freeOrders,

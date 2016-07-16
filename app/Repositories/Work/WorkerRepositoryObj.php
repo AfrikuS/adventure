@@ -29,11 +29,6 @@ class WorkerRepositoryObj
         });
     }
 
-    public function getAcceptedOrders($worker_id)
-    {
-        return Order::where('acceptor_worker_id', $worker_id)->get();
-    }
-
     public function upSkillByCode(Worker $worker, $skillCode, $amount)
     {
         $skill = $worker->getSkillByCode($skillCode);

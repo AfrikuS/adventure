@@ -22,22 +22,22 @@ Route::post('/work/order/apply_skill', 'Work\Order\OrderController@applySkill')-
 
 // team-order actions
 Route::get('/work/teamorders', 'Work\TeamOrdersController@index')->name('work_teamorders_page');
-//    Route::group(['middleware' => 'work_teamorder_acceptor'], function () {
-Route::post('/work/teamorder/accept', 'Work\TeamOrdersController@acceptOrder')->name('work_accept_teamorder_action');
 
 
-Route::get('/delete/work/teamorder/{id}', 'Work\TeamOrdersController@delete')->name('work_delete_teamorder_action');
+Route::get('/work/teamorder/{id}', 'Work\Order\TeamOrderController@index')->name('work_show_teamorder_page');
+
+Route::post('/work/teamorder/accept', 'Work\Order\TeamOrderController@acceptOrder')->name('work_accept_teamorder_action');
 Route::post('/work/teamorder/estimate', 'Work\Order\TeamOrderController@estimate')->name('work_teamorder_estimate_action');
+Route::post('/work/teamorder/add_material', 'Work\Order\TeamOrderController@addMaterial')->name('work_teamorder_add_material_in_stock_action');
+Route::post('/work/teamorder/apply_skill', 'Work\Order\TeamOrderController@applySkill')->name('work_teamorder_apply_skill_in_stock_action');
 Route::post('/work/teamorder/take_reward', 'Work\Order\TeamOrderController@takeReward')->name('work_teamorder_take_reward_action');
+Route::get('/work/teamorder/delete/{id}', 'Work\Order\TeamOrderController@delete')->name('work_delete_teamorder_action');
 
 
 //    });
 
 
 //    Route::group(['middleware' => 'work_teamorder_partner'], function () {
-Route::get('/work/teamorder/{id}', 'Work\Order\TeamOrderController@index')->name('work_show_teamorder_page');
-Route::post('/work/teamorder/add_material', 'Work\Order\TeamOrderController@addMaterial')->name('work_teamorder_add_material_in_stock_action');
-Route::post('/work/teamorder/apply_skill', 'Work\Order\TeamOrderController@applySkill')->name('work_teamorder_apply_skill_in_stock_action');
 //    });
 
 

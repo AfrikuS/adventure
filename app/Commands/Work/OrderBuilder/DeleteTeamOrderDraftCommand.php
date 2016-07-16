@@ -2,28 +2,31 @@
 
 namespace App\Commands\Work\OrderBuilder;
 
+use App\Entities\Work\TeamOrderDraftEntity;
 use App\Models\Work\Team\TeamOrder;
 use App\Models\Work\Team\TeamOrderMaterial;
 use App\Models\Work\Team\TeamOrderSkill;
 use App\Repositories\Work\Team\TeamOrderRepositoryObj;
-use App\Entities\Work\TeamOrderDraftEntity;
-use App\Entities\Work\TeamOrderEntity;
+use App\Repositories\Work\TeamOrderDraftRepo;
 
 class DeleteTeamOrderDraftCommand 
 {
     /** @var TeamOrderRepositoryObj */
     private $teamOrderRepo;
+    /** @var TeamOrderDraftRepo */
+    private $teamOrderDraftRepo;
 
     public function __construct(TeamOrderRepositoryObj $teamOrderRepo)
     {
         $this->teamOrderRepo = $teamOrderRepo;
+        $this->teamOrderDraftRepo = new TeamOrderDraftRepo();
     }
 
     public function deleteTeamOrder($order_id)
     {
         // todo validate on completed status
         /** @var TeamOrderDraftEntity $teamOrderEntity */
-        $teamOrderEntity = $this->teamOrderRepo->findOrderDraft($order_id);
+        $teamOrderEntity = $this->teamOrderDraftRepo->findOrderDraft($order_id);
 
         \DB::beginTransaction();
         try {

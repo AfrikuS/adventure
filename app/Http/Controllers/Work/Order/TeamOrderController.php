@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Work\Order;
 
+use App\Commands\Work\TeamOrder\AcceptTeamOrderCommand;
 use App\Commands\Work\TeamOrder\AddMaterialTeamOrderCommand;
 use App\Commands\Work\TeamOrder\ApplySkillTeamOrderCommand;
+use App\Commands\Work\TeamOrder\DeleteTeamOrderCommand;
 use App\Commands\Work\TeamOrder\EstimateTeamOrderCommand;
 use App\Commands\Work\TeamOrder\TakeRewardTeamOrderCommand;
 use App\Entities\Work\TeamOrderEntity;
 use App\Exceptions\DefecitMaterialException;
+use App\Exceptions\NotTeamLeaderException;
+use App\Exceptions\WorkerWithoutTeamException;
 use App\Http\Controllers\Work\WorkController;
 use App\Http\Requests;
 use App\Models\Work\Worker;
@@ -22,43 +26,23 @@ use Illuminate\Support\Facades\Session;
 class TeamOrderController extends WorkController
 {
     /** @var TeamOrderRepositoryObj */
-    protected $teamOrdersRep;
-//    /** @var WorkerRepositoryObj */
-//    protected $workerRep;
+    protected $teamOrderRepo;
 
-
-//    /** @var  Worker */
-//    protected $worker;
-
-    public function __construct(TeamOrderRepositoryObj $teamOrdersRep, WorkerRepositoryObj $workerRep)
+    public function __construct(TeamOrderRepositoryObj $teamOrderRepo, WorkerRepositoryObj $workerRepo)
     {
-        parent::__construct($workerRep);
+        parent::__construct($workerRepo);
 
-        $this->teamOrdersRep = $teamOrdersRep;
-//        $this->workerRep = $workerRep;
-
-
-
+        $this->teamOrderRepo = $teamOrderRepo;
     }
 
 
     public function index($id)
     {
-        /** @var Worker $worker*/
-        $worker = $this->workerRep->findWithMaterialsAndSkillsById(\Auth::id());
         /** @var TeamOrderEntity $order */
-        $order = $this->teamOrdersRep->findOrderWithMaterialsAndSkillsById($id);
+        $order = $this->teamOrderRepo->findOrderWithMaterialsAndSkillsById($id);
 
-//        if (Gate::denies('teamorder-accepted', [$order])) {
-//            Session::flash('message', 'Order not accepted yet');
-//            return \Redirect::back();
-//        }
-//        if (Gate::denies('view-teamorder', [$worker, $order])) {
-//            Session::flash('message', 'Policy is work');
-//            return \Redirect::back();
-//        }
-
-        switch ($order->status) {
+        switch ($order->status) 
+        {
             case 'accepted':
 
                 return $this->view('work.teamorder.show.accepted', [
@@ -68,7 +52,7 @@ class TeamOrderController extends WorkController
             case 'stock_materials':
 
                 $orderMaterials = $order->materials;
-                $workerNeedMaterials = $this->workerRep->selectWorkerMaterialsNeedForOrder($order, $worker);
+                $workerNeedMaterials = $this->workerRepo->selectWorkerMaterialsNeedForOrder($order, $this->worker);
 
                 return $this->view('work.teamorder.show.stock_materials', [
                     'order' => $order,
@@ -79,7 +63,7 @@ class TeamOrderController extends WorkController
             case 'stock_skills':
 
                 $orderSkills = $order->skills;
-                $userSkills = $worker->skills;
+                $userSkills = $this->worker->skills;
 
                 return $this->view('work.teamorder.show.stock_skills', [
                     'order' => $order,
@@ -97,13 +81,40 @@ class TeamOrderController extends WorkController
         throw new \Exception; // UnknownTeamOrderStatus
     }
 
+    public function acceptOrder()
+    {
+        $data = Input::all();
+        $order_id = $data['order_id'];
+
+
+        try {
+
+            $cmd = new AcceptTeamOrderCommand($this->teamOrderRepo, $this->workerRepo);
+
+            $cmd->acceptTeamOrder($order_id, $this->worker->id);
+        }
+        catch (WorkerWithoutTeamException $e)
+        {
+            Session::flash('message', 'Worker without team cannot accept team-order');
+            return \Redirect::back();
+        }
+        catch (NotTeamLeaderException $e)
+        {
+            Session::flash('message', 'Only Team-Leader can accept team-order');
+            return \Redirect::back();
+        }
+
+        return \Redirect::route('work_show_teamorder_page', ['id' => $order_id]);
+    }
+
+
     public function estimate()
     {
         $data = Input::all();
         $order_id = $data['order_id'];
         $worker_id = \Auth::id();
 
-        $cmd = new EstimateTeamOrderCommand($this->teamOrdersRep, $this->workerRep);
+        $cmd = new EstimateTeamOrderCommand($this->teamOrderRepo, $this->workerRepo);
 
         $cmd->estimateTeamOrder($order_id, $worker_id);
 
@@ -119,7 +130,7 @@ class TeamOrderController extends WorkController
         $worker_id = \Auth::id();
 
         try {
-            $cmd = new AddMaterialTeamOrderCommand($this->teamOrdersRep, $this->workerRep);
+            $cmd = new AddMaterialTeamOrderCommand($this->teamOrderRepo, $this->workerRepo);
 
             $cmd->addMaterial($order_id, $worker_id, $materialCode);
         }
@@ -143,7 +154,7 @@ class TeamOrderController extends WorkController
         $order_id = $data['order_id'];
         $worker_id = \Auth::id();
 
-        $cmd = new ApplySkillTeamOrderCommand($this->teamOrdersRep, $this->workerRep);
+        $cmd = new ApplySkillTeamOrderCommand($this->teamOrderRepo, $this->workerRepo);
 
         $cmd->applySkill($order_id, $worker_id, $skillCode);
 
@@ -160,13 +171,22 @@ class TeamOrderController extends WorkController
         $worker_id = \Auth::id();
 
 
-        $cmd = new TakeRewardTeamOrderCommand($this->teamOrdersRep, $this->workerRep, new HeroRepositoryObj());
+        $cmd = new TakeRewardTeamOrderCommand($this->teamOrderRepo, $this->workerRepo, new HeroRepositoryObj());
         
         $cmd->takeReward($order_id, $worker_id);
 
         
         
         return Redirect::route('work_teamorders_page');
+    }
+
+    public function delete($id)
+    {
+        $cmd = new DeleteTeamOrderCommand($this->teamOrderRepo);
+
+        $cmd->deleteTeamOrder($id);
+
+        return redirect()->route('work_teamorders_page');
     }
 
 }

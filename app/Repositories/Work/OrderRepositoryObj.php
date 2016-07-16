@@ -11,14 +11,6 @@ use App\Entities\Work\OrderEntity;
 
 class OrderRepositoryObj
 {
-    public function getFreeOrders()
-    {
-        return Order::
-            where('status', 'free')
-            ->where('type', 'individual')
-            ->get();
-    }
-
     public function findSimpleOrderById($id)
     {
         $order = Order::

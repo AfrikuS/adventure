@@ -52,19 +52,6 @@ class TeamOrderRepositoryObj
         ]);
     }
 
-    public function findOrderDraft($draft_id)
-    {
-        $order = Order::select('id', 'price', 'status', 'desc', 'kind_work_title')
-            ->with(['materials' => function ($query) {
-                $query->select('id', 'order_id', 'code', 'need', 'stock');
-            }])
-            ->with(['skills' => function ($query) {
-                $query->select('id', 'order_id', 'code', 'need_times', 'stock_times');
-            }])
-            ->find($draft_id);
-
-        return new TeamOrderDraftEntity($order);
-    }
 
     public function deleteOrderMaterials(TeamOrderDraftEntity $orderDraft)
     {
