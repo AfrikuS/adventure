@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\NotAuth;
 
-use App\Models\Work\Team\TeamOrder;
+use App\Lib\Skill\SkillArtifact;
+use App\Lib\Skill\SkillCalculator;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
 class IndexController extends GuestController
@@ -47,9 +48,19 @@ class IndexController extends GuestController
     public function test ()
     {
 
-        $a = null;
+/*        $a = null;
 
-        $b = $a == null ? $c = 4 : 5;
+        $b = $a == null ? $c = 4 : 5;*/
+
+        $startSum = 100;
+        $calc = new SkillCalculator($startSum);
+        $art1 = new SkillArtifact();
+        $art2 = new SkillArtifact();
+
+        $calc->addArtifact($art1);
+        $calc->addArtifact($art2);
+
+        $resultSum = $calc->resultSumma();
 
 /*
         $order_id = 9;
@@ -100,7 +111,9 @@ class IndexController extends GuestController
 //        $m = $mats->where('code', 'pesok');//->first();
 
         return view('index', [
-            // 'lot' => $lot,
+             'startSum' => $startSum,
+             'resultSum' => $resultSum,
+             'artifactSums' => 'artifactSums',
         ]);
     }
 }
