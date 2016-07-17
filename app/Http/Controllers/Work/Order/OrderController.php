@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers\Work\Order;
 
+use App\Commands\Hero\UpBuildingLevelCmd;
+use App\Commands\Work\IndividualOrder\AcceptOrderCommand;
 use App\Commands\Work\IndividualOrder\AddMaterialCommand;
+use App\Commands\Work\IndividualOrder\DeleteOrderCommand;
 use App\Commands\Work\IndividualOrder\EstimateOrderCommand;
+use App\Commands\Work\IndividualOrder\GenerateOrderCommand;
 use App\Commands\Work\IndividualOrder\TakeRewardCommand;
 use App\Entities\Work\OrderEntity;
-use App\Exceptions\DefecitMaterialException;
+use App\Exceptions\NotEnoughMaterialException;
 use App\Http\Controllers\Work\WorkController;
+use App\Models\Work\Catalogs\Material;
 use App\Models\Work\Worker;
 use App\Repositories\HeroRepositoryObj;
 use App\Repositories\Work\OrderRepositoryObj;
@@ -19,8 +24,6 @@ class OrderController extends WorkController
 {
     /** @var OrderRepositoryObj */
     protected $orderRepo;
-//    /** @var  OrderEntity */
-//    protected $order;
 
     public function __construct(OrderRepositoryObj $orderRepo)
     {
@@ -65,16 +68,57 @@ class OrderController extends WorkController
                 return $this->view('work.order.show.completed', [
                     'order' => $order,
                 ]);
-        }
 
-        // order not accepted, free
-        throw new \Exception;
+            default:
+
+                // order not accepted, free
+                Session::flash('message', 'It\'s not your order');
+                return \Redirect::route('work_orders_page');
+        }
     }
+
+    public function accept()
+    {
+        $data = Input::all();
+        $order_id = $data['order_id'];
+
+
+        $cmd = new AcceptOrderCommand($this->orderRepo);
+
+        $cmd->accept($order_id, $this->worker);
+
+
+        return \Redirect::route('work_show_order_page', ['id' => $order_id]);
+    }
+
 
     public function estimate()
     {
         $data = Input::all();
         $order_id = $data['order_id'];
+
+        // -----------
+        $faker = \Faker\Factory::create();
+
+        $materialsCodes = Material::get(['id', 'code'])->pluck('code');
+
+        for ($i = 0; $i < 2; $i++) { // wtf todo
+            $materialCode = $faker->unique()->randomElement($materialsCodes->toArray());
+
+            $this->orderRepo->createMaterial($order_id, $materialCode, $need = 2);
+        }
+//        if ($order->desc == 'gates') {
+
+
+
+
+
+
+
+
+
+
+        // -----------
 
         $cmd = new EstimateOrderCommand($this->orderRepo, $this->workerRepo);
 
@@ -85,7 +129,7 @@ class OrderController extends WorkController
     }
 
 
-    public function addMaterial()
+    public function stockMaterial()
     {
         $data = Input::all();
 
@@ -97,7 +141,7 @@ class OrderController extends WorkController
 
             $cmd->addMaterial($order_id, $this->worker->id, $materialCode);
         }
-        catch (DefecitMaterialException $e)
+        catch (NotEnoughMaterialException $e)
         {
             Session::flash('message', 'Nedostatochno ' . $materialCode);
         }
@@ -112,12 +156,21 @@ class OrderController extends WorkController
 
         $order_id = $data['order_id'];
 
+        $repo = new OrderRepositoryObj();
+        $order = $repo->findSimpleOrderById($order_id);
+        
+
+        
+        
 
         $cmd = new TakeRewardCommand($this->orderRepo, $this->workerRepo, new HeroRepositoryObj());
         
         $cmd->takeReward($order_id, $this->worker->id);
-        
-        
+
+        $cmd = new UpBuildingLevelCmd();
+        $cmd->upBuildingLevel($order->customer_hero_id, $order->desc);
+
+
         return \Redirect::route('work_show_order_page', ['id' => $order_id]);
     }
 
@@ -126,4 +179,28 @@ class OrderController extends WorkController
         
     }
 
+    public function delete()
+    {
+        $data = Input::all();
+
+        $order_id = $data['order_id'];
+
+
+        $cmd = new DeleteOrderCommand($this->orderRepo);
+
+        $cmd->deleteOrder($order_id);
+
+
+        return \Redirect::route('work_orders_page');
+    }
+
+    public function generate()
+    {
+        $cmd = new GenerateOrderCommand($this->orderRepo);
+
+        $cmd->generateOrder();
+
+
+        return \Redirect::route('work_orders_page');
+    }
 }

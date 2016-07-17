@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Work;
 
 use App\Jobs\Job;
-use App\Models\Core\Hero;
-use Illuminate\Mail\Mailer;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
-class SendMessageToWorker extends Job implements ShouldQueue
+class CreateBuildOrderCmd extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
@@ -38,3 +36,4 @@ class SendMessageToWorker extends Job implements ShouldQueue
 
     }
 }
+

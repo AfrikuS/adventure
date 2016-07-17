@@ -35,21 +35,6 @@ class EntityGenerator
         TravelShip::destroy($id);
     }
 
-    public static function createWorkOrderWithMaterials()
-    {
-        $orderRepo = new OrderRepositoryObj();
-        $skill = Skill::get()->random();
-
-        \DB::beginTransaction();
-            $desc = 'order_desc';
-            $price = rand(74, 90);
-
-            $order = $orderRepo->createOrderModel($desc, $skill->code, $price); 
-
-            static::generateMaterials(2, $order);
-        
-        \DB::commit();
-    }
 
     public static function createTeamWorkOrderWithMaterials()
     {
@@ -102,20 +87,6 @@ class EntityGenerator
         ]);
     }
 
-    private static function generateMaterials($count, Order $order)
-    {
-        $orderRepo = new OrderRepositoryObj();
-
-        $faker = \Faker\Factory::create();
-        $materialsCodes = Material::get(['id', 'code'])->pluck('code');
-
-        for ($i = 0; $i < $count; $i++) { // wtf todo
-            $materialCode = $faker->unique()->randomElement($materialsCodes->toArray());
-            
-            $material = $orderRepo->createMaterial($order->id, $materialCode, $need = 2);
-        }
-    }
-    
 
     /** @deprecated */
     public static function createUserMaterials($user)

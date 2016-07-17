@@ -37,8 +37,8 @@ class TeamOrdersController extends WorkController
         try {
 
             $this->teamOrderSecurity->verifyViewTeamOrderList();
+            
         }
-
         catch (WorkerWithoutTeamException $e)
         {
             Session::flash('message', 'Worker without team cannot view team-order list');

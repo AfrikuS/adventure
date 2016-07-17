@@ -14,11 +14,11 @@ class OrderRepositoryObj
     public function findSimpleOrderById($id)
     {
         $order = Order::
-            select(['id', 'desc', 'kind_work_title', 'price', 'acceptor_worker_id', 'status', 'type'])
+            select(['id', 'desc', 'kind_work_title', 'price', 
+                    'acceptor_worker_id', 'status', 'type', 'customer_hero_id'])
             ->find($id);
 
         return new OrderEntity($order);
-//        return $order;
     }
 
     public function findOrderWithMaterialsById($id)
@@ -27,15 +27,14 @@ class OrderRepositoryObj
             select(['id', 'desc', 'kind_work_title', 'price', 'acceptor_worker_id', 'status', 'type' ])
             ->where('type', 'individual')
             ->with('materials')
-//            ->with('skills')
             ->find($id);
 
         return new OrderEntity($order);
     }
 
-    public function createOrderModel($desc, $skillCode, $price)
+    public function createOrderModel($desc, $skillCode, $price, $customer_id)
     {
-        return Order::create([
+        $order = Order::create([
             'desc' => $desc,
             'kind_work_title' => $skillCode,
             'price' => $price,
@@ -43,8 +42,10 @@ class OrderRepositoryObj
             'acceptor_team_id' => null,
             'status' => 'free',
             'type' => 'individual',
+            'customer_hero_id' => $customer_id,
         ]);
 
+        return new OrderEntity($order);
     }
 
     public function createMaterial($order_id, $code, $need)

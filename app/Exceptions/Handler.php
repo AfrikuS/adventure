@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
             return redirect('/profile');
 //            return response()->view('errors.404', [], 404);
         }
-        elseif ($e instanceof DefecitHeroResException) {
+        elseif ($e instanceof NotEnoughResourceException) {
             Session::flash('message', 'Nedostatochno gold');
             return redirect()->back();
         }

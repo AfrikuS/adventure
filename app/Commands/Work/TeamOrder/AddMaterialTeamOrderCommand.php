@@ -2,7 +2,7 @@
 
 namespace App\Commands\Work\TeamOrder;
 
-use App\Exceptions\DefecitMaterialException;
+use App\Exceptions\NotEnoughMaterialException;
 use App\Models\Work\Worker;
 use App\Repositories\Work\Team\TeamOrderRepositoryObj;
 use App\Repositories\Work\WorkerRepositoryObj;
@@ -39,7 +39,7 @@ class AddMaterialTeamOrderCommand
         $needAmount = $orderMaterial->need - $orderMaterial->stock;
         
         if ($needAmount > $workerMaterial->value) {
-            throw new DefecitMaterialException;
+            throw new NotEnoughMaterialException;
         };
 
         $transfer = new OrderMaterialTransfer($teamOrderEntity, $worker, $materialCode, $needAmount);

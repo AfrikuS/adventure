@@ -25,7 +25,10 @@ $ ln -s vendor/bin/phinx phinx
   //php phinx migrate -e development
 
 
-  php phinx migrate -e development -t 20160706184449
+  php phinx migrate -e development -t 20160716114312
 
 
 phinx  create RefactorWorkOrdersTablesMigration
+
+
+phinx  create AddCustomerIdToWorkOrdersMigration

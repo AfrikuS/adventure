@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Work;
 
 use App\Commands\Shop\BuyInstrumentCommand;
 use App\Commands\Shop\BuyMaterialCommand;
-use App\Exceptions\DefecitHeroResException;
+use App\Exceptions\NotEnoughResourceException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\Work\PriceMaterial;
@@ -58,7 +58,7 @@ class ShopController extends WorkController
             $cmd->buyMaterial($materialCode, $this->worker->id);
         }
         
-        catch (DefecitHeroResException $e) 
+        catch (NotEnoughResourceException $e) 
         {
             Session::flash('message', 'Не хватает денег');
         }
@@ -79,7 +79,7 @@ class ShopController extends WorkController
             $cmd->buyInstrument($instrumentCode, $this->worker->id);
         }
         
-        catch (DefecitHeroResException $e)
+        catch (NotEnoughResourceException $e)
         {
             Session::flash('message', 'Не хватает денег');
         }

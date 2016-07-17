@@ -11,14 +11,14 @@ use App\Models\Work\Team\TeamOrderSkill;
 
 class TeamOrderRepository
 {
-    public static function getOrderById($id): TeamOrder
+/*    public static function getOrderById($id): TeamOrder
     {
         $order = TeamOrder::
             select(['id', 'desc', 'kind_work', 'price', 'acceptor_team_id', 'status' ])
             ->find($id);
 
         return $order;
-    }
+    }*/
 
 //    public static function finishWorks(TeamOrder $order)
 //    {
@@ -36,7 +36,7 @@ class TeamOrderRepository
 //        return TeamOrderSkill::select('id')->where('teamorder_id', $order->id)->count() == 0;
 //    }
 
-    public static function findOrderWithMaterialsAndSkillsById($id): TeamOrder
+/*    public static function findOrderWithMaterialsAndSkillsById($id): TeamOrder
     {
         return TeamOrder::select('id', 'price', 'status', 'desc', 'kind_work')
             ->with(['materials' => function ($query) {
@@ -46,9 +46,9 @@ class TeamOrderRepository
                 $query->select('id', 'teamorder_id', 'code', 'need_times', 'stock_times');
             }])
             ->findOrFail($id);
-    }
+    }*/
 
-    public static function belongUserToTeamOrder($user, TeamOrder $order)
+/*    public static function belongUserToTeamOrder($user, TeamOrder $order)
     {
         if ($team = $order->team) {
 
@@ -60,7 +60,7 @@ class TeamOrderRepository
         }
         
         return false;
-    }
+    }*/
 
 //    public static function getMaterialDataByCode(TeamOrder$order, $materialCode)
 //    {
@@ -123,10 +123,6 @@ class TeamOrderRepository
 //        return true;
 //    }
 
-    public static function getTeamOrders(PrivateTeam $team)
-    {
-        return $team->orders;
-    }
 
     /*    public static function isOrderReadyToWorks(Order $order)
         {

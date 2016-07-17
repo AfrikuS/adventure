@@ -60,7 +60,7 @@ class RouteServiceProvider extends ServiceProvider
 
             $router->group(['middleware' => 'app_auth'], function () {
                         
-                require app_path('Http/Controllers/Profile/profile_routes.php');
+                require app_path('Http/Controllers/Profile/_routes.php');
                 require app_path('Http/Controllers/Npc/routes.php');
                 require app_path('Http/Controllers/Drive/_routes.php');
                 require app_path('Http/Controllers/Geo/_routes.php');

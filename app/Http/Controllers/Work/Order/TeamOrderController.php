@@ -9,7 +9,7 @@ use App\Commands\Work\TeamOrder\DeleteTeamOrderCommand;
 use App\Commands\Work\TeamOrder\EstimateTeamOrderCommand;
 use App\Commands\Work\TeamOrder\TakeRewardTeamOrderCommand;
 use App\Entities\Work\TeamOrderEntity;
-use App\Exceptions\DefecitMaterialException;
+use App\Exceptions\NotEnoughMaterialException;
 use App\Exceptions\NotTeamLeaderException;
 use App\Exceptions\WorkerWithoutTeamException;
 use App\Http\Controllers\Work\WorkController;
@@ -134,7 +134,7 @@ class TeamOrderController extends WorkController
 
             $cmd->addMaterial($order_id, $worker_id, $materialCode);
         }
-        catch (DefecitMaterialException $e)
+        catch (NotEnoughMaterialException $e)
         {
             Session::flash('message', 'Nedostatochno ' . $materialCode);
             return Redirect::route('work_show_teamorder_page', ['id' => $order_id]);

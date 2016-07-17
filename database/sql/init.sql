@@ -501,6 +501,9 @@ CREATE TABLE IF NOT EXISTS `work_orders` (
     FOREIGN KEY (acceptor_worker_id) REFERENCES work_workers(id),
     FOREIGN KEY (acceptor_team_id) REFERENCES work_teams(id)
 );
+    `customer_hero_id` INT UNSIGNED NOT NULL,
+    FOREIGN KEY (customer_hero_id) REFERENCES hero_resources(id),
+
 
 -- предложения вступить в группу\команду - исходят от свободного воркера
 CREATE TABLE IF NOT EXISTS `work_team_joinoffers` (
@@ -668,5 +671,16 @@ CREATE TABLE IF NOT EXISTS `drive_raids` (
 );
 ALTER TABLE `drive_raids` CHANGE `raid_status` `status` varchar(255) NOT NULL;
 
+CREATE TABLE IF NOT EXISTS `work_build_orders` (
+    `id` INT UNSIGNED NOT NULL,
+    `customer_hero_id` INT UNSIGNED NOT NULL,
+    `building_code` varchar(255) NOT NULL,
+    `reward` INT UNSIGNED NOT NULL,
+    `status` varchar(255) NOT NULL,
+    `acceptor_worker_id` INT UNSIGNED,
+    PRIMARY KEY (id),
+    FOREIGN KEY (customer_hero_id) REFERENCES hero_resources(id),
+    FOREIGN KEY (acceptor_worker_id) REFERENCES work_workers(id)
+);
 
 

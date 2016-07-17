@@ -46,7 +46,13 @@
                                 <td>{{ $order->type }}</td>
                                 <td>{{ $order->status }}</td>
                                 <td>{{ link_to_route('work_show_order_page', 'Выбрать', ['id' => $order->id]) }}</td>
-                                <td>{{ link_to_route('work_delete_order_action', 'Del', ['id' => $order->id]) }}</td>
+                                {{--<td>{{ link_to_route('work_delete_order_action', 'Del', ['id' => $order->id]) }}</td>--}}
+                                <td>
+                                    {!! Form::open(['route' => 'work_delete_order_action', 'class' => 'form-signup']) !!}
+                                    {!! Form::hidden('order_id', $order->id, []) !!}
+                                    {!! Form::submit('Del', array('class' => 'btn btn-primary')) !!}
+                                    {!! Form::close() !!}
+                                </td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -60,6 +66,10 @@
             @endif
         </div>
     </div>
+
+    {!! Form::open(['route' => 'work_create_build_order_action', 'class' => 'form-signup']) !!}
+    {!! Form::submit('New Build Order', array('class' => 'btn btn-primary')) !!}
+    {!! Form::close() !!}
 
     <div class="row text-center pad-top">
         <div class="col-lg-12">
@@ -88,7 +98,13 @@
                                 <td>{{ $order->type }}</td>
                                 <td>{{ $order->status }}</td>
                                 <td>{{ link_to_route('work_show_order_page', 'Выбрать', ['id' => $order->id]) }}</td>
-                                <td>{{ link_to_route('work_delete_order_action', 'Del', ['id' => $order->id]) }}</td>
+                                {{--<td>{{ link_to_route('work_delete_order_action', 'Del', ['id' => $order->id]) }}</td>--}}
+                                <td>
+                                    {!! Form::open(['route' => 'work_delete_order_action', 'class' => 'form-signup']) !!}
+                                    {!! Form::hidden('order_id', $order->id, []) !!}
+                                    {!! Form::submit('Del', array('class' => 'btn btn-primary')) !!}
+                                    {!! Form::close() !!}
+                                </td>
                             </tr>
                         @endforeach
                         </tbody>

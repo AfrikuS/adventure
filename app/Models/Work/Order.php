@@ -10,7 +10,7 @@ class Order extends Model
     public $timestamps = false;
     protected $primaryKey = 'id';
     protected $fillable   = ['desc', 'type', 'status', 'kind_work_title', 'price',
-        'acceptor_worker_id', 'acceptor_team_id'];
+        'acceptor_worker_id', 'acceptor_team_id', 'customer_hero_id'];
 
     public function materials()
     {

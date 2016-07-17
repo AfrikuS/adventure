@@ -19,8 +19,8 @@ use Illuminate\Support\Facades\Session;
 
 class AuctionController extends Controller
 {
-    /** @var  HeroRepositoryObj */
-    private $heroRepo;
+//    /** @var  HeroRepositoryObj */
+//    protected $heroRepo;
     /** @var  AuctionRepository */
     protected $auctionRepo;
 

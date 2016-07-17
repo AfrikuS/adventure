@@ -7,6 +7,7 @@ use App\Factories\WorkerFactory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\Battle\ResourceChannel;
+use App\Models\Core\Buildings;
 use App\Models\Work\Worker;
 use App\Repositories\Drive\DriverRepository;
 use App\Repositories\Work\Team\WorkerRepository;
@@ -49,6 +50,15 @@ class ProfileController extends Controller
         return $this->view('profile.channels', [
             'channels' => $channels,
             'lossChannels' => $lossChannels,
+        ]);
+    }
+
+    public function buildings()
+    {
+        $buildings = Buildings::find($this->user_id); 
+            
+        return $this->view('profile.buildings', [
+            'buildings' => $buildings,
         ]);
     }
 

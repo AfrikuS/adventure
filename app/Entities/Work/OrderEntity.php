@@ -15,6 +15,14 @@ class OrderEntity extends ApplicationEntity
         parent::__construct($order);
     }
 
+/*    public function addMaterial($material)
+    {
+        $this->model->getRelation('materials')->add($material);
+//        $user->userPhones()->save($phone);
+//          http://laravel.io/forum/12-19-2014-creatinginserting-relations-in-eloquent
+//        push
+    }
+*/
     protected function getModelClass(): string
     {
         return Order::class;

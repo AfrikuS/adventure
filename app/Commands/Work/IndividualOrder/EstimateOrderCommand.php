@@ -2,7 +2,9 @@
 
 namespace App\Commands\Work\IndividualOrder;
 
+use App\Entities\Work\OrderEntity;
 use App\Factories\WorkerFactory;
+use App\Models\Work\Catalogs\Material;
 use App\Models\Work\Worker;
 use App\Repositories\Work\OrderRepositoryObj;
 use App\Repositories\Work\WorkerRepositoryObj;
@@ -27,9 +29,10 @@ class EstimateOrderCommand
         /** @var Worker $worker */
         $worker = $this->workerRepo->findWithMaterialsAndSkillsById($worker_id);
 
+    
         \DB::beginTransaction();
         try {
-
+            
             $missingMaterialCodes = $this->selectMissingMaterialCodes($worker, $order);
 
             if ($missingMaterialCodes->count() > 0) {
@@ -49,11 +52,10 @@ class EstimateOrderCommand
             \DB::rollback();
             throw $e;
         }
-
-
         \DB::commit();
     }
-
+    
+    
     private function createMissingMaterials(Worker $worker, Collection $codes)
     {
         $codes->each(function ($code, $key) use ($worker) {

@@ -1,8 +1,6 @@
 <?php
 
 Route::get('/work', 'Work\WorkController@index')->name('work_index_page');
-Route::get('/delete/work/order/{id}', 'Work\OrdersController@deleteOrder')->name('work_delete_order_action');
-Route::post('/generate/work/order', 'Work\OrdersController@generateOrder')->name('generate_work_order_action');
 
 
 
@@ -10,14 +8,17 @@ Route::get('/work/orders', 'Work\OrdersController@index')->name('work_orders_pag
 Route::get('/work/orders/ajax/{chunk_number}', 'Api\Work\AjaxComponentsController@orderLoading')->name('work_orders_ajax_page');
 // single-order actions
 
-Route::post('/work/orders/accept', 'Work\OrdersController@acceptOrder')->name('work_accept_order_action');
 
-// accepted order
 Route::get('/work/order/{id}', 'Work\Order\OrderController@index')->name('work_show_order_page');
+Route::post('/work/orders/accept', 'Work\Order\OrderController@accept')->name('work_accept_order_action');
 Route::post('/work/order/estimate', 'Work\Order\OrderController@estimate')->name('work_order_estimate_action');
-Route::post('/work/order/add_material', 'Work\Order\OrderController@addMaterial')->name('work_order_add_material_in_stock_action');
+Route::post('/work/order/add_material', 'Work\Order\OrderController@stockMaterial')->name('work_order_add_material_in_stock_action');
 Route::post('/work/order/apply_skill', 'Work\Order\OrderController@applySkill')->name('work_order_apply_skill_action');
+Route::post('/work/order/delete', 'Work\Order\OrderController@delete')->name('work_delete_order_action');
+Route::post('/work/order/generate', 'Work\Order\OrderController@generate')->name('generate_work_order_action');
 
+
+Route::post('/work/order/create_build_order', 'Work\Order\CustomerController@createBuildOrder')->name('work_create_build_order_action');
 
 
 // team-order actions

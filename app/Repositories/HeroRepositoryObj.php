@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Exceptions\DefecitHeroResException;
+use App\Exceptions\NotEnoughResourceException;
 use App\Models\Core\Buildings;
 use App\Models\Core\Hero;
 use App\Models\Core\Thing;
@@ -29,7 +29,7 @@ class HeroRepositoryObj
     {
         if ($amount > $hero->gold) {
 
-            throw new DefecitHeroResException();
+            throw new NotEnoughResourceException();
         }
 
         $hero->decrement('gold', $amount);
