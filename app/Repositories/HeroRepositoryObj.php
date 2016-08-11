@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Entities\Hero\HeroEntity;
 use App\Exceptions\NotEnoughResourceException;
 use App\Models\Core\Buildings;
 use App\Models\Core\Hero;
@@ -22,7 +23,9 @@ class HeroRepositoryObj
     
     public function findById($id)
     {
-        return Hero::find($id, ['id', 'gold', 'oil', 'water']);
+        $hero = Hero::find($id, ['id', 'gold', 'oil', 'water']);
+        
+        return new HeroEntity($hero);
     }
 
     public function decrementGold(Hero $hero, $amount)

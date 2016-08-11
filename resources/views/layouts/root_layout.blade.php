@@ -100,6 +100,13 @@
                         <li>{{ link_to_route('maxovik_page', 'Maxovik') }}</li>
                     </ul>
                 </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Railway<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>{{ link_to_route('railway_director_page', 'Director') }}</li>
+                    </ul>
+                </li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">

@@ -65,16 +65,7 @@
                 {{--'S',--}}
                 {{--['class' => 'order_kind_work_title', 'size' => '5'])--}}
             {{--!!}--}}
-            <select name="order[kind_work_title]" class="order_kind_work_title">
-                @foreach($skills as $skill)
-                    @if($skill->code == $draftOrder->kind_work_title)
-                        <option value="{{ $skill->code }}" selected="selected">{{ $skill->title }}</option>
-                    @else
-                        <option value="{{ $skill->code }}">{{ $skill->title }}</option>
-                    @endif
-                @endforeach
-            </select>
-        </div>
+_title        </div>
 
         <div class="col-lg-6">
         </div>

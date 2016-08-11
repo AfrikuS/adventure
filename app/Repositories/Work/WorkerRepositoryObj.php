@@ -20,9 +20,13 @@ class WorkerRepositoryObj
         $orderMaterials = $order->materials;
         $workerMaterials = $worker->materials;
 
-        $needMaterialsCodes = $orderMaterials->map(function ($material, $key) {
+        $needMaterialsCodes = array_map(function ($material) {
             return $material->code;
-        })->toArray();
+        }, $orderMaterials);
+
+        /*        $needMaterialsCodes = $orderMaterials->map(function ($material, $key) {
+            return $material->code;
+        })->toArray();*/
 
         return $workerMaterials->filter(function ($material) use ($needMaterialsCodes) {
             return in_array($material->code, $needMaterialsCodes);

@@ -9,6 +9,7 @@
         <p></p>
         <li>{{ link_to_route('admin_module_drive_page', 'Drive-Module') }}</li>
         <li>{{ link_to_route('admin_module_work_page', 'Work-Module') }}</li>
+        <li>{{ link_to_route('admin_module_npc_page', 'Npc-Module') }}</li>
     </ul>
 
 @endsection

@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 class NpcDeal extends Model
 {
     protected $table      = 'npc_deals';
-    public $timestamps = false;
     protected $primaryKey = 'id';
+    public $timestamps = false;
     protected $fillable   = ['hero_id', 'npc_char', 'task', 'reward',   
                              'offer_status', 'offer_ending', 'deal_status', 'deal_ending'];
 

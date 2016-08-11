@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class AuctionLot extends Model
 {
     protected $table      = 'auction_lot';
+    protected $primaryKey = 'id';
     public    $timestamps = false;
     protected $fillable   = ['owner_id', 'owner_user_name',
             'thing_id', 'thing_title', 'title', 'bid', 'purchaser_id', 'date_time'];

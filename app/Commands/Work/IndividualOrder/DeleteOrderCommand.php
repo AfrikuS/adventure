@@ -4,33 +4,27 @@ namespace App\Commands\Work\IndividualOrder;
 
 use App\Models\Work\Order;
 use App\Models\Work\OrderMaterials;
+use App\Persistence\Repositories\Work\OrderRepo;
 use App\Repositories\Work\OrderRepositoryObj;
 
 class DeleteOrderCommand
 {
-    /** @var OrderRepositoryObj */
+    /** @var OrderRepo */
     private $orderRepo;
 
-    public function __construct(OrderRepositoryObj $orderRepo)
+    public function __construct()
     {
-        $this->orderRepo = $orderRepo;
+        $this->orderRepo = new OrderRepo;
     }
 
     public function deleteOrder($order_id)
     {
-        $order = $this->orderRepo->findOrderWithMaterialsById($order_id);
 
         \DB::beginTransaction();
         try {
 
-            $material_ids = $order->materials->map(function ($material, $key) {
-                return $material->id;
-            })->toArray();
 
-            OrderMaterials::destroy($material_ids);
-
-
-            Order::destroy($order_id);
+            $this->orderRepo->deleteOrder($order_id);
         }
         catch (\Exception $e) {
             \DB::rollBack();

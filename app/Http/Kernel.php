@@ -61,5 +61,6 @@ class Kernel extends HttpKernel
         
         'drive_driver' => \App\Http\Middleware\DriverMiddleware::class,
         'drive_vehicle_broken' => \App\Http\Middleware\VehicleBrokenMiddleware::class,
+        'railway_train_meeting' => \App\Http\Middleware\TrainMeetingMiddleware::class,
     ];
 }

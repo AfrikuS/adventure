@@ -49,7 +49,7 @@
 
         Ваши авто-детали
     <div class="row row-offcanvas">
-        <div class="col-lg-7">
+        <div class="col-lg-9">
 
             @if($driverDetails->count() > 0)
                 <table class="table table-condensed">

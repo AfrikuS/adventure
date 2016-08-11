@@ -4,8 +4,9 @@
 @section('left_column')
 
     <ul>
-        <li>Profile LINKS</li>
+        <li>Profile LINKS - Хозяйство</li>
         <li>{{ link_to_route('profile_buildings_page', 'Постройки') }}</li>
+        <li>{{ link_to_route('profile_resource_stores_page', 'Хранилища') }}</li>
         {{--<li>{{ link_to_route('drive_garage_shop_page', 'Garage-Shop') }}</li>--}}
         {{--<p></p>--}}
         {{--<li>{{ link_to_route('drive_workroom_page', 'Мастерская') }}</li>--}}

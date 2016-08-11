@@ -10,3 +10,18 @@ Route::post('/npc/offer/refuse', 'Npc\NpcDealController@refuseOffer')->name('npc
 Route::post('/npc/deal/perform', 'Npc\NpcDealController@performDeal')->name('npc_perform_deal_action');
 Route::post('/npc/deal/{id}/take_reward', 'Npc\NpcDealController@takeReward')->name('npc_take_reward_page');
 Route::post('/npc/deal/generate_offer', 'Npc\NpcDealController@generateOffer')->name('npc_generate_offer_page');
+
+
+
+
+
+
+
+
+
+Route::get('/admin/npc', 'Admin\Npc\CharactersController@index')->name('admin_module_npc_page');
+Route::get('/admin/npc/characters', 'Admin\Npc\CharactersController@index')->name('npc_characters_page');
+Route::post('/admin/npc/add_character', 'Admin\Npc\CharactersController@add')->name('create_npc_character_action');
+
+
+

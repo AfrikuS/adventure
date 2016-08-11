@@ -9,11 +9,13 @@ use App\Commands\Work\IndividualOrder\DeleteOrderCommand;
 use App\Commands\Work\IndividualOrder\EstimateOrderCommand;
 use App\Commands\Work\IndividualOrder\GenerateOrderCommand;
 use App\Commands\Work\IndividualOrder\TakeRewardCommand;
+use App\Commands\Work\Order\Actions\ApplySkill;
 use App\Entities\Work\OrderEntity;
 use App\Exceptions\NotEnoughMaterialException;
 use App\Http\Controllers\Work\WorkController;
 use App\Models\Work\Catalogs\Material;
 use App\Models\Work\Worker;
+use App\Persistence\Repositories\Work\OrderRepo;
 use App\Repositories\HeroRepositoryObj;
 use App\Repositories\Work\OrderRepositoryObj;
 use App\Repositories\Work\WorkerRepositoryObj;
@@ -34,8 +36,12 @@ class OrderController extends WorkController
 
     public function index($id)
     {
-        /** @var OrderEntity $order */
-        $order = $this->orderRepo->findOrderWithMaterialsById($id);
+//        /** @var OrderEntity $order */
+//        $order = $this->orderRepo->findOrderWithMaterialsById($id);
+
+        $orderRepoNew = new OrderRepo();
+
+        $order = $orderRepoNew->findOrderWithMaterialsById($id);
 
 
         switch ($order->status) 
@@ -136,7 +142,8 @@ class OrderController extends WorkController
         $materialCode = $data['material'];
         $order_id = $data['order_id'];
 
-        try {
+        try 
+        {
             $cmd = new AddMaterialCommand($this->orderRepo, $this->workerRepo);
 
             $cmd->addMaterial($order_id, $this->worker->id, $materialCode);
@@ -156,19 +163,11 @@ class OrderController extends WorkController
 
         $order_id = $data['order_id'];
 
-        $repo = new OrderRepositoryObj();
-        $order = $repo->findSimpleOrderById($order_id);
-        
+        $cmd = new ApplySkill();
 
-        
-        
+        $cmd->applySkill($order_id, $this->worker->id);
 
-        $cmd = new TakeRewardCommand($this->orderRepo, $this->workerRepo, new HeroRepositoryObj());
-        
-        $cmd->takeReward($order_id, $this->worker->id);
 
-        $cmd = new UpBuildingLevelCmd();
-        $cmd->upBuildingLevel($order->customer_hero_id, $order->desc);
 
 
         return \Redirect::route('work_show_order_page', ['id' => $order_id]);
@@ -186,7 +185,7 @@ class OrderController extends WorkController
         $order_id = $data['order_id'];
 
 
-        $cmd = new DeleteOrderCommand($this->orderRepo);
+        $cmd = new DeleteOrderCommand();
 
         $cmd->deleteOrder($order_id);
 

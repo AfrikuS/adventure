@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -53,7 +54,11 @@ class Handler extends ExceptionHandler
 //            return response()->view('errors.404', [], 404);
         }
         elseif ($e instanceof NotEnoughResourceException) {
-            Session::flash('message', 'Nedostatochno gold');
+            Session::flash('message', 'Nedostatochno денег');
+            return redirect()->back();
+        }
+        elseif ($e instanceof FatalThrowableError) {
+            Session::flash('message', $e->getMessage());
             return redirect()->back();
         }
 
