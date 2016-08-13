@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Work;
 
 use App\Models\Work\Catalogs\Instrument;
 use App\Models\Work\Catalogs\Material;

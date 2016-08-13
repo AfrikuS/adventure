@@ -5,45 +5,54 @@ namespace App\Commands\Work\IndividualOrder;
 use App\Entities\Work\OrderEntity;
 use App\Models\Work\Catalogs\Material;
 use App\Models\Work\Catalogs\Skill;
+use App\Persistence\Repositories\Work\Catalogs\MaterialsRepo;
+use App\Persistence\Repositories\Work\OrderMaterialsRepo;
+use App\Persistence\Repositories\Work\OrderRepo;
+use App\Persistence\Repositories\Work\WorkerRepo;
+use App\Persistence\Services\Work\Order\OrderBuilderService;
 use App\Repositories\Work\OrderRepositoryObj;
 
 class GenerateOrderCommand
 {
-    /** @var OrderRepositoryObj */
+    /** @var OrderRepo */
     private $orderRepo;
 
-    public function __construct(OrderRepositoryObj $orderRepo)
+    /** @var  WorkerRepo */
+    private $workerRepo;
+
+
+    /** @var MaterialsRepo */
+    private $materialsRepo;
+
+    /** @var OrderMaterialsRepo */
+    private $orderMaterialsRepo;
+
+
+
+    public function __construct(MaterialsRepo $materialsRepo,
+                                OrderMaterialsRepo $orderMaterialsRepo,
+                                OrderRepo $orderRepo
+    )
     {
+        $this->materialsRepo = $materialsRepo;
+        $this->orderMaterialsRepo = $orderMaterialsRepo;
         $this->orderRepo = $orderRepo;
     }
 
-    public function generateOrder() // createWorkOrderWithMaterials
+    public function generateOrder($worker_id) // createWorkOrderWithMaterials
     {
-        $skill = Skill::get()->random();
+        $orderBuilderService = new OrderBuilderService(
+            $this->materialsRepo,
+            $this->orderMaterialsRepo
+        );
 
-        $faker = \Faker\Factory::create();
-        $materialsCodes = Material::get(['id', 'code'])->pluck('code');
+
 
         \DB::beginTransaction();
         try {
 
 
-            $desc = 'fence';
-            $price = rand(74, 90);
-            $customer_id = \Auth::id();
-
-
-            $order = $this->orderRepo->createOrderModel($desc, $skill->code, $price, $customer_id);
-
-            $count = 2;
-
-            for ($i = 0; $i < $count; $i++) { // wtf todo
-                $materialCode = $faker->unique()->randomElement($materialsCodes->toArray());
-
-                $this->orderRepo->createMaterial($order->id, $materialCode, $need = 2);
-
-            }
-
+            $orderBuilderService->generateOrderData($worker_id);
 
         }
         catch(\Exception $e)

@@ -7,22 +7,63 @@ use App\Persistence\Models\DataObject;
 
 class Worker extends DataObject
 {
+    /** @deprecated  */
+    public function addMaterials($materials)
+    {
+        foreach ($materials as $material)
+        {
+            
+        }
+    }
+
+    /** @deprecated  */
+    public function addMaterial($material)
+    {
+        
+    }
+
+    public function includeMaterials($materials)
+    {
+        foreach ($materials as $material) {
+
+            $newMaterial = new \stdClass();
+            $newMaterial->user_id = $this->id;
+            $newMaterial->code = $material->code;
+            $newMaterial->value = 0;
+
+            $this->dataObject->materials[$material->code] = $newMaterial;
+        }
+    }
+
     protected function getAttributes()
     {
         return ['id', 'team_id', 'status',
 
-                'materials'];
+                'materials', 'hero'];
     }
 
-    public function subtractMaterial($code, $amount)
+    public function decrementMaterial($material)
     {
-        $material = $this->findMaterialByCode($code);
+//        $material = $this->findMaterialByCode($code);
 
-        if ($material->value < $amount) {
+        $workerMaterial = $this->materials->getByCode($material->code);
+
+
+        $stockAmount = $material->need - $material->stock;
+
+        if ($workerMaterial->value < $stockAmount) {
             throw new NotEnoughMaterialException;
         }
 
-        $material->value -= $amount;
+        $this->materials->decrementMaterial($material);
+//        // redo
+//        $workerMaterial->value -= $stockAmount;
+//
+//        $stockMaterial = new \stdClass();
+//        $stockMaterial->code = $material->code;
+//        $stockMaterial->amount = $stockAmount;
+//
+//        return $stockMaterial;
     }
 
     public function findMaterialByCode($code)
@@ -33,5 +74,7 @@ class Worker extends DataObject
 
         return array_pop($material);
     }
+    
+    
 
 }

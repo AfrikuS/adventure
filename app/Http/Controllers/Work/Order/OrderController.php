@@ -13,9 +13,14 @@ use App\Commands\Work\Order\Actions\ApplySkill;
 use App\Entities\Work\OrderEntity;
 use App\Exceptions\NotEnoughMaterialException;
 use App\Http\Controllers\Work\WorkController;
+use App\Lib\Work\OrderBuilder;
+use App\Lib\Work\OrderMaterialsGenerator;
 use App\Models\Work\Catalogs\Material;
 use App\Models\Work\Worker;
+use App\Persistence\Repositories\Work\Catalogs\MaterialsRepo;
+use App\Persistence\Repositories\Work\OrderMaterialsRepo;
 use App\Persistence\Repositories\Work\OrderRepo;
+use App\Persistence\Repositories\Work\WorkerRepo;
 use App\Repositories\HeroRepositoryObj;
 use App\Repositories\Work\OrderRepositoryObj;
 use App\Repositories\Work\WorkerRepositoryObj;
@@ -55,11 +60,21 @@ class OrderController extends WorkController
             case 'stock_materials':
 
                 $orderMaterials = $order->materials;
-                $workerNeedMaterials = $this->workerRepo->selectWorkerMaterialsNeedForOrder($order, $this->worker);
+                $viewOrderMaterials = $order->materials->extract();
+
+                $workerRepo = new WorkerRepo();
+                $worker = $workerRepo->getWithMaterialsByUser($this->user_id);
+                $workerMaterials = $worker->materials;
+
+
+
+
+//                $workerNeedMaterials = $this->workerRepo->selectWorkerMaterialsNeedForOrder($order, $this->worker);
+                $workerNeedMaterials = $orderMaterials->selectIntersect($workerMaterials);
 
                 return $this->view('work.order.show.stock_materials', [
                     'order' => $order,
-                    'orderMaterials' => $orderMaterials,
+                    'orderMaterials' => $viewOrderMaterials,
                     'userMaterials' => $workerNeedMaterials,
                 ]);
 
@@ -89,44 +104,27 @@ class OrderController extends WorkController
         $order_id = $data['order_id'];
 
 
-        $cmd = new AcceptOrderCommand($this->orderRepo);
+        $cmd = new AcceptOrderCommand();
 
-        $cmd->accept($order_id, $this->worker);
+        $cmd->acceptOrder($order_id, $this->user_id);
 
 
         return \Redirect::route('work_show_order_page', ['id' => $order_id]);
     }
 
 
-    public function estimate()
+    public function estimate(MaterialsRepo $materialsRepo,
+                             OrderMaterialsRepo $orderMaterialsRepo,
+                             OrderRepo $orderRepo
+    )
     {
         $data = Input::all();
         $order_id = $data['order_id'];
 
-        // -----------
-        $faker = \Faker\Factory::create();
-
-        $materialsCodes = Material::get(['id', 'code'])->pluck('code');
-
-        for ($i = 0; $i < 2; $i++) { // wtf todo
-            $materialCode = $faker->unique()->randomElement($materialsCodes->toArray());
-
-            $this->orderRepo->createMaterial($order_id, $materialCode, $need = 2);
-        }
-//        if ($order->desc == 'gates') {
 
 
 
-
-
-
-
-
-
-
-        // -----------
-
-        $cmd = new EstimateOrderCommand($this->orderRepo, $this->workerRepo);
+        $cmd = new EstimateOrderCommand($materialsRepo, $orderMaterialsRepo, $orderRepo);
 
         $cmd->estimateOrder($order_id, $this->worker->id);
         
@@ -135,7 +133,7 @@ class OrderController extends WorkController
     }
 
 
-    public function stockMaterial()
+    public function stockMaterial(OrderRepo $orderRepo, WorkerRepo $workerRepo)
     {
         $data = Input::all();
 
@@ -144,9 +142,11 @@ class OrderController extends WorkController
 
         try 
         {
-            $cmd = new AddMaterialCommand($this->orderRepo, $this->workerRepo);
 
-            $cmd->addMaterial($order_id, $this->worker->id, $materialCode);
+            $cmd = new AddMaterialCommand($orderRepo, $workerRepo);
+
+            $cmd->addMaterial($order_id, $materialCode, $this->worker->id);
+
         }
         catch (NotEnoughMaterialException $e)
         {
@@ -178,14 +178,14 @@ class OrderController extends WorkController
         
     }
 
-    public function delete()
+    public function delete(OrderRepo $orderRepo)
     {
         $data = Input::all();
 
         $order_id = $data['order_id'];
 
 
-        $cmd = new DeleteOrderCommand();
+        $cmd = new DeleteOrderCommand($orderRepo);
 
         $cmd->deleteOrder($order_id);
 
@@ -193,11 +193,14 @@ class OrderController extends WorkController
         return \Redirect::route('work_orders_page');
     }
 
-    public function generate()
+    public function generate(MaterialsRepo $materialsRepo,
+                             OrderMaterialsRepo $orderMaterialsRepo,
+                             OrderRepo $orderRepo
+    )
     {
-        $cmd = new GenerateOrderCommand($this->orderRepo);
+        $cmd = new GenerateOrderCommand($materialsRepo, $orderMaterialsRepo, $orderRepo);
 
-        $cmd->generateOrder();
+        $cmd->generateOrder($this->user_id);
 
 
         return \Redirect::route('work_orders_page');

@@ -48,4 +48,11 @@ class OrderDao
         return $order_id;
     }
 
+    public function delete($order_id)
+    {
+        \DB::table('work_orders')
+            ->where('id', $order_id)
+            ->delete();
+    }
+
 }

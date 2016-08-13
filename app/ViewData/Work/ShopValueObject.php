@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ViewData;
+namespace App\ViewData\Work;
 
 use Illuminate\Database\Eloquent\Collection;
 

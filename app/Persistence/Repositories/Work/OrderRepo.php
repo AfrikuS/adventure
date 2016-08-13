@@ -2,13 +2,18 @@
 
 namespace App\Persistence\Repositories\Work;
 
-use App\Persistence\Dao\Work\MaterialsDao;
+use App\Persistence\Dao\Work\OrderMaterialsDao;
 use App\Persistence\Dao\Work\OrderDao;
 use App\Persistence\Models\Work\Order;
+use App\Persistence\Models\Work\Order\Material;
+use App\Persistence\Models\Work\Order\Materials;
+use App\Persistence\Models\Work\Order\OrderMaterial;
+use App\Persistence\Models\Work\Order\StockDataDto;
+use App\Persistence\Services\Work\Order\OrderDataDto;
 
 class OrderRepo
 {
-    /** @var MaterialsDao */
+    /** @var OrderMaterialsDao */
     private $materialsDao;
 
     /** @var OrderDao */
@@ -16,7 +21,7 @@ class OrderRepo
 
     public function __construct()
     {
-        $this->materialsDao = new MaterialsDao();
+        $this->materialsDao = new OrderMaterialsDao();
         $this->orderDao = new OrderDao();
     }
 
@@ -24,12 +29,49 @@ class OrderRepo
     {
         $orderModel = $this->orderDao->findById($order_id);
         
-        $materials = $this->materialsDao->getOrderMaterialsById($order_id);
+        $materials = $this->materialsDao->getAllByOrderId($order_id);
+
+        $materialsMap = [];
+
+        foreach ($materials as $material) {
+
+            $code = $material->code;
+            $materialsMap[$code] = $this->buildMaterial($material);
+        }
+
+        $materials = new Materials($materialsMap, null);
+
 
         $orderModel->materials = $materials;
-        
-        
+
+
+
         return new Order($orderModel);
+    }
+
+    public function findMaterialBy($order_id, $code)
+    {
+        $materialData = $this->materialsDao->findBy($order_id, $code);
+        
+        if (null == $materialData) {
+        
+            return null;
+        }
+        
+        return new OrderMaterial($materialData);
+    }
+
+    public function getStockMaterialsData($order_id)
+    {
+        $needAmount = $this->materialsDao->getSummarizeNeed($order_id);
+        $stockAmount = $this->materialsDao->getSummarizeStocked($order_id);
+
+        return new StockDataDto($needAmount, $stockAmount);
+    }
+
+    private function buildMaterial(\stdClass $materialDao)
+    {
+        return new Material($materialDao->code, $materialDao->need, $materialDao->stock);
     }
 
     public function findSimpleOrder($order_id)
@@ -42,23 +84,43 @@ class OrderRepo
 
     public function deleteOrder($order_id)
     {
-        $materials_ids = $this->getMaterialsIds($order_id);
-
-        \DB::table('work_order_materials')
-            ->whereIn('id', $materials_ids)
-            ->delete();
-
-        \DB::table('work_orders')
-            ->where('id', $order_id)
-            ->delete();
+        $this->orderDao->delete($order_id);
     }
 
     public function updateMaterialAmount(Order $order, $materialCode)
     {
-        $material = $order->findMaterialByCode($materialCode);
+        $material = $order->materials->getByCode($materialCode);
         
         $this->materialsDao->save($material);
         
+    }
+
+    public function updateStatus($order)
+    {
+        $this->orderDao->save($order);
+    }
+
+    public function updateAcceptor($order)
+    {
+        $this->orderDao->save($order);
+    }
+
+    public function getWithMaterialsById($order_id)
+    {
+        $order = $this->orderDao->findById($order_id);
+        $materials = $this->materialsDao->getAllByOrderId($order->id);
+
+        $materialsMap = [];
+
+        foreach ($materials as $material) {
+            $code = $material->code;
+            $materialsMap[$code] = $material;
+        }
+
+        $materials = new Materials($materialsMap, null);
+        $order->materials = $materials;
+
+        return new Order($order);
     }
 
     private function getMaterialsIds($order_id)
@@ -73,5 +135,16 @@ class OrderRepo
         }, $ids);
 
         return $idsArr;
+    }
+
+    public function create(OrderDataDto $orderData)
+    {
+        return
+            $this->orderDao->create(
+                $orderData->desc,
+                $orderData->skillCode,
+                $orderData->price,
+                $orderData->customer_id
+            );
     }
 }

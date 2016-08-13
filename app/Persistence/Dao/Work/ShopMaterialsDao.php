@@ -2,11 +2,11 @@
 
 namespace App\Persistence\Dao\Work;
 
-class WorkerMaterialsDao
+class ShopMaterialsDao
 {
-    private $table = 'work_worker_materials';
+    private $table = 'work_shop_materials';
 
-    public function save(\stdClass $material)
+/*    public function save($material)
     {
         if (isset($material->id)) {
 
@@ -19,7 +19,6 @@ class WorkerMaterialsDao
         else {
             \DB::table($this->table)
                 ->insertGetId([
-                    'user_id' => $material->user_id,
                     'code' => $material->code,
                     'value' => $material->value,
                 ]);
@@ -34,26 +33,24 @@ class WorkerMaterialsDao
             ->get();
 
         return $materials;
-    }
+    }*/
 
-    public function find($worker_id, $code)
+    public function findByCode($code)
     {
         $material = \DB::table($this->table)
-            ->select(['id', 'user_id', 'code', 'value'])
-            ->where('user_id', $worker_id)
+            ->select(['id', 'code', 'price'])
             ->where('code', $code)
             ->first();
 
         return $material;
     }
 
-    public function update($material)
+    public function getAll()
     {
-        \DB::table($this->table)
-            ->where('id', $material->id)
-            ->update([
-                'value'  => $material->value,
-            ]);
-    }
+        $materials = \DB::table($this->table)
+            ->select(['id', 'code', 'price'])
+            ->get();
 
+        return $materials;
+    }
 }

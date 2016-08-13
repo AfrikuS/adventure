@@ -10,11 +10,13 @@ use App\Http\Requests;
 use App\Models\Work\PriceMaterial;
 use App\Models\Work\ShopInstrument;
 use App\Models\Work\Worker\WorkerInstrument;
+use App\Persistence\Repositories\HeroRepo;
+use App\Persistence\Repositories\Work\ShopRepo;
 use App\Repositories\HeroRepositoryObj;
-use App\Repositories\ShopRepository;
+use App\Repositories\Work\ShopRepository;
 use App\Repositories\Work\Team\WorkerRepository;
 use App\Repositories\Work\WorkerRepositoryObj;
-use App\ViewData\ShopValueObject;
+use App\ViewData\Work\ShopValueObject;
 use Illuminate\Support\Facades\Input;
 use Session;
 
@@ -47,11 +49,11 @@ class ShopController extends WorkController
         ]);
     }
 
-    public function buyMaterial()
+    public function buyMaterial(HeroRepo $heroRepo, ShopRepo $shopRepo)
     {
         $materialCode = Input::get('material');
 
-        $cmd = new BuyMaterialCommand(new WorkerRepositoryObj(), new ShopRepository(), new HeroRepositoryObj());
+        $cmd = new BuyMaterialCommand($heroRepo, $shopRepo);
         
         try {
         
@@ -67,12 +69,16 @@ class ShopController extends WorkController
         return \Redirect::route('work_shop_page');
     }
 
-    public function buyInstrument()
+    public function buyInstrument(WorkerRepositoryObj $workerRepo, ShopRepo $shopRepo, HeroRepo $heroRepo)
     {
         $instrumentCode = Input::get('instrument');
 
 
-        $cmd = new BuyInstrumentCommand(new WorkerRepositoryObj(), new ShopRepository(), new HeroRepositoryObj());
+        $cmd = new BuyInstrumentCommand(
+            $workerRepo,
+            $shopRepo,
+            $heroRepo
+        );
 
         try {
 
@@ -84,7 +90,7 @@ class ShopController extends WorkController
             Session::flash('message', 'Не хватает денег');
         }
         
-        return \Redirect::route('work_shop_page');
+        return \Redirect::route('work_shop_instruments_page');
     }
 
     public function reindexPrices()

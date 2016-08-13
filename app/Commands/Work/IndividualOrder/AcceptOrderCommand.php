@@ -2,24 +2,45 @@
 
 namespace App\Commands\Work\IndividualOrder;
 
-use App\Models\Work\Worker;
-use App\Repositories\Work\OrderRepositoryObj;
+use App\Persistence\Models\Work\Order;
+use App\Persistence\Repositories\Work\OrderRepo;
+use App\Persistence\Repositories\Work\WorkerRepo;
 
 class AcceptOrderCommand
 {
-    /** @var OrderRepositoryObj */
+//    /** @var OrderRepositoryObj */
+//    private $orderRepo;
+
+    /** @var OrderRepo */
     private $orderRepo;
 
-    public function __construct(OrderRepositoryObj $orderRepo)
+    /** @var  WorkerRepo */
+    private $workerRepo;
+
+    public function __construct()
     {
-        $this->orderRepo = $orderRepo;
+//        $this->orderRepo = $orderRepo;
+
+        $this->orderRepo = new OrderRepo();
+        $this->workerRepo = new WorkerRepo();
+
     }
 
-    public function accept($order_id, Worker $worker)
+    public function acceptOrder($order_id, $worker_id)
     {
-        $orderEntity = $this->orderRepo->findSimpleOrderById($order_id);
+        $worker = $this->workerRepo->findSimpleWorker($worker_id);
 
-        $orderEntity->accept($worker->id);
+        /** @var Order $order */
+        $order = $this->orderRepo->findSimpleOrder($order_id);
+        
+        $order->setAcceptor($worker);
 
+        // as callback
+        $order->changeStatusAfterAccepting();
+
+
+
+
+        $this->orderRepo->updateAcceptor($order);
     }
 }

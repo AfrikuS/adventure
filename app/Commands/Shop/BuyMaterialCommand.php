@@ -2,44 +2,47 @@
 
 namespace App\Commands\Shop;
 
-use App\Models\Core\Hero;
 use App\Models\Work\Worker;
+use App\Persistence\Models\Work\Shop;
+use App\Persistence\Repositories\HeroRepo;
+use App\Persistence\Repositories\Work\ShopRepo;
+use App\Persistence\Services\Work\WorkerMaterialsService;
 use App\Repositories\HeroRepositoryObj;
-use App\Repositories\ShopRepository;
-use App\Repositories\Work\WorkerRepositoryObj;
+use App\Repositories\Work\ShopRepository;
 
 class BuyMaterialCommand
 {
     /** @var ShopRepository */
     private $shopRepo;
-    /** @var  WorkerRepositoryObj */
-    private $workerRepo;
+
     /** @var  HeroRepositoryObj */
     private $heroRepo;
 
-    public function __construct(WorkerRepositoryObj $workerRepo, ShopRepository $shopRepo, HeroRepositoryObj $heroRepo)
+    public function __construct(HeroRepo $heroRepo, ShopRepo $shopRepo)
     {
         $this->shopRepo = $shopRepo;
-        $this->workerRepo = $workerRepo;
         $this->heroRepo = $heroRepo;
     }
 
-    public function buyMaterial($materialCode, $user_id)
+    // application Layer
+    public function buyMaterial($code, $user_id)
     {
-        /** @var Worker $worker */
-        $worker = $this->workerRepo->findWithMaterialsAndSkillsById($user_id);
 
-        /** @var Hero $hero */
-        $hero = $this->heroRepo->findById($user_id);
+        // domain layer - work with data
+        $service = new WorkerMaterialsService(
+            $this->heroRepo,
+            $this->shopRepo
+        );
 
-        $materialPrice = ShopRepository::getMaterialPriceByCode($materialCode);
+
 
         \DB::beginTransaction();
-
         try {
-            $this->heroRepo->decrementGold($hero, $materialPrice);
+
             
-            $this->workerRepo->addMaterialToWorker($worker, $materialCode, 60);
+            $service->purchaseMaterial($user_id, $code);
+
+
         }
         catch(\Exception $e) {
             \DB::rollBack();
@@ -48,4 +51,5 @@ class BuyMaterialCommand
 
         \DB::commit();
     }
+
 }
