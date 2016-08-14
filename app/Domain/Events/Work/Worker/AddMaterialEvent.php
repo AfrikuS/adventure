@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Persistence\Services\Work;
+namespace App\Domain\Events\Work\Worker;
 
-use App\Exceptions\NotEnoughMaterialException;
-use App\Persistence\Models\Work\Order\WorkerMaterial;
 use App\Persistence\Repositories\Work\WorkerMaterialsRepo;
 
-class DecrementMaterialEvent
+class AddMaterialEvent
 {
     /** @var WorkerMaterialsRepo */
     private $workerMaterialsRepo;
@@ -18,19 +16,17 @@ class DecrementMaterialEvent
 
     public function handle($worker_id, $code, $amount)
     {
-        /** @var WorkerMaterial $material */
         $material = $this->workerMaterialsRepo->findBy($worker_id, $code);
 
         if (null == $material) {
 
-            throw new NotEnoughMaterialException;
+            $this->workerMaterialsRepo->create($worker_id, $code, $amount);
         }
         else {
-            
-            $material->decrAmount($amount);
+
+            $material->incrAmount($amount);
 
             $this->workerMaterialsRepo->update($material);
         }
     }
-
 }

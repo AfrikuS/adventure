@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Persistence\Services\Work;
+namespace App\Domain\Events\Work\Worker;
 
 use App\Persistence\Models\Work\Worker\WorkerInstrument;
 use App\Persistence\Repositories\Work\WorkerInstrumentsRepo;

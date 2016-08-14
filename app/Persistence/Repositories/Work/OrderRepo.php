@@ -2,6 +2,7 @@
 
 namespace App\Persistence\Repositories\Work;
 
+use App\Infrastructure\IdentityMap;
 use App\Persistence\Dao\Work\OrderMaterialsDao;
 use App\Persistence\Dao\Work\OrderDao;
 use App\Persistence\Models\Work\Order;
@@ -13,6 +14,9 @@ use App\Persistence\Services\Work\Order\OrderDataDto;
 
 class OrderRepo
 {
+    /** @var IdentityMap */
+    private $identityMap;
+
     /** @var OrderMaterialsDao */
     private $materialsDao;
 
@@ -23,6 +27,8 @@ class OrderRepo
     {
         $this->materialsDao = new OrderMaterialsDao();
         $this->orderDao = new OrderDao();
+
+        $this->identityMap = IdentityMap::getInstance();
     }
 
     public function findOrderWithMaterialsById($order_id)
@@ -64,6 +70,7 @@ class OrderRepo
     public function getStockMaterialsData($order_id)
     {
         $needAmount = $this->materialsDao->getSummarizeNeed($order_id);
+        
         $stockAmount = $this->materialsDao->getSummarizeStocked($order_id);
 
         return new StockDataDto($needAmount, $stockAmount);
@@ -74,11 +81,24 @@ class OrderRepo
         return new Material($materialDao->code, $materialDao->need, $materialDao->stock);
     }
 
-    public function findSimpleOrder($order_id)
+    public function find($order_id)
     {
-        $orderModel = $this->orderDao->findById($order_id);
+        $order = $this->identityMap->getObject(Order::class, $order_id);
+        
+        if ($order != null) {
+            
+            return $order;
+        }
+        
+        
+        $orderData = $this->orderDao->findById($order_id);
 
-        return new Order($orderModel);
+        $order = $this->orderMapper($orderData);
+        
+        
+        $this->identityMap->addObject($order, $order->id);
+        
+        return $order;
     }
     
 
@@ -146,5 +166,12 @@ class OrderRepo
                 $orderData->price,
                 $orderData->customer_id
             );
+    }
+
+    private function orderMapper($orderData)
+    {
+        $order = new Order($orderData);
+
+        return $order;
     }
 }

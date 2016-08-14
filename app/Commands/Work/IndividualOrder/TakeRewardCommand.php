@@ -40,7 +40,7 @@ class TakeRewardCommand
 
 //        $order =  $this->orderRepo->findSimpleOrderById($order_id);
         /** @var Order $order */
-        $order = $this->orderRepo->findSimpleOrder($order_id);
+        $order = $this->orderRepo->find($order_id);
         
         /** @var Hero $hero */
         $hero = $this->heroDao->findById($worker_id);

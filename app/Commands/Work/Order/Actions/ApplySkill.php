@@ -2,39 +2,82 @@
 
 namespace App\Commands\Work\Order\Actions;
 
-use App\Commands\Hero\UpBuildingLevelCmd;
-use App\Commands\Work\IndividualOrder\TakeRewardCommand;
-use App\Repositories\HeroRepositoryObj;
-use App\Repositories\Work\OrderRepositoryObj;
-use App\Repositories\Work\WorkerRepositoryObj;
+use App\Domain\Services\Work\Order\OrderService;
+use App\Domain\Services\Work\Worker\WorkerSkillsService;
+use App\Domain\Services\Work\WorkerOrderService;
+use App\Persistence\Models\StateControllers\OrderStateCtrl;
+use App\Persistence\Repositories\Work\OrderRepo;
+use App\Persistence\Repositories\Work\Worker\WorkerSkillsRepo;
+use App\Persistence\Repositories\Work\WorkerRepo;
+use Finite\Exception\StateException;
 
 class ApplySkill
 {
-    /** @var OrderRepositoryObj  */
+    /** @var OrderRepo  */
     private $orderRepo;
 
-    /** @var WorkerRepositoryObj  */
+    /** @var WorkerRepo */
     private $workerRepo;
 
-    public function __construct()
+    /** @var OrderStateCtrl */
+    private $orderStateCtrl;
+
+    public function __construct(OrderRepo $orderRepo, WorkerRepo $workerRepo)
     {
-        $this->orderRepo = new OrderRepositoryObj();
-        $this->workerRepo = new WorkerRepositoryObj();
+        $this->orderRepo = $orderRepo;
+        $this->workerRepo = $workerRepo;
+
+        $this->orderStateCtrl = new OrderStateCtrl();
     }
 
+    // process order,   work iteration,   approach - подход,попытки
     public function applySkill($order_id, $worker_id)
     {
-        $order = $this->orderRepo->findSimpleOrderById($order_id);
+        $order = $this->orderRepo->find($order_id);
+
+        OrderStateCtrl::validateApplySkill($order);
 
 
 
-        $takeRewardCmd = new TakeRewardCommand($this->orderRepo, $this->workerRepo, new HeroRepositoryObj());
+//        $upBuildingLevelCmd = new UpBuildingLevelCmd();
+//
+//        $upBuildingLevelCmd->upBuildingLevel($order->customer_hero_id, $order->desc);
 
-        $takeRewardCmd->takeReward($order_id, $worker_id);
+
+        $workerOrderService = new WorkerOrderService(
+            $this->orderRepo,
+            $this->workerRepo
+        );
+
+
+        $orderService = new OrderService($this->orderRepo);
+
 
         
-        $upBuildingLevelCmd = new UpBuildingLevelCmd();
 
-        $upBuildingLevelCmd->upBuildingLevel($order->customer_hero_id, $order->desc);
+        \DB::beginTransaction();
+        try {
+
+
+
+            $workerOrderService->takeReward($order_id, $worker_id);
+
+
+            $workerOrderService->workProcess($order_id, $worker_id);
+
+
+
+            // callback
+            // check finish
+            $orderService->changeStatusAfterApplyingSkill($order_id);
+
+        }
+        catch(\Exception $e) {
+            \DB::rollBack();
+            throw $e;
+        }
+
+        \DB::commit();
+
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Persistence\Services\Work;
+namespace App\Domain\Events\Hero;
 
 use App\Persistence\Models\Hero;
 use App\Persistence\Repositories\HeroRepo;

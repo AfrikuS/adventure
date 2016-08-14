@@ -782,17 +782,34 @@ CREATE TABLE IF NOT EXISTS `npc_conductor_sessions` (
 
 ---                           KNOWLEDGE- LEARNING - LORE
 
-CREATE TABLE IF NOT EXISTS `learning_lore` (
-    `user_id` INT UNSIGNED NOT NULL,
 
-    `mosaic` char(30) NOT NULL,
-    `amount` INT UNSIGNED NOT NULL,
-
-    PRIMARY KEY (user_id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+-- маленькие справочники можно хранить в памяти коллекциями
+CREATE TABLE IF NOT EXISTS `employment_domains` (
+    `id` INT UNSIGNED NOT NULL,
+    `title` VARCHAR(255) NOT NULL,
+    `mosaic_size` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (id)
 );
 
+CREATE TABLE IF NOT EXISTS `employment_lore` (
+    `user_id` INT UNSIGNED NOT NULL,
 
+    `mosaic` VARCHAR(255) NOT NULL,
+    `domain_id` INT UNSIGNED NOT NULL,
+
+    PRIMARY KEY (user_id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (domain_id) REFERENCES employment_domains(id)
+);
+
+CREATE TABLE IF NOT EXISTS `employment_professions` (
+    `id` INT UNSIGNED NOT NULL,
+    `title` VARCHAR(255) NOT NULL,
+
+    `domain_id` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (id)
+    FOREIGN KEY (domain_id) REFERENCES employment_domains(id)
+);
 
 
 

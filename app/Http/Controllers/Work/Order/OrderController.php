@@ -10,9 +10,11 @@ use App\Commands\Work\IndividualOrder\EstimateOrderCommand;
 use App\Commands\Work\IndividualOrder\GenerateOrderCommand;
 use App\Commands\Work\IndividualOrder\TakeRewardCommand;
 use App\Commands\Work\Order\Actions\ApplySkill;
+use App\Commands\Work\Order\Actions\CancelApplySkill;
 use App\Entities\Work\OrderEntity;
 use App\Exceptions\NotEnoughMaterialException;
 use App\Http\Controllers\Work\WorkController;
+use App\Infrastructure\IdentityMap;
 use App\Lib\Work\OrderBuilder;
 use App\Lib\Work\OrderMaterialsGenerator;
 use App\Models\Work\Catalogs\Material;
@@ -157,22 +159,37 @@ class OrderController extends WorkController
         return \Redirect::route('work_show_order_page', ['id' => $order_id]);
     }
 
-    public function applySkill()
+    public function applySkill(OrderRepo $orderRepo, WorkerRepo $workerRepo)
     {
         $data = Input::all();
 
         $order_id = $data['order_id'];
 
-        $cmd = new ApplySkill();
+        $cmd = new ApplySkill($orderRepo, $workerRepo);
 
         $cmd->applySkill($order_id, $this->worker->id);
-
 
 
 
         return \Redirect::route('work_show_order_page', ['id' => $order_id]);
     }
 
+    public function cancelSkill(OrderRepo $orderRepo)
+    {
+        $data = Input::all();
+
+        $order_id = $data['order_id'];
+
+        $cmd = new CancelApplySkill($orderRepo);
+
+        $cmd->cancel($order_id);
+
+
+
+
+        return \Redirect::route('work_show_order_page', ['id' => $order_id]);
+    }
+    
     public function takeReward()
     {
         

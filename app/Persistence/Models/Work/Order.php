@@ -11,19 +11,29 @@ class Order extends DataObject
         $this->dataObject->status = 'stock_skills';
     }
 
-    public function setAcceptor($worker)
+    public function setAcceptor($worker_id)
     {
-        $this->dataObject->acceptor_worker_id = $worker->id;
+        $this->dataObject->acceptor_worker_id = $worker_id;
     }
 
-    public function changeStatusAfterAccepting()
+//    public function changeStatusAfterAccepting()
+//    {
+//        $this->dataObject->status = 'accepted';
+//    }
+
+    public function setStatusStockMaterials()
+    {
+        $this->dataObject->status = 'stock_materials';
+    }
+
+    public function setStatusAccepted()
     {
         $this->dataObject->status = 'accepted';
     }
 
-    public function setStockMaterialsStatus()
+    public function setStatusCompleted()
     {
-        $this->dataObject->status = 'stock_materials';
+        $this->dataObject->status = 'completed';
     }
 
     protected function getAttributes()

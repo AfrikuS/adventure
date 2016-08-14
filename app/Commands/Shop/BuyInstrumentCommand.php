@@ -2,13 +2,12 @@
 
 namespace App\Commands\Shop;
 
+use App\Domain\Services\Work\WorkerShopService;
 use App\Models\Core\Hero;
 use App\Models\Work\Worker;
 use App\Persistence\Repositories\HeroRepo;
 use App\Persistence\Repositories\Work\ShopRepo;
-use App\Persistence\Services\Work\WorkerShopService;
 use App\Repositories\HeroRepositoryObj;
-use App\Repositories\ShopRepository;
 use App\Repositories\Work\WorkerRepositoryObj;
 
 class BuyInstrumentCommand
@@ -29,15 +28,7 @@ class BuyInstrumentCommand
 
     public function buyInstrument($code, $user_id)
     {
-//        /** @var Worker $worker */
-//        $worker = $this->workerRepo->findWithMaterialsAndSkillsById($user_id);
-//        /** @var Hero $hero */
-//        $hero = $this->heroRepo->findById($user_id);
-//
-//        $instrumentPrice = ShopRepository::getInstrumentPriceByCode($code);
 
-        
-        
         $workerShopService = new WorkerShopService($this->heroRepo, $this->shopRepo);
         
         

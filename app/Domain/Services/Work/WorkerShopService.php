@@ -1,10 +1,14 @@
 <?php
 
-namespace App\Persistence\Services\Work;
+namespace App\Domain\Services\Work;
 
+use App\Domain\Events\Work\Worker\AddInstrumentEvent;
+use App\Domain\Events\Work\Worker\AddMaterialEvent;
 use App\Persistence\Repositories\HeroRepo;
 use App\Persistence\Repositories\Work\ShopRepo;
 use App\Persistence\Repositories\Work\WorkerInstrumentsRepo;
+use App\Persistence\Repositories\Work\WorkerMaterialsRepo;
+use App\Domain\Events\Hero\DecrementGoldEvent;
 
 class WorkerShopService
 {
@@ -20,6 +24,23 @@ class WorkerShopService
         $this->shopRepo = $shopRepo;
     }
 
+    public function purchaseMaterial($worker_id, $code)
+    {
+        $shopMaterialDto = $this->shopRepo->findMaterialByCode($code);
+
+
+        $heroEvent = new DecrementGoldEvent($this->heroRepo);
+
+        $heroEvent->handle($worker_id, $shopMaterialDto->price);
+
+
+
+        $event = new AddMaterialEvent(new WorkerMaterialsRepo());
+
+        $event->handle($worker_id, $shopMaterialDto->code, $shopMaterialDto->amount);
+    }
+    
+    
     public function purchaseInstrument($worker_id, $code)
     {
         // shopService ?
@@ -39,4 +60,6 @@ class WorkerShopService
 
         $event->handle($worker_id, $shopInstrumentDto->code, $shopInstrumentDto->charge);
     }
+    
+    
 }

@@ -2,15 +2,11 @@
 
 namespace App\Commands\Work\IndividualOrder;
 
-use App\Entities\Work\OrderEntity;
-use App\Models\Work\Catalogs\Material;
-use App\Models\Work\Catalogs\Skill;
+use App\Domain\Services\Work\Order\OrderBuilderService;
 use App\Persistence\Repositories\Work\Catalogs\MaterialsRepo;
 use App\Persistence\Repositories\Work\OrderMaterialsRepo;
 use App\Persistence\Repositories\Work\OrderRepo;
 use App\Persistence\Repositories\Work\WorkerRepo;
-use App\Persistence\Services\Work\Order\OrderBuilderService;
-use App\Repositories\Work\OrderRepositoryObj;
 
 class GenerateOrderCommand
 {

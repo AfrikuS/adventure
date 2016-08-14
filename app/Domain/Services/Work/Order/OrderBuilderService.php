@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Persistence\Services\Work\Order;
+namespace App\Domain\Services\Work\Order;
 
+use App\Domain\Events\Work\Order\Builder\CreateOrderDataEvent;
+use App\Domain\Events\Work\Order\Builder\GenerateMaterialsEvent;
 use App\Persistence\Repositories\Work\Catalogs\MaterialsRepo;
 use App\Persistence\Repositories\Work\OrderMaterialsRepo;
 use App\Persistence\Repositories\Work\OrderRepo;
+use App\Persistence\Services\Work\Order\OrderDataDto;
 
 class OrderBuilderService
 {

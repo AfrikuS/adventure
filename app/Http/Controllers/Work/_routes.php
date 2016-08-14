@@ -16,6 +16,10 @@ Route::post('/work/order/add_material', 'Work\Order\OrderController@stockMateria
 Route::post('/work/order/apply_skill', 'Work\Order\OrderController@applySkill')->name('work_order_apply_skill_action');
 Route::post('/work/order/delete', 'Work\Order\OrderController@delete')->name('work_delete_order_action');
 Route::post('/work/order/generate', 'Work\Order\OrderController@generate')->name('generate_work_order_action');
+Route::post('/work/order/cancel_skill', 'Work\Order\OrderController@cancelSkill')->name('work_order_cancel_apply_skill_action');
+
+
+
 
 
 Route::post('/work/order/create_build_order', 'Work\Order\CustomerController@createBuildOrder')->name('work_create_build_order_action');

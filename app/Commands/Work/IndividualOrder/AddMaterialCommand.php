@@ -2,12 +2,12 @@
 
 namespace App\Commands\Work\IndividualOrder;
 
+use App\Domain\Services\Work\Order\OrderService;
+use App\Domain\Services\Work\WorkerOrderService;
 use App\Models\Work\Worker;
 use App\Persistence\Models\Work\Order;
 use App\Persistence\Repositories\Work\OrderRepo;
 use App\Persistence\Repositories\Work\WorkerRepo;
-use App\Persistence\Services\Work\WorkerOrderService;
-use App\Persistence\Services\Work\Order\OrderService;
 
 class AddMaterialCommand
 {

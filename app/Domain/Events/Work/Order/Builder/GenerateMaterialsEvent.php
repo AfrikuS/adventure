@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Persistence\Services\Work\Order;
+namespace App\Domain\Events\Work\Order\Builder;
 
 use App\Persistence\Repositories\Work\Catalogs\MaterialsRepo;
 use App\Persistence\Repositories\Work\OrderMaterialsRepo;

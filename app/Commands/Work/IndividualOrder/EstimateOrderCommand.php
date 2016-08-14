@@ -2,13 +2,12 @@
 
 namespace App\Commands\Work\IndividualOrder;
 
+use App\Domain\Services\Work\Order\OrderBuilderService;
+use App\Domain\Services\Work\Order\OrderService;
 use App\Models\Work\Worker;
 use App\Persistence\Repositories\Work\Catalogs\MaterialsRepo;
 use App\Persistence\Repositories\Work\OrderMaterialsRepo;
 use App\Persistence\Repositories\Work\OrderRepo;
-use App\Persistence\Repositories\Work\WorkerRepo;
-use App\Persistence\Services\Work\Order\OrderBuilderService;
-use App\Persistence\Services\Work\Order\OrderService;
 use App\Repositories\Work\OrderRepositoryObj;
 use App\Repositories\Work\WorkerRepositoryObj;
 
@@ -39,7 +38,7 @@ class EstimateOrderCommand
 
     }
 
-    public function estimateOrder($order_id, $worker_id)
+    public function estimateOrder($order_id)
     {
 
         $orderBuilderService = new OrderBuilderService($this->materialsRepo,
@@ -69,64 +68,64 @@ class EstimateOrderCommand
         }
         \DB::commit();
     }
-
-    private function searchMissingMaterials($workerMaterials, $orderMaterials)
-    {
-        $missingMaterials = [];
-        
-        foreach ($orderMaterials as $oMaterial) {
-
+    /*
+        private function searchMissingMaterials($workerMaterials, $orderMaterials)
+        {
+            $missingMaterials = [];
             
-            if (! array_key_exists($oMaterial->code, $workerMaterials)) {
+            foreach ($orderMaterials as $oMaterial) {
+    
                 
-                $missingMaterials[] = $oMaterial;
+                if (! array_key_exists($oMaterial->code, $workerMaterials)) {
+                    
+                    $missingMaterials[] = $oMaterial;
+                }
             }
+            
+            return $missingMaterials;
         }
+    
+            private function createMissingMaterials(Worker $worker, Collection $codes)
+            {
+                $codes->each(function ($code, $key) use ($worker) {
         
-        return $missingMaterials;
-    }
-
-    /*    private function createMissingMaterials(Worker $worker, Collection $codes)
-        {
-            $codes->each(function ($code, $key) use ($worker) {
-    
-                WorkerFactory::createWorkerMaterial($worker, $code);
-            });
-        }
-    
-        private function createMissingSkills(Worker $worker, Collection $codes)
-        {
-            $codes->each(function ($code, $key) use ($worker) {
-    
-                WorkerFactory::createWorkerSkill($worker, $code);
-            });
-        }
-    
-        private function selectMissingMaterialCodes($worker, $order)
-        {
-            $workerMaterialCodes = $worker->materials->map(function ($material, $key) {
-                return $material->code;
-            })->toArray();
-    
-            $missingCodes = $order->materials->reject(function ($material) use ($workerMaterialCodes) {
-                return in_array($material->code,  $workerMaterialCodes);
-            })->pluck('code');
-    
-            return $missingCodes;
-        }
-    
-        private function selectMissingSkillCodes($worker, $order)
-        {
-            $orderCodes = Collection::make($order->kind_work_title);
-    
-            $workerSkillCodes = $worker->skills->map(function ($skill, $key) {
-                return $skill->code;
-            })->toArray();
-    
-            $missingCodes = $orderCodes->reject(function ($code) use ($workerSkillCodes) {
-                return in_array($code,  $workerSkillCodes);
-            })->pluck('code');
-    
-            return $missingCodes;
-        }*/
+                    WorkerFactory::createWorkerMaterial($worker, $code);
+                });
+            }
+        
+            private function createMissingSkills(Worker $worker, Collection $codes)
+            {
+                $codes->each(function ($code, $key) use ($worker) {
+        
+                    WorkerFactory::createWorkerSkill($worker, $code);
+                });
+            }
+        
+            private function selectMissingMaterialCodes($worker, $order)
+            {
+                $workerMaterialCodes = $worker->materials->map(function ($material, $key) {
+                    return $material->code;
+                })->toArray();
+        
+                $missingCodes = $order->materials->reject(function ($material) use ($workerMaterialCodes) {
+                    return in_array($material->code,  $workerMaterialCodes);
+                })->pluck('code');
+        
+                return $missingCodes;
+            }
+        
+            private function selectMissingSkillCodes($worker, $order)
+            {
+                $orderCodes = Collection::make($order->kind_work_title);
+        
+                $workerSkillCodes = $worker->skills->map(function ($skill, $key) {
+                    return $skill->code;
+                })->toArray();
+        
+                $missingCodes = $orderCodes->reject(function ($code) use ($workerSkillCodes) {
+                    return in_array($code,  $workerSkillCodes);
+                })->pluck('code');
+        
+                return $missingCodes;
+            }*/
 }

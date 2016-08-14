@@ -2,11 +2,11 @@
 
 namespace App\Commands\Shop;
 
+use App\Domain\Services\Work\WorkerShopService;
 use App\Models\Work\Worker;
 use App\Persistence\Models\Work\Shop;
 use App\Persistence\Repositories\HeroRepo;
 use App\Persistence\Repositories\Work\ShopRepo;
-use App\Persistence\Services\Work\WorkerMaterialsService;
 use App\Repositories\HeroRepositoryObj;
 use App\Repositories\Work\ShopRepository;
 
@@ -29,7 +29,7 @@ class BuyMaterialCommand
     {
 
         // domain layer - work with data
-        $service = new WorkerMaterialsService(
+        $service = new WorkerShopService(
             $this->heroRepo,
             $this->shopRepo
         );

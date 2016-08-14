@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Finite\Exception\StateException;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -50,7 +51,8 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
         if ($e instanceof NotFoundHttpException) {
-            return redirect('/profile');
+            Session::flash('message', '404 not found');
+            return redirect()->back();
 //            return response()->view('errors.404', [], 404);
         }
         elseif ($e instanceof NotEnoughResourceException) {
@@ -59,6 +61,10 @@ class Handler extends ExceptionHandler
         }
         elseif ($e instanceof FatalThrowableError) {
             Session::flash('message', $e->getMessage());
+            return redirect()->back();
+        }
+        elseif ($e instanceof StateException) {
+            Session::flash('message', 'Недопустимое действие');
             return redirect()->back();
         }
 
