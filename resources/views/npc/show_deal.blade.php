@@ -10,11 +10,11 @@
 
     <div class="row row-offcanvas">
         <div class="col-lg-4">
-            Вы приняли предложение от {{ $offer->npc_char }}
+            Вы приняли предложение от {{ $deal->npc_char }}
             <p></p>
-            Он ждет от вас выполнения {{ $offer->task }}
+            Он ждет от вас выполнения {{ $deal->task }}
             {!! Form::open(['route' => 'npc_perform_deal_action', 'class' => '']) !!}
-            {!! Form::hidden('deal_id', $offer->id) !!}
+            {!! Form::hidden('deal_id', $deal->id) !!}
             {!! Form::submit('Выполнить задание', array('class' => 'btn btn-primary')) !!}
             {!! Form::close() !!}
             <p></p>
@@ -24,18 +24,18 @@
 
             Награда:
             <p>
-            {{ $offer->reward }}
+            {{ $deal->reward }}
             <p><p><p>
-            {{ $offer->deal_ending }}
+            {{ $deal->deal_ending }}
             <p>
-            {{ $offer->deal_status }}
+            {{ $deal->deal_status }}
             <p>
             <p></p>
-            <div class="timer" data-seconds-left={{ TimeHelper::leftSecs($offer->deal_ending) }}></div>
+            <div class="timer" data-seconds-left={{ TimeHelper::leftSecs($deal->deal_ending) }}></div>
         </div>
         <div class="col-lg-4">
-            {!! Form::open(['route' => 'npc_refuse_offer_page', 'class' => '']) !!}
-            {!! Form::hidden('offer_id', $offer->id) !!}
+            {!! Form::open(['route' => 'npc_refuse_offer_action', 'class' => '']) !!}
+            {!! Form::hidden('offer_id', $deal->id) !!}
             {!! Form::submit('Отказаться от выполнения', array('class' => 'btn btn-primary')) !!}
             {!! Form::close() !!}
         </div>

@@ -56,7 +56,6 @@ Route::group(['middleware' => 'app_auth'], function () {
 
     // admin
     Route::get('/admin/', 'Admin\AdminController@index')->name('admin_index_page');
-    Route::get('/admin/module/work', 'Admin\AdminController@work')->name('admin_module_work_page');
 
 
 
@@ -114,14 +113,11 @@ Route::group(['middleware' => 'app_auth'], function () {
 
     Route::post('/generate/work/teamorder', 'DataGeneratorController@generateWorkTeamOrder')->name('generate_work_teamorder_action');
 
-    Route::post('/generate/work/create_material', 'Admin\Work\CatalogsController@createMaterial')->name('create_work_material_action');
-    Route::post('/generate/work/create_skill', 'Admin\Work\CatalogsController@createSkill')->name('create_work_skill_action');
-    Route::post('/generate/work/create_instrument', 'Admin\Work\CatalogsController@createInstrument')->name('create_work_instrument_action');
 
-    Route::get('/admin/drive', 'Admin\Drive\CatalogsController@index')->name('admin_module_drive_page');
-    Route::post('/generate/drive/create_detail_kind', 'Admin\Drive\CatalogsController@createDetailKind')->name('create_detail_kind_action');
-    Route::post('/generate/drive/create_detail_title', 'Admin\Drive\CatalogsController@createDetailTitle')->name('create_detail_title_action');
-
+//    Route::get('/admin/drive', 'Admin\Drive\CatalogsController@index')->name('admin_module_drive_page');
+//    Route::post('/generate/drive/create_detail_kind', 'Admin\Drive\CatalogsController@createDetailKind')->name('create_detail_kind_action');
+//    Route::post('/generate/drive/create_detail_title', 'Admin\Drive\CatalogsController@createDetailTitle')->name('create_detail_title_action');
+//
 
     
 

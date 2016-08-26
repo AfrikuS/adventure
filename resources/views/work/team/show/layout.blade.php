@@ -9,17 +9,17 @@
         Требования, бонусы
     <p><p><p>
 
-        Лидер - {{ $privateteam->leader->name }}
+{{--        Лидер - {{ $privateteam->leader->name }}--}}
     <p><p>
-        Тип работ {{ $privateteam->kind_work }}
+        {{--Тип работ {{ $privateteam->kind_work }}--}}
     <p><p>
         Статус группы {{ $privateteam->status }}
     <p><p>
         Состав группы
     <p><p>
     <ul>
-        @foreach ($privateteam->partners as $partner)
-            <li>{{ $partner->user->name }} (id: {{ $partner->id }})</li>
+        @foreach ($partners as $partner)
+            <li>{{ $partner->name }} (id: {{ $partner->id }})</li>
         @endforeach
     </ul>
 

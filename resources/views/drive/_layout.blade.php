@@ -21,7 +21,7 @@
 
     Vehicle Info
     <p></p>
-    State: {{ $vehicle->state }}
+    State: {{ $vehicle->status }}
     <p></p>damage: {{ $vehicle->damage_percent }} %
     <p></p>
     <p></p>

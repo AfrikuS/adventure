@@ -6,7 +6,7 @@
     @parent
 
     <p></p>
-    @if ($joinOffers->count() > 0)
+    @if (count($joinOffers) > 0)
         Добавить юзера в группу
         <p></p>
         <ul>

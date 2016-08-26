@@ -4,8 +4,10 @@ namespace App\Repositories\Work;
 
 use App\Models\Work\Order;
 
+/** @deprecated  */
 class OrdersRepository
 {
+    /** @deprecated  */
     public function getAcceptedOrders($worker_id)
     {
         return Order::
@@ -14,6 +16,7 @@ class OrdersRepository
             ->get();
     }
 
+    /** @deprecated  */
     public function getFreeOrders()
     {
         return Order::

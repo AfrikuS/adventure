@@ -4,7 +4,7 @@
 @section('title', 'Work - Single Orders')
 @section('head')
     @parent
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js"></script>
+    {{--<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js"></script>--}}
 @endsection
 
 @section('center')
@@ -12,7 +12,7 @@
     Список заказов на постройку.
     <p></p>
 {{--    @include('_partials.hb_test', array('title' => 'TITLE', 'body' => 'BADY', 'orders' => $orders))--}}
-    @include('_partials.order_items', [])
+{{--    @include('_partials.order_items', ['orders' => $orders])--}}
 
     <div class="row text-center pad-top">
         <div class="col-lg-12">
@@ -25,7 +25,7 @@
                             <th>accept</th>
                             <th>price</th>
                             <th>acceptor</th>
-                            <th>type</th>
+                            <th>domain</th>
                             <th>status</th>
                             <th>show</th>
                             <th>del</th>
@@ -43,7 +43,7 @@
                                 </td>
                                 <td>{{ $order->price }}</td>
                                 <td>{{ $order->acceptor_worker_id | 'no' }}</td>
-                                <td>{{ $order->type }}</td>
+                                <td>{{ $order->domain_code }}</td>
                                 <td>{{ $order->status }}</td>
                                 <td>{{ link_to_route('work_show_order_page', 'Выбрать', ['id' => $order->id]) }}</td>
                                 {{--<td>{{ link_to_route('work_delete_order_action', 'Del', ['id' => $order->id]) }}</td>--}}
@@ -120,6 +120,7 @@
 
 
 
+{{--
     <div class="row text-center pad-top">
 
         @foreach ($workerOrders->chunk(2) as $chunk)
@@ -128,13 +129,11 @@
                     @foreach ($chunk as $order)
                         <div class="col-lg-6">
                             @include('_partials.individual_order_cmp', array('order' => $order))
-                            {{--{{ $product->name }}--}}
                         </div>
                     @endforeach
-                @else {{-- last iteration --}}
+                @else
                     <div class="col-lg-6">
                         @include('_partials.individual_order_cmp', array('order' => $chunk->first()))
-                        {{--{{ $product->name }}--}}
                     </div>
                     <div class="col-lg-6">
                     </div>
@@ -143,6 +142,7 @@
         @endforeach
 
     </div>
+--}}
 
 
 
@@ -184,7 +184,7 @@
 
 @section('scripts')
 
-    <script language="JavaScript">
+{{--    <script language="JavaScript">
 
 
         $(document).ready(function() {
@@ -204,5 +204,5 @@
 
         });
 
-    </script>
+    </script>--}}
 @endsection

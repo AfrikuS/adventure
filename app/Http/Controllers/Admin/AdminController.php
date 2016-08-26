@@ -19,22 +19,6 @@ class AdminController extends Controller
         ]);
     }
 
-    public function work()
-    {
-
-//        Gate::index();
-
-        $materials = Material::get();
-        $instruments = Instrument::get();
-        $skills = Skill::get();
-        
-        return $this->view('admin.work.catalogs', [
-            'materials' => $materials,
-            'instruments' => $instruments,
-            'skills' => $skills,
-        ]);
-    }
-
     public function normalizeUser($id)
     {
         

@@ -39,33 +39,6 @@ class ShopRepository
         return $instrumentPrice->price;
     }
     
-    public static function reindexPriceMaterials()
-    {
-        $materialsCodes = Material::select('id', 'code')->get();
-        
-        $materialsCodes->each(function ($item, $key) {
-            PriceMaterial::updateOrCreate(
-                ['code' => $item->code],
-                ['price' => rand(3, 7),
-                    'material_id' => $item->id,
-                    'code' => $item->code,
-                ]);
-        });
-    }
-
-    public static function reindexInstrumentsPrices()
-    {
-        $instrumentCodes = Instrument::select('id', 'code')->get();
-        
-        $instrumentCodes->each(function ($item, $key) {
-            ShopInstrument::updateOrCreate(
-                ['code' => $item->code],
-                ['price' => rand(583, 794),
-                    'instrument_id' => $item->id,
-                    'code' => $item->code,
-                ]);
-        });
-    }
 
     /** @deprecated  todo review  @see transferInstrumentToUser */
     public static function addInstrumentToUser($worker, $instrument)

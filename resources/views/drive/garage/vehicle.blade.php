@@ -13,7 +13,7 @@
         <div class="col-lg-12">
             <h4>Детали вашего авто</h4>
             <p></p>
-            @if($vehicleDetails->count() > 0)
+            @if(count($vehicleDetails) > 0)
 
             <table class="table table-condensed">
                 <table class="table table-bordered table-hover">
@@ -27,7 +27,7 @@
                     <tbody>
                     @foreach($vehicleDetails as $vehicleDetail)
                         <tr>
-                            <td>{{ $vehicleDetail->kind->title }}</td>
+                            <td>{{ $vehicleDetail->kind_title }}</td>
                             <td>{{ $vehicleDetail->title }}</td>
                             <td>
                                 {!! Form::open(['route' => 'drive_vehicle_unmount_detail_action', 'class' => '']) !!}
@@ -51,7 +51,7 @@
     <div class="row row-offcanvas">
         <div class="col-lg-9">
 
-            @if($driverDetails->count() > 0)
+            @if(count($driverDetails) > 0)
                 <table class="table table-condensed">
                     <table class="table table-bordered table-hover">
                         <thead>
@@ -66,7 +66,7 @@
                         @foreach($driverDetails as $driverDetail)
                             <tr>
                                 <td>{{ $driverDetail->id }}</td>
-                                <td>{{ $driverDetail->kind->title }}</td>
+                                <td>{{ $driverDetail->kind_title }}</td>
                                 <td>{{ $driverDetail->title }}</td>
                                 <td>
                                     {!! Form::open(['route' => 'drive_vehicle_mount_detail_action', 'class' => '']) !!}

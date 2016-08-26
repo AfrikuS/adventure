@@ -22,7 +22,7 @@
         "yohang/finite": "^1.1",
         "graham-campbell/exceptions": "^8.6",
         "laravelcollective/html": "5.2.*",
-        "proai/laravel-handlebars": "^1.1"
+        "laravelcollective/bus": "^5.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

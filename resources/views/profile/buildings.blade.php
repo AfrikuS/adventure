@@ -9,18 +9,18 @@
 
     <p></p>
     <p></p>
-    Ворота: <b>{{ $buildings->gates_level }}</b> ур.
+    Ворота: <b>{{ $buildings->gatesLevel }}</b> ур.
     <p></p>
     <p></p>
-    Забор: <b>{{ $buildings->fence_level }}</b> ур.
+    Забор: <b>{{ $buildings->fenceLevel }}</b> ур.
     <p></p>
     <p></p>
-    Дверь в амбар: <b>{{ $buildings->door_ambar_level }}</b> ур.
+    Дверь в амбар: <b>{{ $buildings->ambarLevel }}</b> ур.
     <p></p>
     <p></p>
-    Дверь в дом: <b>{{ $buildings->door_house_level }}</b> ур.
+    Дверь в дом: <b>{{ $buildings->houseLevel }}</b> ур.
     <p></p>
     <p></p>
-    Дверь в склад: <b>{{ $buildings->door_resource_warehause_level }}</b> ур.
+    Дверь в склад: <b>{{ $buildings->warehauseLevel }}</b> ур.
 
 @endsection

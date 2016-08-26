@@ -111,6 +111,7 @@ class PrivateTeamRepository
     }
 
 
+    /** @deprecated  */
     public function getJoinOffersByTeamId($team_id)
     {
         return TeamJoinOffer::with(['user' => function($query) {

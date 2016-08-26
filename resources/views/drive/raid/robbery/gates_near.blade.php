@@ -18,7 +18,7 @@
 
     {!! Form::open(['route' => 'drive_robbery_drivein_gates_action', 'class' => '']) !!}
 
-    @include('drive.robbery._specials')
+{{--    @include('drive.raid.robbery._specials')--}}
 
     {!! Form::submit('Въехать в ворота', array('class' => 'btn btn-primary')) !!}
     {!! Form::close() !!}

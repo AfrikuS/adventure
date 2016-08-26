@@ -493,7 +493,7 @@ CREATE TABLE IF NOT EXISTS `work_orders` (
     `desc` VARCHAR(255) NOT NULL,
     `type` VARCHAR(255) NOT NULL,
     `status` VARCHAR(255) NOT NULL,
-    `kind_work_title` VARCHAR(255) NOT NULL,
+--    `kind_work_title` VARCHAR(255) NOT NULL,
     `price` INT UNSIGNED NOT NULL,
     `acceptor_worker_id` INT UNSIGNED,
     `acceptor_team_id` INT UNSIGNED,
@@ -602,7 +602,7 @@ CREATE TABLE IF NOT EXISTS `hero_buildings` (
     PRIMARY KEY (id),
     FOREIGN KEY (id) REFERENCES hero_resources(id)
 );
-CREATE TABLE IF NOT EXISTS `driver_raids` (
+CREATE TABLE IF NOT EXISTS `drive_raids` (
     `id` INT UNSIGNED NOT NULL,
     `vehicle_id` INT UNSIGNED NOT NULL,
     `status` VARCHAR(255) NOT NULL,
@@ -785,29 +785,37 @@ CREATE TABLE IF NOT EXISTS `npc_conductor_sessions` (
 
 -- маленькие справочники можно хранить в памяти коллекциями
 CREATE TABLE IF NOT EXISTS `employment_domains` (
-    `id` INT UNSIGNED NOT NULL,
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `code` VARCHAR(255) NOT NULL,
     `title` VARCHAR(255) NOT NULL,
     `mosaic_size` INT UNSIGNED NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE KEY `unique_code` (`code`)
 );
+INSERT INTO `employment_domains` (code, title, mosaic_size) VALUES('building', 'Строительство', 30);
+INSERT INTO `employment_domains` (code, title, mosaic_size) VALUES('repair_vehicle', 'Ремонт авто', 50);
+
 
 CREATE TABLE IF NOT EXISTS `employment_lore` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `domain_id` INT UNSIGNED NOT NULL,
+    `domain_code` VARCHAR(255) NOT NULL,
     `user_id` INT UNSIGNED NOT NULL,
 
     `mosaic` VARCHAR(255) NOT NULL,
-    `domain_id` INT UNSIGNED NOT NULL,
+    `size` INT UNSIGNED NOT NULL,
 
-    PRIMARY KEY (user_id),
+    PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (domain_id) REFERENCES employment_domains(id)
+    FOREIGN KEY (domain_id) REFERENCES employment_domains(id),
+    UNIQUE KEY `unique_user_domain` (`user_id`,`domain_id`)
 );
 
 CREATE TABLE IF NOT EXISTS `employment_professions` (
     `id` INT UNSIGNED NOT NULL,
     `title` VARCHAR(255) NOT NULL,
-
     `domain_id` INT UNSIGNED NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
     FOREIGN KEY (domain_id) REFERENCES employment_domains(id)
 );
 

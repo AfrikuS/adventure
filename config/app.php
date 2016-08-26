@@ -129,7 +129,7 @@ return [
          */
         Illuminate\Auth\AuthServiceProvider::class,
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
-        Illuminate\Bus\BusServiceProvider::class,
+//        Illuminate\Bus\BusServiceProvider::class,
         Illuminate\Cache\CacheServiceProvider::class,
         Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class,
         Illuminate\Cookie\CookieServiceProvider::class,
@@ -138,7 +138,7 @@ return [
         Illuminate\Filesystem\FilesystemServiceProvider::class,
         Illuminate\Foundation\Providers\FoundationServiceProvider::class,
         Illuminate\Hashing\HashServiceProvider::class,
-        Illuminate\Mail\MailServiceProvider::class,
+//        Illuminate\Mail\MailServiceProvider::class,
         Illuminate\Pagination\PaginationServiceProvider::class,
         Illuminate\Pipeline\PipelineServiceProvider::class,
         Illuminate\Queue\QueueServiceProvider::class,
@@ -152,6 +152,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
 //        'Form'=> 'Collective\Html\HtmlServiceProvider',
 //        'Helpers'   => 'App\Libraries\Helpers'
+        Collective\Bus\BusServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -168,7 +169,29 @@ return [
         Appzcoder\CrudGenerator\CrudGeneratorServiceProvider::class,
         DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
         GrahamCampbell\Exceptions\ExceptionsServiceProvider::class,
-        ProAI\Handlebars\HandlebarsServiceProvider::class
+
+
+        // modules
+        App\Modules\Core\Providers\CoreModuleProvider::class,
+
+        App\Modules\Drive\Providers\RepositoriesProvider::class,
+        App\Modules\Drive\Providers\CommandsHandlersProviders::class,
+
+        App\Modules\Hero\Providers\HeroModuleProvider::class,
+        App\Modules\Hero\Providers\CommandsHandlersProviders::class,
+        App\Modules\Hero\Providers\ComposerServiceProvider::class,
+
+        App\Modules\Work\Providers\WorkModuleProvider::class,
+        App\Modules\Work\Providers\CommandsHandlersProviders::class,
+        App\Modules\Work\Providers\ComposerServiceProvider::class,
+
+        App\Modules\Employment\Providers\EmploymentModuleProvider::class,
+        App\Modules\Employment\Providers\CommandsHandlersProviders::class,
+
+        
+        App\Modules\Npc\Providers\NpcModuleProvider::class,
+        App\Modules\Npc\Providers\ComposerServiceProvider::class,
+
     ],
 
     /*
@@ -199,7 +222,7 @@ return [
         'Gate' => Illuminate\Support\Facades\Gate::class,
         'Hash' => Illuminate\Support\Facades\Hash::class,
         'Lang' => Illuminate\Support\Facades\Lang::class,
-        'Log' => Illuminate\Support\Facades\Log::class,
+//        'Log' => Illuminate\Support\Facades\Log::class,
         'Mail' => Illuminate\Support\Facades\Mail::class,
         'Password' => Illuminate\Support\Facades\Password::class,
         'Queue' => Illuminate\Support\Facades\Queue::class,
@@ -218,7 +241,7 @@ return [
 //        'Form'=> Illuminate\Html\FormFacade::class,
         'Form' => Collective\Html\FormFacade::class,
         'HTML'=> Illuminate\Html\HtmlFacade::class,
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+//        'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Activation' => Cartalyst\Sentinel\Laravel\Facades\Activation::class,
         'Reminder'   => Cartalyst\Sentinel\Laravel\Facades\Reminder::class,
         'Sentinel'   => Cartalyst\Sentinel\Laravel\Facades\Sentinel::class,
@@ -226,6 +249,11 @@ return [
         'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
         
         'TimeHelper' => App\Helpers\TimeHelper::class,
+
+
+        // app
+
+        'EntityStore' => App\Modules\Core\Facades\EntityStore::class,
     ],
 
 ];

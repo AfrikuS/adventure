@@ -17,23 +17,9 @@
         <div class="row row-offcanvas row-offcanvas-right">
             <div class="col-lg-2">
 
-                <ul>
-                    @forelse($npcOffers as $offer)
-                        {{ link_to_route('npc_show_offer_page', $offer->task, ['id' => $offer->id])  }}
-                    @empty
-                        Нет NPC-offers
-                    @endforelse
-                </ul>
-
+                @include('_partials.npc.offers')
                 <p></p>
-                <ul>
-                    @forelse($npcDeals as $deal)
-                        {{ link_to_route('npc_show_offer_page', $deal->task, ['id' => $deal->id])  }}
-                    @empty
-                        Нет NPC-deals
-                    @endforelse
-                </ul>
-
+                @include('_partials.npc.deals')
 
                 @yield('left_column')
             </div>
@@ -48,15 +34,15 @@
                     <p>
                     Hero-ресурсы
                     <ul>
-                        <li>Нефть: {{ $heroResources->oil }}</li>
-                        <li>Золото: {{ $heroResources->gold}}</li>
-                        <li>Вода: {{ $heroResources->water }}</li>
+                        <li>Нефть: {{ $hero->oil }}</li>
+                        <li>Золото: {{ $hero->gold}}</li>
+                        <li>Вода: {{ $hero->water }}</li>
                     </ul>
                     <p>
                     <p>
-                    {!! Form::open(['route' => 'npc_generate_offer_page', 'class' => '']) !!}
-                    {!! Form::submit('Cгенерить npc-offer', array('class' => 'btn btn-success')) !!}
-                    {!! Form::close() !!}
+
+                    @include('_partials.npc.offer_generate')
+
                     <p>
                     <p>
                     <p>

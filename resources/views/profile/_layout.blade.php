@@ -1,6 +1,5 @@
 @extends('layouts.app')
 
-
 @section('left_column')
 
     <ul>

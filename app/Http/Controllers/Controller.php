@@ -16,40 +16,17 @@ class Controller extends BaseController
 
     protected $user_id;
     
-    /** @var  HeroRepositoryObj */
-    protected $heroRepo;
-
-    /**
-     * Controller constructor.
-     */
     public function __construct()
     {
-//        $this->user_id = auth()->user()->id;
         $this->user_id = \Auth::id();
-        
-        $this->heroRepo = new HeroRepositoryObj();
     }
 
     protected function view($view = null, $data = [])
     {
-        $id = \Auth::id();
-        $res = \App\Models\Macro\Resources::select(['water', 'food', 'tree', 'free_people'])->find($id);
-        $heroResources = \App\Models\Core\Hero::select(['water', 'oil', 'gold'])->find($id);
+//        $res = \App\Models\Macro\Resources::select(['water', 'food', 'tree', 'free_people'])->find($id);
         
-        $npcOffers = NpcDeal::
-            where('offer_status', 'created')
-            ->whereOr('offer_status', 'waiting')
-            ->get();
-        
-        
-        $npcDeals = NpcDeal::where('offer_status', 'accepted')->get();
-//        $team = User::whe
-
         return view($view, $data, [
-            'npcOffers' => $npcOffers,
-            'npcDeals' => $npcDeals,
-            'resources' => $res,
-            'heroResources' => $heroResources,
+            'user_id' => $this->user_id,
         ]);
     }
 }

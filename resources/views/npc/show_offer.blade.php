@@ -27,13 +27,13 @@
             <p>
             {{ $offer->reward }}
             <p>
-            {{ $offer->offer_status }}
+            Status: <b>{{ $offer->offer_status }}</b>
             <p>
-            {{ $offer->deal_status }}
+            {{--{{ $offer->deal_status }}--}}
             <p>
         </div>
         <div class="col-lg-4">
-            {!! Form::open(['route' => 'npc_refuse_offer_page', 'class' => '']) !!}
+            {!! Form::open(['route' => 'npc_refuse_offer_action', 'class' => '']) !!}
             {!! Form::hidden('offer_id', $offer->id) !!}
             {!! Form::submit('Отклонить предложение', array('class' => 'btn btn-primary')) !!}
             {!! Form::close() !!}

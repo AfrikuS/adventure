@@ -15,6 +15,11 @@
         <li>TEAMS</li>
         <li>{{ link_to_route('work_privateteams_page', 'Teams LIST') }}</li>
     </ul>
+    <p></p>
+
+    {{ $worker->id }}
+    <p></p>
+    {{ $worker->status }}
 
 @endsection
 

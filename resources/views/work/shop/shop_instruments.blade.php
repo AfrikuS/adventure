@@ -64,3 +64,12 @@
 
 @endsection
 
+@section('right_column')
+
+    @parent
+
+    {!! Form::open(['route' => 'update_instruments_prices_action', 'class' => 'form-signup']) !!}
+    {!! Form::submit('Сменить цены на инструменты', array('class' => 'btn btn-warning')) !!}
+    {!! Form::close() !!}
+
+@endsection

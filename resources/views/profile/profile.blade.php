@@ -14,22 +14,22 @@
     <div class="row row-offcanvas">
         <div class="col-lg-4">
             Рабочие навыки
-            @if (count($workSkills) > 0)
-                <ul>
-                    <li>Скилл_Код \ Скилл_Title</li>
-                    @foreach($workSkills as $skill)
-                        <li>{{ $skill->code . " - "  .$skill->value }}</li>
-                    @endforeach
-                </ul>
-            @endif
+            {{--@if (count($workSkills) > 0)--}}
+                {{--<ul>--}}
+                    {{--<li>Скилл_Код \ Скилл_Title</li>--}}
+                    {{--@foreach($workSkills as $skill)--}}
+                        {{--<li>{{ $skill->code . " - "  .$skill->value }}</li>--}}
+                    {{--@endforeach--}}
+                {{--</ul>--}}
+            {{--@endif--}}
 
 
         </div>
 
         <div class="col-lg-4">
             Выполненных заказов: N
-            <p>Выполненных заказов в составе команды private-team: N
-            <p>Выполненных заказов в составе команды private-team как лидер группы: N
+            <p></p>Выполненных заказов в составе команды private-team: N
+            <p></p>Выполненных заказов в составе команды private-team как лидер группы: N
         </div>
     </div>
 

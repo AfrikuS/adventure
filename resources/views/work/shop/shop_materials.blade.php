@@ -13,7 +13,7 @@
     <p></p>
     <div class="row row-offcanvas">
         <div class="col-lg-7">
-            @if($shop->getProducts()->count() > 0)
+            @if(count($shopMaterials) > 0)
                 <table class="table table-condensed">
                     <table class="table table-bordered table-hover">
                         <thead>
@@ -25,7 +25,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($shop->getProducts() as $product)
+                        @foreach($shopMaterials as $product)
                             <tr>
                                 <td>{{ $product->code }}</td>
                                 <td>{{ $product->price }}</td>

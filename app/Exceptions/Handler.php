@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\Persistence\EntityNotFound_Exception;
 use Exception;
 use Finite\Exception\StateException;
 use Illuminate\Support\Facades\Session;
@@ -66,6 +67,10 @@ class Handler extends ExceptionHandler
         elseif ($e instanceof StateException) {
             Session::flash('message', 'Недопустимое действие');
             return redirect()->back();
+        }
+        elseif ($e instanceof EntityNotFound_Exception) {
+            Session::flash('message', 'Запись не найдена');
+            return \Redirect::route('profile_page');
         }
 
         return parent::render($request, $e);

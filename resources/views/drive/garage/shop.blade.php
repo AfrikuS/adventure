@@ -25,7 +25,7 @@
                         @foreach($detailsOffers as $offer)
                             <tr>
                                 <td>{{ $offer->id }}</td>
-                                <td>{{ $offer->kind->title }}</td>
+                                <td>{{ $offer->kind_title }}</td>
                                 <td>{{ $offer->title }}</td>
                                 <td>
                                     {!! Form::open(['route' => 'drive_shop_buy_detail_action', 'class' => '']) !!}

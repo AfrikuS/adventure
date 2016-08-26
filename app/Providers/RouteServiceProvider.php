@@ -53,24 +53,36 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes(Router $router)
     {
-        $ctrlsDirs = ['Profile', 'Npc'];
-        
         $router->group(['namespace' => $this->namespace, 'middleware' => 'web'], function ($router) {
             require app_path('Http/Controllers/NotAuth/routes.php');
 
             $router->group(['middleware' => 'app_auth'], function () {
-                        
-                require app_path('Http/Controllers/Profile/_routes.php');
-                require app_path('Http/Controllers/Npc/routes.php');
-                require app_path('Http/Controllers/Drive/_routes.php');
+
+//                require app_path('Http/Controllers/Profile/_routes.php');
+//                require app_path('Http/Controllers/Drive/_routes.php');
                 require app_path('Http/Controllers/Geo/_routes.php');
                 require app_path('Http/Controllers/Work/_routes.php');
                 require app_path('Http/Controllers/Railway/_routes.php');
-                
-                require app_path('Http/Controllers/Learn/_routes.php');
+
+//                require app_path('Http/Controllers/Employment/_routes.php');
+
+
             });
 
             require app_path('Http/routes.php');
+        });
+
+        $router->group(['namespace' => 'App\Modules', 'middleware' => 'web'], function ($router) {
+
+            $router->group(['middleware' => 'app_auth'], function () {
+
+                require app_path('Modules/Drive/Resources/routes.php');
+                require app_path('Modules/Work/Resources/routes.php');
+                require app_path('Modules/Employment/Resources/_routes.php');
+
+                require app_path('Modules/Profile/Resources/routes.php');
+                require app_path('Modules/Npc/Resources/routes.php');
+            });
         });
     }
 }

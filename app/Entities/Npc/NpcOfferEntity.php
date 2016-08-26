@@ -71,7 +71,7 @@ class NpcOfferEntity extends ApplicationEntity
 
     public function isOfferExpired()
     {
-        if ($this->state == 'too_long_wait') {
+        if ($this->state == 'expired') {
             return true;
         }
         

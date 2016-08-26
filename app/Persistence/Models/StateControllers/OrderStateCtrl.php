@@ -3,21 +3,21 @@
 namespace App\Persistence\Models\StateControllers;
 
 use App\Persistence\Models\Work\Order;
+use App\Persistence\Repositories\Work\OrderRepo;
 use Finite\Exception\StateException;
 
 class OrderStateCtrl
 {
-    public static function validateApplySkill($order)
-    {
-        if ($order->status != 'stock_skills') {
+    /** @var OrderRepo */
+    private $orderRepo;
 
-            throw new StateException;
-        }
+    public function __construct()
+    {
+        $this->orderRepo = app('OrderRepo');
     }
 
-    public function canAccepted(Order $order)
+    public function validateApplySkill($order_id)
     {
-        return $order->status === 'free';
     }
 
     public function canEstimated(Order $order)
@@ -30,8 +30,8 @@ class OrderStateCtrl
         return $order->status === 'stock_materials';
     }
 
-    public function canApplySkill(Order $order)
-    {
-        return $order->status === 'stock_skills';
-    }
+//    public function canApplySkill(Order $order)
+//    {
+//        return $order->status === 'stock_skills';
+//    }
 }
