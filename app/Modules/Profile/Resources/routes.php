@@ -2,7 +2,6 @@
 
 
 Route::get('/profile', 'Profile\Controllers\ProfileController@index')->name('profile_page');
-Route::get('/profile/channels', 'Profile\Controllers\ProfileController@channels')->name('profile_channels_page');
 
 Route::post('/profile/become_driver', 'Profile\Controllers\ProfileController@becomeDriver')->name('profile_become_driver_action');
 

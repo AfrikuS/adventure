@@ -8,11 +8,6 @@ class IncrementGold
     
     public $amount;
 
-    /**
-     * IncrementGold constructor.
-     * @param $hero_id
-     * @param $amount
-     */
     public function __construct($hero_id, $amount)
     {
         $this->hero_id = $hero_id;

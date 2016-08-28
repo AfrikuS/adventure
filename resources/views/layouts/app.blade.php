@@ -32,12 +32,8 @@
 
             <div class="col-lg-3">
                     <p>
-                    Hero-ресурсы
-                    <ul>
-                        <li>Нефть: {{ $hero->oil }}</li>
-                        <li>Золото: {{ $hero->gold}}</li>
-                        <li>Вода: {{ $hero->water }}</li>
-                    </ul>
+
+                    @include('_partials.hero.resources')
                     <p>
                     <p>
 

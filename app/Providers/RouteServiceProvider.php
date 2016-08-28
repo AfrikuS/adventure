@@ -81,7 +81,12 @@ class RouteServiceProvider extends ServiceProvider
                 require app_path('Modules/Employment/Resources/_routes.php');
 
                 require app_path('Modules/Profile/Resources/routes.php');
+                require app_path('Modules/Hero/Resources/routes.php');
                 require app_path('Modules/Npc/Resources/routes.php');
+                require app_path('Modules/Battle/Resources/routes.php');
+                
+                
+                require app_path('Modules/Auction/Http/routes.php');
             });
         });
     }

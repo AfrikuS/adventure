@@ -14,16 +14,16 @@
                     {{ $user->name }}
 
                     <p>
-                    {!! Form::open(['action' => ['Battle\AttackController@searchOpponent'], 'class' => '']) !!}
+                    {!! Form::open(['route' => 'search_enemy_action']) !!}
                     {!! Form::submit('Искать снова', array('class' => 'btn btn-primary')) !!}
                     {!! Form::close() !!}
                     <p>
-                    {!! Form::open(['action' => ['Battle\AttackController@attack'], 'class' => '']) !!}
-                    {!! Form::hidden('user_id', $user->id, ['id' =>  '']) !!}
+                    {!! Form::open(['route' => 'attack_enemy_action']) !!}
+                    {!! Form::hidden('user_id', $user->id) !!}
                     {!! Form::submit('Напасть', array('class' => 'btn btn-primary')) !!}
                     {!! Form::close() !!}
                     <p>
-                    <a href="/search">Назад на страницу посика</a>
+                    {{ link_to_route('search_page', 'Назад на страницу посика') }}
                 </div>
             </div>
         </div>

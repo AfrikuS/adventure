@@ -173,7 +173,14 @@ return [
 
         // modules
         App\Modules\Core\Providers\CoreModuleProvider::class,
+        
+        App\Modules\Auction\Providers\AuctionModuleProvider::class,
+        App\Modules\Auction\Providers\CommandsHandlersProviders::class,
+        App\Modules\Auction\Providers\ComposerServiceProvider::class,
 
+        App\Modules\Battle\Providers\BattleModuleProvider::class,
+
+        
         App\Modules\Drive\Providers\RepositoriesProvider::class,
         App\Modules\Drive\Providers\CommandsHandlersProviders::class,
 

@@ -56,7 +56,7 @@
                                     </td>
 
                                     <td>
-                                        {!! Form::open(['action' => ['Trade\AuctionController@buy'], 'class' => '']) !!}
+                                        {!! Form::open(['route' => 'auction_buy_lot_action']) !!}
                                         {!! Form::hidden('lot_id', $lot->id, ['id' =>  '']) !!}
                                         {!! Form::submit('Купить', array('class' => 'btn btn-primary')) !!}
                                         {!! Form::close() !!}
@@ -76,12 +76,10 @@
                             <p><p><p>
                                 Expired LOTS
                             <p>
-                            @if(count($lots) > 0)
-                                <ul>
+                            @if(count($expiredLots) > 0)
                                     @foreach ($expiredLots as $lot)
-                                        <li>{{  $lot->owner_id }} | {{ $lot->title }} | {{  $lot->bid }} | {{  $lot->date_time }}</li>
+                                        <br>{{  $lot->owner_id }} | {{ $lot->title }} | {{  $lot->bid }} | {{  $lot->date_time }} {{ link_to_route('auction_cancel_lot_action', 'del', [$lot->id]) }}
                                     @endforeach
-                                </ul>
                             @endif
 
 
@@ -128,16 +126,12 @@
             </div>
 
             <div class="col-lg-3 col-sm-3">
+
+                @include('_partials.hero.resources')
+
                 <div class="things">
-                    @if(count($heroThings) > 0)
-                        <ul>Вещи:
-                            @foreach($heroThings as $thing)
-                                <li>{{ $thing->id }} :=> {{ $thing->title }} (<b>{{ $thing->status }}</b>)</li>
-                            @endforeach
-                        </ul>
-                    @else
-                        Блок для вещей/ Вещей нет
-                    @endif
+
+                    @include('_partials.auction.things')
                 </div>
             </div>
 

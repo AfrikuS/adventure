@@ -3,7 +3,6 @@
 namespace App\Modules\Npc\Controllers;
 
 use App\Entities\Npc\NpcOfferEntity;
-use App\Factories\NpcFactory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Modules\Npc\Actions\PerformDeal;

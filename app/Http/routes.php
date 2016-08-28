@@ -90,25 +90,7 @@ Route::group(['middleware' => 'app_auth'], function () {
     
     
     
-    // battle-module
-    Route::get('/search', 'Battle\AttackController@searchPage')->name('search_page');
-    Route::post('/search', 'Battle\AttackController@searchOpponent')->name('search_enemy_action');
-    Route::post('/attack', 'Battle\AttackController@attack')->name('attack_enemy_action');
 
-    Route::get('/bodalka', 'Battle\BodalkaController@index')->name('bodalka_page');
-    Route::post('/bodalka', 'Battle\BodalkaController@start')->name('bodalka_start_action');
-
-    Route::get('/boss', 'Battle\BossController@index')->name('boss_page');
-    Route::post('/boss_create', 'Battle\BossController@boss_create')->name('boss_create_action');
-    Route::post('/boss_join', 'Battle\BossController@boss_join')->name('boss_join_action');
-    Route::post('/boss_kick', 'Battle\BossController@boss_kick')->name('boss_kick_action');
-
-
-
-    // trade module
-    Route::get('/auction', 'Trade\AuctionController@index')->name('auction_page');
-    Route::post('/auction/add_lot', 'Trade\AuctionController@addLot')->name('auction_add_lot_action');
-    Route::post('/auction/buy', 'Trade\AuctionController@buy')->name('auction_buy_lot_action');
 
 
     Route::post('/generate/work/teamorder', 'DataGeneratorController@generateWorkTeamOrder')->name('generate_work_teamorder_action');

@@ -4,6 +4,7 @@ namespace App\Modules\Hero\Providers;
 
 use App\Modules\Hero\Persistence\Repositories\BuildingsRepo;
 use App\Modules\Hero\Persistence\Repositories\HeroRepo;
+use App\Modules\Hero\Persistence\Repositories\ResourceChannelsRepo;
 use Illuminate\Support\ServiceProvider;
 
 class HeroModuleProvider extends ServiceProvider
@@ -30,6 +31,10 @@ class HeroModuleProvider extends ServiceProvider
         
         $this->app->singleton(
             'HeroRepo', HeroRepo::class
+        );
+
+        $this->app->singleton(
+            'ResourceChannelsRepo', ResourceChannelsRepo::class
         );
     }
 

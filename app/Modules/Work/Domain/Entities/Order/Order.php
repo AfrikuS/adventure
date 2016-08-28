@@ -9,6 +9,7 @@ class Order
     const STATUS_COMPLETED = 'completed';
     const STATUS_STOCK_MATERIALS = 'stock_materials';
     const STATUS_STOCK_SKILLS = 'stock_skills';
+//    const STATUS_CREATED = 'created';
 
     public $id;
     public $desc;

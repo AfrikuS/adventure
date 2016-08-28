@@ -48,6 +48,11 @@ class OrderController extends WorkController
 
             case Order::STATUS_ACCEPTED:
 
+
+/*                if ($order->haveAcceptor() && ($order->acceptor_worker_id == $user_id)) {
+                    return true;
+                }
+*/
                 return $this->view('work.order.show.accepted', [
                     'order' => $order,
                 ]);
@@ -103,7 +108,7 @@ class OrderController extends WorkController
                     'order' => $order,
                 ]);
 
-            default:
+            case Order::STATUS_FREE:
 
                 // order not accepted, free
                 Session::flash('message', 'It\'s not your order');
