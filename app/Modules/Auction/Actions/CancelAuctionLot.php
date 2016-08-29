@@ -33,7 +33,7 @@ class CancelAuctionLot
         \DB::beginTransaction();
         try {
 
-            $auctionService->cancleLot($lot_id);
+            $auctionService->cancelLot($lot_id);
 
         }
         catch(\Exception $e)

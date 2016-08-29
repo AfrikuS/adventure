@@ -60,7 +60,7 @@ class RouteServiceProvider extends ServiceProvider
 
 //                require app_path('Http/Controllers/Profile/_routes.php');
 //                require app_path('Http/Controllers/Drive/_routes.php');
-                require app_path('Http/Controllers/Geo/_routes.php');
+//                require app_path('Http/Controllers/Geo/_routes.php');
                 require app_path('Http/Controllers/Work/_routes.php');
                 require app_path('Http/Controllers/Railway/_routes.php');
 
@@ -87,6 +87,7 @@ class RouteServiceProvider extends ServiceProvider
                 
                 
                 require app_path('Modules/Auction/Http/routes.php');
+                require app_path('Modules/Geo/Http/_routes.php');
             });
         });
     }

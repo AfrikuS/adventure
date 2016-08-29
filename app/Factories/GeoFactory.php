@@ -17,23 +17,6 @@ use Carbon\Carbon;
 class GeoFactory
 {
 
-    public static function createRoute(int $trader_id, string $routeTitle, int $startLocation_id)
-    {
-        $route = TravelRoute::create([
-            'title' => $routeTitle,
-            'user_id' => $trader_id,
-            'status' => 'drafting',
-        ]);
-
-        RoutePoint::create([
-            'route_id' => $route->id,
-            'location_id' => $startLocation_id,
-            'status' => 'first',
-            'number' => 1,
-        ]);
- 
-        return $route;
-    }
 
 
     public static function generateTempShopWithMaterials(Carbon $dateEnding)

@@ -24,7 +24,14 @@
 
             <p>{!! Form::open(['route' => 'geo_final_route_action', 'class' => '']) !!}
             <p>{!! Form::hidden('route_id', $route->id) !!}
-            <p>{!! Form::submit('Final Route') !!}
+            <p>{!! Form::submit('Commit Route') !!}
+            <p>{!! Form::close() !!}
+
+            <p></p><p></p>
+
+            <p>{!! Form::open(['route' => 'geo_uncommit_route_action', 'class' => '']) !!}
+            <p>{!! Form::hidden('route_id', $route->id) !!}
+            <p>{!! Form::submit('Uncommit Route') !!}
             <p>{!! Form::close() !!}
 
             <p></p><p></p>
@@ -39,8 +46,9 @@
         </div>
 
         <div class="col-lg-8">
-            Points
-            @if($route->points->count() > 0)
+
+            Nodes
+            @if(count($route->points) > 0)
                 <table class="table table-condensed">
                     <table class="table table-bordered table-hover">
                         <thead>
@@ -51,11 +59,11 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($route->points as $point)
+                        @foreach($route->points as $node)
                             <tr>
-                                <td>{{ $point->location->title }}</td>
-                                <td>{{ $point->number }}</td>
-                                <td>{{ $point->status }}</td>
+                                <td>{{ $node->location_title }}</td>
+                                <td>{{ $node->number }}</td>
+                                <td>{{ $node->status }}</td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -63,10 +71,11 @@
                 </table>
             @endif
 
+
             <h4>Add Route-Point</h4>
             <p>{!! Form::open(['route' => 'geo_add_routepoint_action', 'class' => '']) !!}
             <p>{!! Form::hidden('route_id', $route->id) !!}
-            <p>{!! Form::select('location_id', $possibleLocationsSelect) !!}
+            <p>{!! Form::select('location_id', $potentialLocations) !!}
             <p>{!! Form::submit('Add route point') !!}
             {!! Form::close() !!}
 
@@ -76,7 +85,12 @@
 
     <div class="row row-offcanvas">
         <div class="col-lg-12">
-            @if(count($locationsTableRows) > 0)
+
+
+            @include('_partials.geo.map')
+
+{{--
+        @if(count($locationsTableRows) > 0)
                 <table class="table table-condensed">
                     <table class="table table-bordered table-hover">
                         <thead>
@@ -104,6 +118,7 @@
             @else
                 Локаций нет
             @endif
+--}}
 
             <p></p>
         </div>

@@ -180,6 +180,11 @@ return [
 
         App\Modules\Battle\Providers\BattleModuleProvider::class,
 
+
+
+        App\Modules\Geo\Providers\GeoModuleProvider::class,
+        App\Modules\Geo\Providers\ComposerServiceProvider::class,
+
         
         App\Modules\Drive\Providers\RepositoriesProvider::class,
         App\Modules\Drive\Providers\CommandsHandlersProviders::class,

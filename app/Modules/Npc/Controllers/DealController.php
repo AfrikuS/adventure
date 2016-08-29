@@ -34,6 +34,7 @@ class DealController extends Controller
         $deal = $this->deals->find($deal_id);
 
 
+//        analyse current_state
 
         switch ($deal->deal_status) {
 

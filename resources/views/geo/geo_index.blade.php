@@ -5,7 +5,7 @@
 @section('head')
     @parent
 
-    <link rel="stylesheet" href="{{ asset('js/alchemy-0.4.1/alchemy.css') }}">
+    {{--<link rel="stylesheet" href="{{ asset('js/alchemy-0.4.1/alchemy.css') }}">--}}
 
     {{--<script src="{{ asset('js/d3/d3.js') }}" charset="utf-8"></script>--}}
     {{--<script src="{{ asset('js/alchemy-0.4.1/scripts/vendor.js') }}"></script>--}}
@@ -21,35 +21,9 @@
             {{--<div id="alchemy" class="alchemy"></div>--}}
             <p></p>
             <h4>Список локаций и путей между ними</h4>
-            <p></p>
-            @if(count($locationsTableRows) > 0)
-                <table class="table table-condensed">
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th>Location</th>
-                            <th>next_paths</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($locationsTableRows as $locId => $locationData)
-                            <tr>
-                                <td>{{ $locationData['title'] }}</td>
-                                <td>
-                                    <ul>
-                                        @foreach($locationData['nextLocationsTitles'] as $title)
-                                            <li>{{ $title }}</li>
-                                        @endforeach
-                                    </ul>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </table>
-            @else
-                Локаций нет
-            @endif
+
+            @include('_partials.geo.map')
+
 
         </div>
     </div>

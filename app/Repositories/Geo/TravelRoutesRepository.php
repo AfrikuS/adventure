@@ -3,35 +3,41 @@
 namespace App\Repositories\Geo;
 
 use App\Models\Geo\TravelRoute;
+use App\Modules\Geo\Persistence\Repositories\TravelRoutesRepo;
 
 class TravelRoutesRepository
 {
+    /** @var TravelRoutesRepo */
+    private $routesRepo;
+
+    public function __construct()
+    {
+        $this->routesRepo = app('TravelRoutesRepo');
+    }
+
     public static function getRoutes()
     {
-        return TravelRoute::select('id', 'title')->get();
+        $routesRepo = app('TravelRoutesRepo');
+        
+        return $routesRepo->get();
     }
 
     public static function findTravelWithPointsById($id)
     {
-        return TravelRoute::
-            select('id', 'status', 'user_id')
-            ->with(['points' => function($query) {
-                $query->select('id', 'location_id', 'status', 'number', 'route_id');
-            }])
-            ->find($id);
+        $routesRepo = app('TravelRoutesRepo');
+
+        return $routesRepo->findTravelWithPointsById($id);
+
     }
 
 
     public static function findById($id)
     {
-        return TravelRoute::with(['points' => function($query) {
-                    $query->select('location_id', 'status', 'number', 'route_id', 'id')
-                        ->with(['location' => function($query) {
-                            $query->select('id', 'title');
-                        }]);
-                    }])
-                    ->select('id', 'title')
-                    ->find($id);
+        $routesRepo = app('TravelRoutesRepo');
+
+        return $routesRepo->findById($id);
+
+
     }
 
 }

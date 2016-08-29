@@ -76,10 +76,6 @@ Route::group(['middleware' => 'app_auth'], function () {
     Route::post('/admin/publish_orderdraft', 'Admin\OrderBuilder\TeamOrderBuilderController@publish')->name('admin_publish_orderdraft_action');
     Route::post('/admin/order_builder/delete_draft', 'Admin\OrderBuilder\TeamOrderBuilderController@deleteDraft')->name('teamorder_draft_delete_action');
 
-    // admin-geo
-    Route::get('/admin/locations', 'Admin\Geo\LocationsEditorController@index')->name('admin_locations_page');
-    Route::post('/admin/bind_locations', 'Admin\Geo\LocationsEditorController@bind')->name('admin_bind_locations_action');
-    Route::post('/admin/add_location', 'Admin\Geo\LocationsEditorController@addLocation')->name('admin_add_location_action');
 
 
 

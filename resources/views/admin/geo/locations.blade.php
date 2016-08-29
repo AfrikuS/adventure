@@ -36,7 +36,7 @@
         <div class="col-lg-12">
             <p></p>
             <p></p>
-            @if(count($locationsTableRows) > 0)
+            @if(count($locationsColl) > 0)
                 <table class="table table-condensed">
                     <table class="table table-bordered table-hover">
                         <thead>
@@ -49,22 +49,22 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($locationsTableRows as $locId => $locationColumns)
+                        @foreach($locationsColl as $location)
                             <tr>
-                                <td>{{ $locId }}</td>
-                                <td>{{ $locationColumns['title'] }}</td>
+                                <td>{{ $location->id }}</td>
+                                <td>{{ $location->title }}</td>
                                 <td>
                                     <ul>
-                                        @foreach($locationColumns['nextLocationsTitles'] as $nextTitle)
-                                            <li>{{ $nextTitle }}</li>
+                                        @foreach($location->nextLocations as $next)
+                                            <li>{{ $next->title }}</li>
                                         @endforeach
                                     </ul>
                                 </td>
-                                @if (count($locationColumns['otherLocations']) > 0)
+                                @if (count($potentialsMap->get($location->id)) > 0)
                                     <td>
                                         {!! Form::open(['route' => 'admin_bind_locations_action', 'class' => '']) !!}
-                                        {!! Form::hidden('location_id', $locId) !!}
-                                        {!! Form::select('next_location_id', $locationColumns['otherLocations']) !!}
+                                        {!! Form::hidden('location_id', $location->id) !!}
+                                        {!! Form::select('next_location_id', $potentialsMap->getPotentialsViewSelect($location->id)) !!}
                                     </td>
                                     <td>
                                         {!! Form::submit('Add') !!}
