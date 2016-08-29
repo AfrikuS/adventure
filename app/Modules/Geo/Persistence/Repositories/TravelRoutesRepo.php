@@ -119,4 +119,18 @@ class TravelRoutesRepo
             $route->status
         );
     }
+
+    public function getCommittedRoutes()
+    {
+        $routes = $this->travelRoutes->getByStatus(TravelRoute::STATUS_COMMITTED);
+
+        return $routes;
+    }
+
+    public function getDraftRoutes()
+    {
+        $routes = $this->travelRoutes->getByStatus(TravelRoute::STATUS_DRAFT);
+
+        return $routes;
+    }
 }

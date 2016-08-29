@@ -2,7 +2,9 @@
 
 namespace App\Modules\Geo\Http\Controllers;
 
-class DirectorController extends PortController
+use App\Http\Controllers\Controller;
+
+class DirectorController extends Controller
 {
     public function index()
     {

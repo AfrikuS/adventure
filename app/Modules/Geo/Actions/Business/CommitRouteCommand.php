@@ -44,7 +44,9 @@ class CommitRouteCommand
 
     private function validate(TravelRoute $route)
     {
-        if ($route->status !== TravelRoute::STATUS_DRAFT) {
+        if ($route->status !== TravelRoute::STATUS_DRAFT ||
+            $route->nodesCount() < TravelRoute::MINIMAL_NODES_COUNT
+        ) {
 
             throw new StateException;
         }

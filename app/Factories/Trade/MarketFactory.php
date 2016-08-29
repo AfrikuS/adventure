@@ -6,7 +6,6 @@ use App\Models\Macro\ExchangeGood;
 
 class MarketFactory
 {
-
     public static function createExchangeOffer($initiator, $resCode, $resAmount, $intentResCode, $intentResAmount)
     {
         ExchangeGood::create([

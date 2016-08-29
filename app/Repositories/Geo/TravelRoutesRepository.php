@@ -27,17 +27,12 @@ class TravelRoutesRepository
         $routesRepo = app('TravelRoutesRepo');
 
         return $routesRepo->findTravelWithPointsById($id);
-
     }
 
 
-    public static function findById($id)
+    public function findById($id)
     {
-        $routesRepo = app('TravelRoutesRepo');
-
-        return $routesRepo->findById($id);
-
-
+        return $this->routesRepo->findById($id);
     }
 
 }

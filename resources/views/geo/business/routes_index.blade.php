@@ -1,4 +1,4 @@
-@extends('geo._layout')
+@extends('geo.business._layout')
 
 
 @section('title', 'Geo - Locations -> Main Map')
@@ -36,11 +36,17 @@
 
             <p></p><p></p>
 
-            <p>{!! Form::open(['route' => 'geo_create_voyage_action', 'class' => '']) !!}
-            <p>{!! Form::hidden('route_id', $route->id) !!}
-            <p>{!! Form::submit('Create Voyage by this Route') !!}
-            <p>{!! Form::close() !!}
-
+            <p></p>
+            Rules:
+            <br>
+            - start point - ALWAYS current location
+            <br>
+            - commit when nodes > 2
+            <br>
+            - uncommit when NO voyages by that route
+            <br>
+            - add\delete point - ONLY draft-route
+            <br>
 
 
         </div>

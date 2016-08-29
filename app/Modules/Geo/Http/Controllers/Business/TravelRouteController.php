@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Geo\Http\Controllers;
+namespace App\Modules\Geo\Http\Controllers\Business;
 
 use App\Exceptions\Commands\Geo\OneRoutePointException;
 use App\Exceptions\Commands\Geo\RouteCommitedException;
@@ -46,7 +46,7 @@ class TravelRouteController extends Controller
 
         $potentialLocations = $locs->getNextsViewSelect($lastPoint->location_id);
 
-        return $this->view('geo.routes_index', [
+        return $this->view('geo.business.routes_index', [
             'locations' => $locs,
             'route' => $route,
             'potentialLocations'  => $potentialLocations,

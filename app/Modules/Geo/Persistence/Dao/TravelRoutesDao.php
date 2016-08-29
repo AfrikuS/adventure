@@ -2,6 +2,8 @@
 
 namespace App\Modules\Geo\Persistence\Dao;
 
+use App\Modules\Geo\Domain\Entities\Business\TravelRoute;
+
 class TravelRoutesDao
 {
     private $table = 'geo_travel_routes';
@@ -47,5 +49,16 @@ class TravelRoutesDao
                 ->update([
                     'status' => $status,
                 ]);
+    }
+
+    public function getByStatus($status)
+    {
+        $routesData =
+            \DB::table($this->table)
+                ->select(['id', 'title', 'user_id', 'status'])
+                ->where('status', $status)
+                ->get();
+
+        return $routesData;
     }
 }

@@ -18,4 +18,9 @@ class LocationsService
     {
         $this->locationsRepo->bindLocations($from_id, $to_id);
     }
+
+    public function removePath($from_id, $to_id)
+    {
+        $this->locationsRepo->removePath($from_id, $to_id);
+    }
 }

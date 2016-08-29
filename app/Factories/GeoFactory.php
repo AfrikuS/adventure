@@ -16,9 +16,6 @@ use Carbon\Carbon;
 
 class GeoFactory
 {
-
-
-
     public static function generateTempShopWithMaterials(Carbon $dateEnding)
     {
         \DB::transaction(function () use ($dateEnding) {
@@ -46,24 +43,7 @@ class GeoFactory
         });
     }
 
-    public static function createLiveVoyage($location_id, $user_id)
-    {
-        return LiveVoyage::create([
-            'location_id' => $location_id,
-            'traveler_id' => $user_id,
-            'status' => 'ready_to_sail',
-        ]);
-    }
-
     public static function createVoyage(TravelRoute $route, Ship $ship)
     {
-        $startPoint = $route->points->first();
-
-        return Voyage::create([
-            'route_id' => $route->id,
-            'point_id' => $startPoint->id,
-            'status' => 'ready_start',
-            'ship_id' => $ship->id,
-        ]);
     }
 }

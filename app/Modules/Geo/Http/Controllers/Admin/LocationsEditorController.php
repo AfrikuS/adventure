@@ -5,6 +5,7 @@ namespace App\Modules\Geo\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Modules\Geo\Actions\BindLocationsCommand;
 use App\Modules\Geo\Actions\CreateLocationCommand;
+use App\Modules\Geo\Actions\RemovePathAction;
 use App\Modules\Geo\Persistence\Repositories\LocationsRepo;
 use App\Modules\Geo\View\Models\PotentialNextLocations;
 use Finite\Exception\StateException;
@@ -12,23 +13,16 @@ use Illuminate\Support\Facades\Input;
 
 class LocationsEditorController extends Controller
 {
-    /** @var LocationsRepo */
-    private $locationsRepo;
-
-    public function __construct(LocationsRepo $locationsRepo)
-    {
-        $this->locationsRepo = $locationsRepo;
-        
-        parent::__construct();
-    }
 
     public function index()
     {
-        $locationsColl = $this->locationsRepo->getLocationsWithNexts();
+        /** @var LocationsRepo $locationsRepo */
+        $locationsRepo = app('LocationsRepo');
 
-//        $locationsTableRows = LocationsViewData::geoListLocationsPage($locationsColl);
-        
-        $locationsSelect = $locationsColl->getViewSelect(); //pluck('title', 'id')->toArray();
+        $locationsColl = $locationsRepo->getLocationsWithNexts();
+
+
+        $locationsSelect = $locationsColl->getViewSelect();
 
 
         $potentialsLocationsColl = new PotentialNextLocations();
@@ -73,6 +67,22 @@ class LocationsEditorController extends Controller
             
             \Session::flash('message', 'Locations are bounded yet');
         }    
+
+        return \Redirect::route('admin_locations_page');
+    }
+
+    public function removePath($from_id, $to_id)
+    {
+        $cmd = new RemovePathAction();
+
+        try {
+
+            $cmd->removePath($from_id, $to_id);
+        }
+        catch (StateException $e) {
+
+            \Session::flash('message', 'Locations aren\'t bounded');
+        }
 
         return \Redirect::route('admin_locations_page');
     }

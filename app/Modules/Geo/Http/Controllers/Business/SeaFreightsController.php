@@ -3,16 +3,22 @@
 namespace App\Modules\Geo\Http\Controllers\Business;
 
 use App\Http\Controllers\Controller;
-use App\Models\Geo\Trader\Ship;
-use App\Repositories\Geo\LocationsRepository;
-use App\Repositories\Geo\TravelRoutesRepository;
-use App\Repositories\Geo\VoyagesRepository;
+use App\Modules\Geo\Persistence\Repositories\Business\ShipsRepo;
+use App\Modules\Geo\Persistence\Repositories\TravelRoutesRepo;
 
 class SeaFreightsController extends Controller
 {
     public function index()
     {
-        $travelRoutes = TravelRoutesRepository::getRoutes();
+        /** @var TravelRoutesRepo $routesRepo */
+        $routesRepo = app('TravelRoutesRepo');
+        $committedRoutes = $routesRepo->getCommittedRoutes();
+
+
+//        get $draftRoutes from routesCollection 
+        $draftRoutes = $routesRepo->getDraftRoutes();
+        
+//        $travelRoutes = TravelRoutesRepository::getRoutes();
 
         $voyagesRepo = app('VoyagesRepo');
         $voyages = $voyagesRepo->getVoyagesWithPointLocation();
@@ -22,14 +28,32 @@ class SeaFreightsController extends Controller
         
         $locationsSelect = $locations->getViewSelect(); // presenter
 
-        $ships = Ship::where('owner_id', \Auth::id())->get();
+
+        /** @var ShipsRepo $shipsRepo */
+        $shipsRepo = app('ShipsRepo');
+
+//        $ships = Ship::where('owner_id', \Auth::id())->get();
+        $ships = $shipsRepo->getFreeByOwner($this->user_id);
 
         return $this->view('geo.business.sea_freights', [
             'ships' => $ships,
             'voyages' => $voyages,
-            'routes' => $travelRoutes,
+            'routes' => $committedRoutes,
+            'draftRoutes' => $draftRoutes,
             'locationsSelect'  => $locationsSelect,
         ]);
     }
-    
+
+
+    public function generateShip()
+    {
+        /** @var ShipsRepo $shipsRepo */
+        $shipsRepo = app('ShipsRepo');
+
+        $shipsRepo->create($this->user_id);
+
+
+        return \Redirect::route('geo_sea_freights_page');
+    }
+
 }

@@ -11,19 +11,6 @@ use Illuminate\Support\Facades\Input;
 
 class DataGeneratorController extends Controller
 {
-    public function generateTravel()
-    {
-        EntityGenerator::createSeaTravel();
-        return redirect()->route('sea_travels_page');
-    }
-
-    public function deleteTravel($id)
-    {
-        EntityGenerator::deleteSeaTravel($id);
-        return redirect()->route('sea_travels_page');
-    }
-
-
     public function generateWorkTeamOrder()
     {
         EntityGenerator::createTeamWorkOrderWithMaterials();

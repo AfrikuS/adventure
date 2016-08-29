@@ -2,6 +2,7 @@
 
 namespace App\Modules\Geo\Persistence\Repositories;
 
+use App\Modules\Core\Facades\EntityStore;
 use App\Modules\Geo\Domain\Entities\Location;
 use App\Modules\Geo\Persistence\Catalogs\LocationsCollection;
 use App\Modules\Geo\Persistence\Dao\LocationsDao;
@@ -28,9 +29,15 @@ class LocationsRepo
 
     public function getLocationsWithNexts()
     {
+        $worldMap = EntityStore::get(LocationsCollection::class, 0);
+
+        if (null !== $worldMap) {
+            return $worldMap;
+        }
+
         $locationsData = $this->locationsDao->getLocations();
 
-        $locationsCollection = new LocationsCollection();
+        $worldMap = new LocationsCollection();
         
         
         // collection of simple locations
@@ -38,23 +45,25 @@ class LocationsRepo
 
             $location = new Location($locationData);
 
-            $locationsCollection->addLocation($location);
+            $worldMap->addLocation($location);
         }
 
         // adding next locations
         /** @var Location $locationItem */
-        foreach ($locationsCollection->locations as $locationItem) {
+        foreach ($worldMap->locations as $locationItem) {
             
             $nextIds = $this->locationsDao->getNextIdsBy($locationItem->id);
 
             foreach ($nextIds as $nextId) {
                 
-                $nextLocation = $locationsCollection->find($nextId);
+                $nextLocation = $worldMap->find($nextId);
                 $locationItem->addNext($nextLocation);
             }
         }
+
+        EntityStore::add($worldMap, 0);
         
-        return $locationsCollection;
+        return $worldMap;
     }
 
     public function createLocation($title)
@@ -110,6 +119,12 @@ class LocationsRepo
     {
         return
             $this->locationsDao->createRelation($from_id, $to_id);
+    }
+
+    public function removePath($from_id, $to_id)
+    {
+        return
+            $this->locationsDao->removeRelation($from_id, $to_id);
     }
 
 }

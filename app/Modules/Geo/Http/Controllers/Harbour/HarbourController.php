@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Geo\Http\Controllers;
+namespace App\Modules\Geo\Http\Controllers\Harbour;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
@@ -8,7 +8,7 @@ use App\Modules\Geo\Persistence\Repositories\LocationsRepo;
 use App\Repositories\Geo\LocationsRepository;
 use App\ViewData\Geo\LocationsViewData;
 
-class PortController extends Controller
+class HarbourController extends Controller
 {
     public function index()
     {

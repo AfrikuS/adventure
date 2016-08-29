@@ -7,7 +7,7 @@ use App\Models\Geo\Location;
 class LocationsDao
 {
     private $table = 'geo_locations';
-    private $relsTable = 'geo_location_paths';
+    private $relationsTable = 'geo_location_paths';
 
     public function getByHero($hero_id)
     {
@@ -58,19 +58,10 @@ class LocationsDao
     public function getNextIdsBy($id)
     {
         $next_ids =
-            \DB::table($this->relsTable)
+            \DB::table($this->relationsTable)
                 ->where('from_id', $id)
                 ->pluck('to_id AS id');
-
-//        CREATE TABLE IF NOT EXISTS `geo_location_paths` (
-//    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-//    `from_id` INT UNSIGNED NOT NULL,
-//    `to_id` INT UNSIGNED NOT NULL,
-//    PRIMARY KEY (id),
-//    FOREIGN KEY (from_id) REFERENCES geo_locations(id),
-//    FOREIGN KEY (to_id) REFERENCES geo_locations(id),
-//    UNIQUE KEY `unique_from_id_to_id` (`from_id`,`to_id`)
-
+        
         return $next_ids;
     }
 
@@ -87,11 +78,20 @@ class LocationsDao
     public function createRelation($from_id, $to_id)
     {
         $relation_id =
-            \DB::table($this->relsTable)->insertGetId([
+            \DB::table($this->relationsTable)->insertGetId([
                 'from_id' => $from_id,
                 'to_id' => $to_id,
             ]);
 
         return $relation_id;
+    }
+
+    public function removeRelation($from_id, $to_id)
+    {
+        return
+            \DB::table($this->relationsTable)
+                    ->where('from_id', $from_id)
+                    ->where('to_id', $to_id)
+                    ->delete();
     }
 }

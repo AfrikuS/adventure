@@ -1,4 +1,4 @@
-@extends('geo._layout')
+@extends('geo.business._layout')
 
 @section('title', 'Geo - Business')
 @section('head')

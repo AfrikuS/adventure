@@ -14,27 +14,6 @@ use Illuminate\Support\Facades\Input;
 
 class ShipController extends Controller
 {
-    public function generateShip()
-    {
-        EntityGenerator::createShip();
-        return redirect()->route('geo_sea_freights_page');
-    }
 
-    public function setShipOnRoute()
-    {
-        $data = Input::all();
-        if ($data['route_id'] && $data['ship_id']) {
 
-            $route_id = $data['route_id'];
-            $ship_id = $data['ship_id'];
-
-            $ship = Ship::find($ship_id)->update(['route_id' => $route_id]);
-            /** @var TravelRoute $route */
-            $route = TravelRoutesRepository::findById($route_id);
-            
-            GeoFactory::createVoyage($route, $ship);
-        }
-
-        return redirect()->route('geo_sea_freights_page');
-    }
 }

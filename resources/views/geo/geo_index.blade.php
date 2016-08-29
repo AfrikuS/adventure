@@ -19,8 +19,10 @@
     <div class="row row-offcanvas">
         <div class="col-lg-12">
             {{--<div id="alchemy" class="alchemy"></div>--}}
+            Пристань, гавань. Место куда причаливают и откуда уходят в плавание корабли
             <p></p>
-            <h4>Список локаций и путей между ними</h4>
+
+            <h4>Карта мира</h4>
 
             @include('_partials.geo.map')
 

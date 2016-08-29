@@ -1,4 +1,4 @@
-@extends('geo._layout')
+@extends('geo.business._layout')
 
 @section('title', 'Geo - Business')
 @section('head')
@@ -17,13 +17,29 @@
                 <p>{!! Form::submit('Add route') !!}
                 {!! Form::close() !!}
                 <p></p>
+                - start point - ALWAYS current location
+                <br>
+
             </div>
 
             <div class="col-lg-8">
                 <div class="row row-offcanvas">
-                    <div class="col-lg-6">
+
+                    <div class="col-lg-4">
+                        <p></p>
+
+                        Draft routes
+                        @foreach($draftRoutes as $draftRoute)
+                            <p></p>
+                            {{ link_to_route('geo_route_build_page', $draftRoute->title, ['id' => $draftRoute->id]) }}
+
+                        @endforeach
+
+                    </div>
+
+                    <div class="col-lg-4">
                         <p>{!! Form::open(['route' => 'geo_set_ship_on_route_action']) !!}
-                        Маршруты
+                        Committed Маршруты
                         <p>
                         <ul>
                             @foreach($routes as $route)
@@ -35,7 +51,7 @@
                             @endforeach
                         </ul>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
 
                         Корабли
                         <p>
@@ -49,7 +65,7 @@
                                 Кораблей нет
                             @endforelse
                         </ul>
-                        <p>{!! Form::submit('Поставить') !!}
+                        <p>{!! Form::submit('Поставить на рейс') !!}
                             {!! Form::close() !!}
 
                     </div>
@@ -59,8 +75,7 @@
 
         <div class="row row-offcanvas">
             <div class="col-lg-4">
-                {{ link_to_route('geo_business_page', 'Back to kabinet') }}
-                <p></p>
+
             </div>
 
             <div class="col-lg-8">
@@ -73,13 +88,13 @@
                 <ul>
                     @foreach($voyages as $voyage)
                         <li>
-                            {{ $voyage->id }} - {{ $voyage->route->title }} - {{ $voyage->status }}
-                            ->  {{ $voyage->point->location->title }}
+                            {{ $voyage->id }} - {{ $voyage->route_title }} - {{ $voyage->status }}
+                            ->  {{ $voyage->point_location_title }}
 
-                        {!! Form::open(['route' => 'geo_voyage_start_voyage_action', 'class' => '']) !!}
-                        {!! Form::hidden('voyage_id', $voyage->id) !!}
-                        {!! Form::submit('Start voyage') !!}
-                        {!! Form::close() !!}
+                        {{--{!! Form::open(['route' => 'geo_voyage_start_voyage_action', 'class' => '']) !!}--}}
+                        {{--{!! Form::hidden('voyage_id', $voyage->id) !!}--}}
+                        {{--{!! Form::submit('Start voyage') !!}--}}
+                        {{--{!! Form::close() !!}--}}
                         {{--<p></p>--}}
                         {!! Form::open(['route' => 'geo_voyage_moor_action', 'class' => '']) !!}
                         {!! Form::hidden('voyage_id', $voyage->id) !!}

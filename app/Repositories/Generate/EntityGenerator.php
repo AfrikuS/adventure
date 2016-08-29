@@ -14,28 +14,6 @@ use Faker\Factory;
 
 class EntityGenerator
 {
-    public static function createSeaTravel()
-    {
-        $timeMinutes = rand(3, 7);
-        $resources = ['whater', 'oil', 'gold', 'pillow'];
-        $resource = $resources[rand(0, 3)];
-        $faker = Factory::create();
-        $destination = $faker->city;
-        $dt = Carbon::create()->addMinutes($timeMinutes)->toDateTimeString();
-
-        TravelShip::create([
-            'destination' => $destination . '_' . $timeMinutes,
-            'resource_code' => $resource,
-            'date_sending' => $dt,
-        ]);
-    }
-
-    public static function deleteSeaTravel($id)
-    {
-        TravelShip::destroy($id);
-    }
-
-
     public static function createTeamWorkOrderWithMaterials()
     {
         $skill = Skill::get()->random();
@@ -76,30 +54,5 @@ class EntityGenerator
             }
         
         \DB::commit();
-    }
-
-    public static function createShip()
-    {
-        Ship::create([
-            'owner_id' => \Auth::id(),
-//            'resource_code' => $resource,
-//            'date_sending' => $dt,
-        ]);
-    }
-
-
-    /** @deprecated */
-    public static function createUserMaterials($user)
-    {
-        $faker = \Faker\Factory::create();
-        $materialsCodes = Material::pluck('code');
-
-        //         $faker->valid($evenValidator)->randomElement(1, 3, 5, 7, 9);
-
-        $materialCode = $faker->unique()->randomElement($materialsCodes->toArray());
-        WorkerMaterial::select('id')->updateOrCreate(
-            ['code' => $materialCode, 'user_id' => $user->id],
-            ['value' => rand(79, 157), 'user_id' => $user->id]
-        );
     }
 }

@@ -35,7 +35,6 @@
     <div class="row row-offcanvas">
         <div class="col-lg-12">
             <p></p>
-            <p></p>
             @if(count($locationsColl) > 0)
                 <table class="table table-condensed">
                     <table class="table table-bordered table-hover">
@@ -54,11 +53,9 @@
                                 <td>{{ $location->id }}</td>
                                 <td>{{ $location->title }}</td>
                                 <td>
-                                    <ul>
-                                        @foreach($location->nextLocations as $next)
-                                            <li>{{ $next->title }}</li>
-                                        @endforeach
-                                    </ul>
+                                    @foreach($location->nextLocations as $next)
+                                        <br>{{ $next->title }} {{ link_to_route('geo_rm_location_path_action', 'X', [$location->id, $next->id]) }}
+                                    @endforeach
                                 </td>
                                 @if (count($potentialsMap->get($location->id)) > 0)
                                     <td>
