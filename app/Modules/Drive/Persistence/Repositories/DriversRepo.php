@@ -2,6 +2,7 @@
 
 namespace App\Modules\Drive\Persistence\Repositories;
 
+use App\Modules\Core\Facades\EntityStore;
 use App\Modules\Drive\Domain\Entities\Driver;
 use App\Modules\Drive\Persistence\Dao\DriversDao;
 use App\Modules\Drive\Persistence\Dao\VehiclesDao;
@@ -22,9 +23,18 @@ class DriversRepo
 
     public function findById($user_id)
     {
+        $driver = EntityStore::get(Driver::class, $user_id);
+        
+        if (null !== $driver) {
+            return $driver;
+        }
+
+        
         $driverData = $this->driversDao->find($user_id);
         
         $driver = new Driver($driverData);
+        
+        EntityStore::add($driver, $driver->id);
         
         return $driver;
     }
@@ -37,5 +47,13 @@ class DriversRepo
     public function createFirstVehicle($driver_id)
     {
         $this->vehiclesDao->createFirst($driver_id);
+    }
+
+    public function updateStatus(Driver $driver)
+    {
+        $this->driversDao->update(
+            $driver->id, 
+            $driver->status
+        );
     }
 }

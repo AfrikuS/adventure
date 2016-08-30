@@ -45,11 +45,13 @@ class VoyageService
         \DB::beginTransaction();
         try {
 
+            // freight Ship
             $ship->setOnRoute($route);
 
             $this->shipsRepo->update($ship);
 
 
+            // create voyage
             $startPoint = $route->firstPoint();
 
             $this->voyagesRepo->create(

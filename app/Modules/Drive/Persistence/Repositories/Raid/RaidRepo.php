@@ -17,11 +17,17 @@ class RaidRepo
         $this->raidsDao = app('DriveRaidsDao');
     }
 
-    public function createRaid($driver_id, $vehicle_id, string $startTime)
+    public function createRaid($driver_id, $vehicle_id, string $startTime, $status)
     {
-        $this->raidsDao->create($driver_id, $vehicle_id, $startTime);
+        $this->raidsDao->create(
+            $driver_id, 
+            $vehicle_id, 
+            $startTime, 
+            $status
+        );
     }
     
+    /** @deprecated  */
     public function findSimpleRaid($driver_id)
     {
         $raid = EntityStore::get(Raid::class, $driver_id);

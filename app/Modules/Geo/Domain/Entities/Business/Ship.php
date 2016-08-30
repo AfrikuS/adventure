@@ -21,4 +21,9 @@ class Ship
     {
         $this->route_id = $route->id;
     }
+
+    public function isFreighted()
+    {
+        return $this->route_id !== null;
+    }
 }

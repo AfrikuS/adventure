@@ -3,16 +3,15 @@
 namespace App\Modules\Drive\Controllers\Garage;
 
 use App\Exceptions\DetailNotFoundExeption;
+use App\Http\Controllers\Controller;
 use App\Modules\Drive\Commands\Shop\BuyDetailCommand;
-use App\Modules\Drive\Commands\UpdateDetailOffersCommand;
-use App\Modules\Drive\Controllers\DriveController;
+use App\Modules\Drive\Commands\Shop\UpdateDetailOffersCommand;
 use App\Modules\Drive\Persistence\Repositories\ShopRepo;
-use App\Repositories\Drive\DetailRepository;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
-class ShopController extends DriveController
+class ShopController extends Controller
 {
     public function index()
     {
@@ -22,7 +21,7 @@ class ShopController extends DriveController
         $driveCatalogs = app('DriveShopRepo');
 
         $detailsOffers = $driveCatalogs->getOffersWithKindsByDriver($driver_id);
-//
+
 
         return $this->view('drive.garage.shop', [
             'detailsOffers' => $detailsOffers,
@@ -38,7 +37,7 @@ class ShopController extends DriveController
         
         try {
             
-            $cmd->buyDetail($offer_id, $this->driver->id);
+            $cmd->buyDetail($offer_id, $this->user_id);
             
         }
         catch (DetailNotFoundExeption $e) {
@@ -52,12 +51,9 @@ class ShopController extends DriveController
 
     public function reindexPrices()
     {
-        $driver_id = $this->user_id;
-
-        
         $cmd = new UpdateDetailOffersCommand();
         
-        $cmd->updateOffers($driver_id);
+        $cmd->updateOffers($this->user_id);
         
         
         return Redirect::route('drive_garage_shop_page');

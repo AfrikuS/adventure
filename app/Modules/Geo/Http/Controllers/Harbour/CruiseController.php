@@ -35,7 +35,7 @@ class CruiseController extends Controller
 
 
 
-        return $this->view('geo.business.cruise.voyages_index', [
+        return $this->view('geo.harbour.cruise.voyages_index', [
             'cruise' => $cruise,
             'currentLocation' => $currentLocation,
             'possibleLocationsSelect'  => $possibleLocationsSelect,

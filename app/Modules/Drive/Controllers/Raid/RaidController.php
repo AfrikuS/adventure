@@ -2,20 +2,18 @@
 
 namespace App\Modules\Drive\Controllers\Raid;
 
-use App\Lib\Drive\Raid\VictimFinder;
-use App\Modules\Drive\Commands\Raid\CompleteRaidCommand;
-use App\Modules\Drive\Commands\Raid\Robbery\StartRobberyCommand;
-use App\Modules\Drive\Commands\Raid\SearchVictimCommand;
-use App\Modules\Drive\Controllers\DriveController;
+use App\Http\Controllers\Controller;
+use App\Modules\Drive\Actions\Raid\CompleteRaidCommand;
+use App\Modules\Drive\Actions\Raid\Robbery\StartRobberyCommand;
+use App\Modules\Drive\Actions\Raid\SearchVictimCommand;
+use App\Modules\Drive\Actions\Raid\StartRaidCommand;
 use App\Modules\Drive\Domain\Entities\Raid\Raid;
 use App\Modules\Drive\Exceptions\Controllers\SearchFail_Exception;
 use App\Modules\Drive\Exceptions\Controllers\SearchSuccess_Exception;
 use App\Modules\Drive\Persistence\Repositories\Raid\RaidRepo;
-use App\Repositories\Drive\DriverRepository;
-use App\Repositories\Drive\RaidRepository;
 use Illuminate\Support\Facades\Input;
 
-class RaidController extends DriveController
+class RaidController extends Controller
 {
     /** @var RaidRepo */
     protected $raidRepo;
@@ -60,8 +58,20 @@ class RaidController extends DriveController
                 ]);
         }
 
-    }    
-    
+    }
+
+    public function startRaid()
+    {
+
+        $cmd = new StartRaidCommand();
+
+        $cmd->createRaid($this->user_id);
+
+
+        return \Redirect::route('drive_raid_page');
+    }
+
+
 
     public function startRobbery()
     {

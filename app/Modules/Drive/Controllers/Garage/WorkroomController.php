@@ -2,13 +2,26 @@
 
 namespace App\Modules\Drive\Controllers\Garage;
 
-use App\Modules\Drive\Controllers\DriveController;
-use App\Modules\Drive\Domain\Services\Garage\RepairVehicleService;
+use App\Http\Controllers\Controller;
+use App\Modules\Drive\Actions\Drive\Vehicle\RecoveryVehicleAction;
+use App\Modules\Drive\Actions\Drive\Vehicle\RepairVehicleAction;
+use App\Modules\Drive\Commands\Garage\RefuelVehicleAction;
+use App\Modules\Drive\Persistence\Repositories\DriversRepo;
 use App\Modules\Drive\Persistence\Repositories\VehiclesRepo;
 use Illuminate\Support\Facades\Redirect;
 
-class WorkroomController extends DriveController
+class WorkroomController extends Controller
 {
+    /** @var DriversRepo */
+    private $driversRepo;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->driversRepo = app('DriveDriversRepo');
+    }
+
     public function index()
     {
         /** @var VehiclesRepo $vehicleRepo */
@@ -23,37 +36,40 @@ class WorkroomController extends DriveController
 
     public function repair()
     {
-        $vehicle_id = 1; //$this->driver->active_vehicle_id;
+        $driver = $this->driversRepo->findById($this->user_id);
         
-        $repairService = new RepairVehicleService();
-
-
-        $repairService->repair($vehicle_id);
+        
+        $repair = new RepairVehicleAction();
+        
+        $repair->repair($driver->vehicle_id);
+        
+        
 
         return Redirect::route('drive_workroom_page');
     }
 
     public function recovery()
     {
-        $vehicle_id = 1; //$this->driver->active_vehicle_id;
+        $driver = $this->driversRepo->findById($this->user_id);
 
-        $repairService = new RepairVehicleService();
+        
+        
+        $recoveryVehicleAction = new RecoveryVehicleAction();
 
+        $recoveryVehicleAction->recovery($driver->vehicle_id);
 
-        $repairService->recovery($vehicle_id);
-
+        
 
         return Redirect::route('drive_workroom_page');
     }
 
     public function refuel()
     {
-        $vehicle_id = 1; //$this->driver->active_vehicle_id;
-
-        $repairService = new RepairVehicleService();
-
-
-        $repairService->fuel($vehicle_id, 3);
+        
+        $refuelAction = new RefuelVehicleAction();
+        
+        $refuelAction->refuel($this->user_id);
+        
 
         return Redirect::route('drive_workroom_page');
     }

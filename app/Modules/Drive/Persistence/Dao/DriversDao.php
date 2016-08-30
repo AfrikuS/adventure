@@ -43,5 +43,13 @@ class DriversDao
         return $driver_id;
     }
 
-
+    public function update($id, $status)
+    {
+        return
+            \DB::table($this->table)
+                ->where('id', $id)
+                ->update([
+                    'status' => $status,
+                ]);
+    }
 }

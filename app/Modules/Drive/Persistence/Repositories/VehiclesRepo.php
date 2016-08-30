@@ -2,34 +2,56 @@
 
 namespace App\Modules\Drive\Persistence\Repositories;
 
-use App\Infrastructure\IdentityMap;
 use App\Modules\Core\Facades\EntityStore;
-use App\Modules\Drive\Domain\Entities\Garage\RepairVehicle;
-use App\Modules\Drive\Domain\Entities\Raid\RobberyVehicle;
-use App\Modules\Drive\Persistence\Dao\DetailsDao;
+use App\Modules\Drive\Domain\Entities\Vehicle;
 use App\Modules\Drive\Persistence\Dao\VehiclesDao;
+use App\Modules\Drive\Persistence\Repositories\Vehicle\DetailsRepo;
 
 class VehiclesRepo
 {
-    /** @var DetailsDao */
-    private $detailsDao;
+    /** @var DetailsRepo */
+    private $detailsRepo;
     
     /** @var VehiclesDao */
     private $vehiclesDao;
+    
+    /** @var DriversRepo */
+    private $driversRepo;
 
-    public function __construct(DetailsDao $details, VehiclesDao $vehicles)
+    public function __construct(DetailsRepo $detailsRepo, VehiclesDao $vehicles)
     {
-        $this->detailsDao = $details; // app('DriveDetailsDao');
-        $this->vehiclesDao = $vehicles; // app('DriveVehiclesDao');
+        $this->detailsRepo = $detailsRepo;
+        $this->vehiclesDao = $vehicles;
+        $this->driversRepo = app('DriveDriversRepo');
     }
 
     public function findActiveByDriver($driver_id)
     {
-        $vehicleData = $this->vehiclesDao->findActiveVehicle($driver_id);
+        $driver = $this->driversRepo->findById($driver_id);
         
-        return $vehicleData;
+        $vehicle = $this->find($driver->vehicle_id);
+
+        return $vehicle;
     }
 
+    public function find($vehicle_id)
+    {
+        $vehicle = EntityStore::get(Vehicle::class, $vehicle_id);
+
+        if (null !== $vehicle) {
+            return $vehicle;
+        }
+
+        $vehicleData = $this->vehiclesDao->find($vehicle_id);
+
+        $vehicle = new Vehicle($vehicleData);
+
+        EntityStore::add($vehicle, $vehicle->id);
+
+        return $vehicle;
+    }
+
+    /** @deprecated  */
     public function findViewVehicle($driver_id)
     {
         $vehicleData = $this->vehiclesDao->findViewVehicle($driver_id);
@@ -37,50 +59,7 @@ class VehiclesRepo
         return $vehicleData;
     }
 
-    public function findRepairVehicle($id)
-    {
-        $vehicle = EntityStore::get(RepairVehicle::class, $id);
-        
-        if (null != $vehicle) {
-            
-            return $vehicle;
-        }
-        
-        $vehicleData = $this->vehiclesDao->findVehicleForRepair($id);
-        
-        $vehicle = new RepairVehicle($vehicleData);
-
-        EntityStore::add($vehicle, $vehicle->id);
-        
-        return $vehicle;
-    }
-
-    public function findRobberyVehicle($vehicle_id)
-    {
-        $vehicle = EntityStore::get(RobberyVehicle::class, $vehicle_id);
-            
-        if (null != $vehicle) {
-
-            return $vehicle;
-        }
-
-        $vehicleData = $this->vehiclesDao->findRobberyVehicle($vehicle_id);
-
-        $vehicle = new RobberyVehicle($vehicleData);
-
-        EntityStore::add($vehicle, $vehicle->id);
-
-        return $vehicle;
-    }
-    
-    public function getMountedDetails($vehicle_id)
-    {
-        $details = $this->detailsDao->getMountedByVehicle($vehicle_id);
-        
-        return $details;
-    }
-
-    public function updateRepairData(RepairVehicle $vehicle)
+    public function updateRepairData(Vehicle $vehicle)
     {
         $this->vehiclesDao->updateRepair(
             $vehicle->id,

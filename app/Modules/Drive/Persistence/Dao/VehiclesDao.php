@@ -39,7 +39,6 @@ class VehiclesDao
             ->first();
 
         if (null === $vehicleData) {
-
             throw new EntityNotFound_Exception;
         }
 
@@ -54,7 +53,6 @@ class VehiclesDao
             ->first();
 
         if (null === $vehicleData) {
-
             throw new EntityNotFound_Exception;
         }
 
@@ -87,6 +85,16 @@ class VehiclesDao
         $vehicleData = \DB::table($this->table)
             ->select(['id', 'status', 'damage_percent', 'fuel_level', 'mobility'])
             ->find($vehicle_id);
+
+        return $vehicleData;
+    }
+
+    public function find($id)
+    {
+        $vehicleData = \DB::table($this->table)
+            ->select(['id', 'driver_id', 'acceleration', 'stability', 'mobility', 
+                      'status', 'damage_percent', 'fuel_level'])
+            ->find($id);
 
         return $vehicleData;
     }

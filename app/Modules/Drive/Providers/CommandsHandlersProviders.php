@@ -2,18 +2,12 @@
 
 namespace App\Modules\Drive\Providers;
 
-use App\Handlers\Commands\AddEmploymentDomain;
-use App\Handlers\Commands\AddEmploymentDomainHandler;
-use App\Handlers\Commands\Employment\CreateLore;
-use App\Handlers\Commands\Employment\CreateLoreHandler;
-use App\Handlers\Commands\Employment\Lore\LevelUpLoreSkill;
-use App\Handlers\Commands\Employment\Lore\LevelUpLoreSkillHandler;
-use App\Modules\Drive\Domain\Commands\DeleteDetailOffer;
-use App\Modules\Drive\Domain\Commands\Garage\MountDetail;
-use App\Modules\Drive\Domain\Commands\Garage\UnmountDetail;
 use App\Modules\Drive\Domain\Commands\Raid\DeleteRaid;
 use App\Modules\Drive\Domain\Commands\Shop\CreateDetailOffer;
+use App\Modules\Drive\Domain\Commands\Shop\DeleteDetailOffer;
 use App\Modules\Drive\Domain\Commands\Shop\PurchaseDetail;
+use App\Modules\Drive\Domain\Commands\Vehicle\MountDetail;
+use App\Modules\Drive\Domain\Commands\Vehicle\UnmountDetail;
 use App\Modules\Drive\Domain\Handlers\DeleteDetailOfferHandler;
 use App\Modules\Drive\Domain\Handlers\Garage\MountDetailHandler;
 use App\Modules\Drive\Domain\Handlers\Garage\UnmountDetailHandler;
@@ -27,10 +21,6 @@ class CommandsHandlersProviders extends ServiceProvider
 {
     protected $commandsHandlersMap = 
     [
-        AddEmploymentDomain::class => AddEmploymentDomainHandler::class,
-        CreateLore::class          => CreateLoreHandler::class,
-        LevelUpLoreSkill::class    => LevelUpLoreSkillHandler::class,
-
         CreateDetailOffer::class   => CreateDetailOfferHandler::class,
         PurchaseDetail::class      => PurchaseDetailHandler::class,
         DeleteDetailOffer::class   => DeleteDetailOfferHandler::class,

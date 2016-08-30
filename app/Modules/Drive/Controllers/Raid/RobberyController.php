@@ -2,15 +2,11 @@
 
 namespace App\Modules\Drive\Controllers\Raid;
 
-use App\Entities\Drive\RobberyEntity;
 use App\Models\Core\Hero;
-use App\Modules\Drive\Commands\Raid\Robbery\FinishRobberyCommand;
-use App\Modules\Drive\Domain\Entities\Raid\Robbery;
+use App\Modules\Drive\Actions\Raid\Robbery\FinishRobberyCommand;
 use App\Modules\Drive\Domain\Services\Raid\RobberyService;
 use App\Modules\Drive\Persistence\Repositories\Raid\RobberyRepo;
 use App\Modules\Hero\Domain\Entities\Buildings;
-use App\Repositories\Drive\DriverRepository;
-use App\Repositories\Drive\RaidRepository;
 use Illuminate\Support\Facades\Redirect;
 
 class RobberyController extends RaidController

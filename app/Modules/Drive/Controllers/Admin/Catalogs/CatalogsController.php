@@ -11,34 +11,35 @@ use Illuminate\Support\Facades\Redirect;
 
 class CatalogsController extends Controller
 {
+    /** @var CatalogsRepo */
+    private $driveCatalogsRepo;
+
+    public function __construct(CatalogsRepo $driveCatalogsRepo)
+    {
+        parent::__construct();
+
+        $this->driveCatalogsRepo = $driveCatalogsRepo;
+    }
+
     public function index()
     {
-        /** @var CatalogsRepo $driveCatalogs */
-        $driveCatalogs = app('DriveCatalogsRepo');
+        $detailKinds = $this->driveCatalogsRepo->getDetailsKinds();
         
-        $detailKinds = $driveCatalogs->getDetailsKinds();
-        
-        $detailTitles = $driveCatalogs->getDetailsTitles();
+        $detailTitles = $this->driveCatalogsRepo->getDetailsTitles();
 
         return $this->view('admin.drive.catalogs', [
             'detailKinds' =>  $detailKinds,
             'detailTitles' => $detailTitles,
-//            'skills' => $skills,
         ]);
     }
-
-    
     
     public function createDetailKind()
     {
         $data = Input::all();
         $kind = $data['detail_kind'];
 
-        /** @var CatalogsRepo $driveCatalogs */
-        $driveCatalogs = app('DriveCatalogsRepo');
 
-
-        $driveCatalogs->createDetailKind($kind);
+        $this->driveCatalogsRepo->createDetailKind($kind);
 
         
         return \Redirect::route('admin_module_drive_page');
@@ -50,14 +51,10 @@ class CatalogsController extends Controller
         $kind_id = $data['kind_id'];
         $title = $data['title'];
 
-        /** @var CatalogsRepo $driveCatalogs */
-        $driveCatalogs = app('DriveCatalogsRepo');
 
-
-        $driveCatalogs->createDetailTitle($title, $kind_id);
+        $this->driveCatalogsRepo->createDetailTitle($title, $kind_id);
         
 
         return \Redirect::route('admin_module_drive_page');
     }
-
 }

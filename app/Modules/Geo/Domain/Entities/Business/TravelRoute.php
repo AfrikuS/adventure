@@ -100,4 +100,9 @@ class TravelRoute
         throw new StateException;
     }
 
+    public function isCommitted()
+    {
+        return $this->status === TravelRoute::STATUS_COMMITTED;
+    }
+
 }

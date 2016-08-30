@@ -33,7 +33,7 @@ class LocationsEditorController extends Controller
             $potentialsLocationsColl->add($location->id, $potentials);
         }
 
-        return $this->view('admin.geo.locations', [
+        return $this->view('geo.admin.locations', [
             'locationsColl'  => $locationsColl->locations,
             'potentialsMap'  => $potentialsLocationsColl,
             'locationsSelect'  => $locationsSelect,

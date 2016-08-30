@@ -92,4 +92,11 @@ class VoyagesRepo
     {
         return $this->voyagesDao->getCountByRoute($route->id);
     }
+
+    public function getStayingVoyages()
+    {
+        $voyagesData = $this->voyagesDao->getWithTitles(Voyage::STATUS_READY);
+
+        return $voyagesData;
+    }
 }

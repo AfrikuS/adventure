@@ -2,11 +2,8 @@
 
 //Route::group(['middleware' => 'app_auth'], function () {
 
-// admin
-    Route::get('/admin/drive', 'Drive\Controllers\Admin\Catalogs\CatalogsController@index')->name('admin_module_drive_page');
-    Route::post('/generate/drive/create_detail_kind', 'Drive\Controllers\Admin\Catalogs\CatalogsController@createDetailKind')->name('create_detail_kind_action');
-    Route::post('/generate/drive/create_detail_title', 'Drive\Controllers\Admin\Catalogs\CatalogsController@createDetailTitle')->name('create_detail_title_action');
 
+Route::get('/drive', 'Drive\Controllers\Garage\VehicleController@index')->name('drive_garage_vehicle_page');
 
 
 
@@ -18,7 +15,6 @@ Route::post('/drive/shop/buy_detail', 'Drive\Controllers\Garage\ShopController@b
 
 
 
-Route::get('/drive', 'Drive\Controllers\Garage\VehicleController@index')->name('drive_garage_vehicle_page');
 Route::post('/drive/vehicle/mountDetail', 'Drive\Controllers\Garage\VehicleController@mountDetail')->name('drive_vehicle_mount_detail_action');
 Route::post('/drive/vehicle/unmountDetail', 'Drive\Controllers\Garage\VehicleController@unmountDetail')->name('drive_vehicle_unmount_detail_action');
 Route::get('/drive/vehicle/equip_to_raid', 'Drive\Controllers\Garage\VehicleController@equipToRaid')->name('drive_vehicle_equip_to_raid_page');
@@ -45,7 +41,7 @@ Route::group(['middleware' => 'drive_driver'], function () {
     Route::group(['middleware' => 'drive_vehicle_broken'], function () {
 
 
-        Route::post('/drive/start_raid', 'Drive\Controllers\DriveController@startRaid')->name('drive_raid_start_action');
+        Route::post('/drive/start_raid', 'Drive\Controllers\Raid\RaidController@startRaid')->name('drive_raid_start_action');
         Route::post('/drive/raid/search_victim', 'Drive\Controllers\Raid\RaidController@searchVictim')->name('drive_raid_search_victim_action');
         Route::post('/drive/raid/start_robbery', 'Drive\Controllers\Raid\RaidController@startRobbery')->name('drive_raid_robbery_start_action');
 
@@ -80,3 +76,7 @@ Route::group(['middleware' => 'drive_driver'], function () {
 
 
 //});
+// admin
+Route::get('/admin/drive', 'Drive\Controllers\Admin\Catalogs\CatalogsController@index')->name('admin_module_drive_page');
+Route::post('/generate/drive/create_detail_kind', 'Drive\Controllers\Admin\Catalogs\CatalogsController@createDetailKind')->name('create_detail_kind_action');
+Route::post('/generate/drive/create_detail_title', 'Drive\Controllers\Admin\Catalogs\CatalogsController@createDetailTitle')->name('create_detail_title_action');

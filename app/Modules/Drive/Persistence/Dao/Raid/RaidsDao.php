@@ -4,8 +4,6 @@ namespace App\Modules\Drive\Persistence\Dao\Raid;
 
 class RaidsDao
 {
-    const SWITCH_STATUS = 'switch_action';
-    
     private $table = 'drive_raids';
     // id = driver_id
     
@@ -21,13 +19,13 @@ class RaidsDao
         return $raidData;
     }
 
-    public function create($driver_id, $vehicle_id, $startTime)
+    public function create($driver_id, $vehicle_id, $startTime, $status)
     {
         $raid_id =
             \DB::table($this->table)->insertGetId([
                 'id' => $driver_id,
                 'vehicle_id' => $vehicle_id,
-                'status'     => self::SWITCH_STATUS,
+                'status'     => $status,
                 'reward'     => 0,
                 'start_raid' => $startTime,
 

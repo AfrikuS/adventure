@@ -12,32 +12,22 @@ class BusinessController extends Controller
 {
     public function profile()
     {
-        $user_id = \Auth::id();
-        if (null === Trader::find(\Auth::id())) {
+        if (null === Trader::find($this->user_id)) {
             Trader::create([
-                'id' => $user_id,
+                'id' => $this->user_id,
             ]);
         }
 
 
-        /** @var VoyagesRepo $voyagesRepo */
-        $voyagesRepo = app('VoyagesRepo');
-
-        /** @var LocationsRepo $locationsRepo */
-        $locationsRepo = app('LocationsRepo');
-        
-//        $travelRoutes = TravelRoutesRepository::getRoutes();
-//        $voyages = $voyagesRepo->getVoyagesWithPointLocation();
+//        /** @var VoyagesRepo $voyagesRepo */
+//        $voyagesRepo = app('VoyagesRepo');
 //
-//        $locations = $locationsRepo->getLocationsWithNexts();
-//
-//        $locationsSelect = $locations->getViewSelect(); //$locations->pluck('title', 'id')->toArray();
+//        /** @var LocationsRepo $locationsRepo */
+//        $locationsRepo = app('LocationsRepo');
+//        
 
 
         return $this->view('geo.business.business_index', [
-//            'voyages' => $voyages,
-//            'routes' => $travelRoutes,
-//            'locationsSelect'  => $locationsSelect,
         ]);
     }
 }

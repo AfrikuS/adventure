@@ -188,6 +188,7 @@ return [
         
         App\Modules\Drive\Providers\RepositoriesProvider::class,
         App\Modules\Drive\Providers\CommandsHandlersProviders::class,
+        App\Modules\Drive\Providers\ComposerServiceProvider::class,
 
         App\Modules\Hero\Providers\HeroModuleProvider::class,
         App\Modules\Hero\Providers\CommandsHandlersProviders::class,

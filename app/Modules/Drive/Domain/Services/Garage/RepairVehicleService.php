@@ -3,6 +3,7 @@
 namespace App\Modules\Drive\Domain\Services\Garage;
 
 use App\Modules\Drive\Domain\Entities\Garage\RepairVehicle;
+use App\Modules\Drive\Domain\Entities\Vehicle;
 use App\Modules\Drive\Persistence\Repositories\VehiclesRepo;
 
 class RepairVehicleService
@@ -15,34 +16,25 @@ class RepairVehicleService
         $this->vehiclesRepo = app('DriveVehiclesRepo');
     }
 
-    public function repair($vehicle_id)
+    public function repair(RepairVehicle $vehicle)
     {
-        /** @var RepairVehicle $repairVehicle */
-        $repairVehicle = $this->vehiclesRepo->findRepairVehicle($vehicle_id);
-
         // просто починить
-        $repairVehicle->repairOn(10);
+        $vehicle->repairOn(10);
 
-        $this->vehiclesRepo->updateRepairData($repairVehicle);
+        $this->vehiclesRepo->updateRepairData($vehicle);
     }
 
-    public function recovery($vehicle_id)
+    public function recovery(RepairVehicle $vehicle)
     {
-        /** @var RepairVehicle $repairVehicle */
-        $repairVehicle = $this->vehiclesRepo->findRepairVehicle($vehicle_id);
+        $vehicle->recoveryAfterBreaking();
 
-        $repairVehicle->recoveryAfterBreaking();
-
-        $this->vehiclesRepo->updateRepairData($repairVehicle);
+        $this->vehiclesRepo->updateRepairData($vehicle);
     }
 
-    public function fuel($vehicle_id, $litres)
+    public function fuel(RepairVehicle $vehicle, $litres)
     {
-        /** @var RepairVehicle $repairVehicle */
-        $repairVehicle = $this->vehiclesRepo->findRepairVehicle($vehicle_id);
+        $vehicle->refuel($litres);
 
-        $repairVehicle->refuel($litres);
-
-        $this->vehiclesRepo->updateRepairData($repairVehicle);
+        $this->vehiclesRepo->updateRepairData($vehicle);
     }
 }

@@ -50,18 +50,24 @@ class VoyagesDao
                 ]);
     }
 
-    public function getWithTitles()
+    public function getWithTitles($voyageStatus = null)
     {
-        $voyagesData =
+        $query = 
             \DB::table($this->table . ' AS vo')
                 ->select(['vo.id', 'vo.route_id', 'vo.ship_id', 'vo.point_id', 'vo.status',
                             'ro.title AS route_title', 'lo.title AS point_location_title'])
                 ->join('geo_travel_routes AS ro', 'ro.id', '=', 'vo.route_id')
 
                 ->join('geo_travel_route_points AS po', 'po.id', '=', 'vo.point_id')
-                ->join('geo_locations AS lo', 'lo.id', '=', 'po.location_id')
-                ->get();
-
+                ->join('geo_locations AS lo', 'lo.id', '=', 'po.location_id');
+                
+        
+        if ($voyageStatus) {
+            $query->where('vo.status', $voyageStatus);
+        }
+        
+        $voyagesData = $query->orderBy('vo.id', 'desc')->get();
+        
         return $voyagesData;
     }
 
