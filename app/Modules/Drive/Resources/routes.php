@@ -45,7 +45,7 @@ Route::group(['middleware' => 'drive_driver'], function () {
         Route::post('/drive/raid/search_victim', 'Drive\Controllers\Raid\RaidController@searchVictim')->name('drive_raid_search_victim_action');
         Route::post('/drive/raid/start_robbery', 'Drive\Controllers\Raid\RaidController@startRobbery')->name('drive_raid_robbery_start_action');
 
-        Route::get('/drive/raid', 'Drive\Controllers\Raid\RaidController@show')->name('drive_raid_page');
+        Route::get('/drive/raid', 'Drive\Controllers\Raid\RaidController@index')->name('drive_raid_page');
 
 
 

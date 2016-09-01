@@ -21,7 +21,6 @@
                         <tr>
                             <th>Order ID</th>
                             <th>desc</th>
-                            <th>kind_work_title</th>
                             <th>price</th>
                             <th>type</th>
                             <th>status</th>
@@ -34,7 +33,6 @@
                             <tr>
                                 <td>{{ $order->id }}</td>
                                 <td>{{ $order->desc }}</td>
-                                <td>{{ $order->kind_work_title }}</td>
                                 <td>{{ $order->price }}</td>
                                 <td>{{ $order->type }}</td>
                                 <td>{{ $order->status }}</td>

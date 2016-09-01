@@ -65,3 +65,30 @@ Route::post('/work/team/refuse_joinoffer', 'Work\Controllers\Team\LeaderControll
 //});
 
 
+
+
+
+
+
+
+
+
+
+
+
+// team-order-constructor
+Route::get('/admin/orders_drafts', 'Work\Controllers\Admin\OrderBuilder\TeamOrderBuilderController@orderDrafts')->name('admin_orderdrafts_page');
+
+
+Route::get('/admin/order_builder/team_order/main/{id}', 'Work\Controllers\Admin\OrderBuilder\TeamOrderBuilderController@mainTeamOrderDraft')->name('teamorder_draft_main_page');
+Route::post('/admin/order_builder/team_order/create', 'Work\Controllers\Admin\OrderBuilder\TeamOrderBuilderController@createOrderDraft')->name('teamorder_draft_create_action');
+
+
+Route::get('/admin/order_builder/selectRequirements/{id}', 'Work\Controllers\Admin\OrderBuilder\TeamOrderBuilderController@selectRequirements')->name('teamorder_draft_select_requires_page');
+Route::get('/admin/order_builder/settingValues/{id}', 'Work\Controllers\Admin\OrderBuilder\TeamOrderBuilderController@settingValues')->name('teamorder_draft_setting_page');
+
+Route::post('/admin/order_builder/team_order/update_materials', 'Work\Controllers\Admin\OrderBuilder\TeamOrderBuilderController@setRequirements')->name('teamorder_draft_recheck_action');
+Route::post('/admin/edit_orderdraft_2', 'Work\Controllers\Admin\OrderBuilder\TeamOrderBuilderController@fillValues')->name('teamorder_draft_fill_action');
+Route::post('/admin/publish_orderdraft', 'Work\Controllers\Admin\OrderBuilder\TeamOrderBuilderController@publish')->name('admin_publish_orderdraft_action');
+Route::post('/admin/order_builder/delete_draft', 'Work\Controllers\Admin\OrderBuilder\TeamOrderBuilderController@deleteDraft')->name('teamorder_draft_delete_action');
+

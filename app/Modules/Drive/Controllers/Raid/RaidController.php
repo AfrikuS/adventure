@@ -17,20 +17,19 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class RaidController extends Controller
 {
-//    /** @var RaidRepo */
-//    protected $raidRepo;
-
-    public function __construct()
-    {
-        parent::__construct();
-
-//        $this->raidRepo = app('DriveRaidRepo');
-    }
-
-    public function show()
+    public function index()
     {
         /** @var RaidsRepo $raidRepo */
         $raidRepo = app('DriveRaidRepo');
+
+        $isExistRaid = $raidRepo->isExistRaid($this->user_id);
+
+        if (false === $isExistRaid) {
+
+            \Session::flash('message', 'Сейчас рейда нет');
+            return \Redirect::route('drive_garage_vehicle_page');
+        }
+
 
         /** @var Raid $raid */
         $raid = $raidRepo->findByDriver($this->user_id);
@@ -139,17 +138,5 @@ class RaidController extends Controller
     public function vehicleBroken()
     {
         return $this->view('drive.raid.vehicle_broken');
-    }
-
-    protected function view($view = null, $data = [])
-    {
-//        $raid = $this->raidRepo->findRobberyById($this->driver->id);
-        /** @var RaidsRepo $raidRepo */
-        $raidRepo = app('DriveRaidRepo');
-
-        $raid = $raidRepo->findByDriver($this->user_id);
-        $data['raid'] = $raid;
-
-        return parent::view($view, $data);
     }
 }

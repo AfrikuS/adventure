@@ -25,7 +25,7 @@ class BuildingsRepo
             return $buildings;
         }
 
-        $buildingsData = $this->buildingsDao->getByHero($hero_id);
+        $buildingsData = $this->buildingsDao->findBy($hero_id);
 
 
         $buildings = new Buildings($buildingsData);

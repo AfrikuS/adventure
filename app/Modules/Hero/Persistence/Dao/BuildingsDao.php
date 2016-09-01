@@ -8,7 +8,7 @@ class BuildingsDao
 {
     private $table = 'hero_buildings';
 
-    public function getByHero($hero_id)
+    public function findBy($hero_id)
     {
         $buildings =
             \DB::table($this->table)

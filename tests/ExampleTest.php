@@ -16,6 +16,7 @@ class ExampleTest extends TestCase
         $this->visit('/sign_in')
              ->see('Sign In Page');
 
+        $this->assertTrue(true);
         $this->assertPageLoaded('/sign_in');
     }
 }

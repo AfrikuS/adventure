@@ -2,7 +2,7 @@
 
 namespace App\Modules\Work\Persistence\Dao\Worker;
 
-use App\Persistence\Models\Work\Worker;
+use App\Modules\Work\Domain\Entities\Worker\Worker;
 
 class WorkerDao
 {

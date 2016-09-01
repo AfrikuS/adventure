@@ -60,22 +60,6 @@ Route::group(['middleware' => 'app_auth'], function () {
 
 
 
-    // team-order-constructor
-    Route::get('/admin/orders_drafts', 'Admin\OrderBuilder\TeamOrderBuilderController@orderDrafts')->name('admin_orderdrafts_page');
-
-
-    Route::get('/admin/order_builder/team_order/main/{id}', 'Admin\OrderBuilder\TeamOrderBuilderController@mainTeamOrderDraft')->name('teamorder_draft_main_page');
-    Route::post('/admin/order_builder/team_order/create', 'Admin\OrderBuilder\TeamOrderBuilderController@createOrderDraft')->name('teamorder_draft_create_action');
-
-
-    Route::get('/admin/order_builder/selectRequirements/{id}', 'Admin\OrderBuilder\TeamOrderBuilderController@selectRequirements')->name('teamorder_draft_select_requires_page');
-    Route::get('/admin/order_builder/settingValues/{id}', 'Admin\OrderBuilder\TeamOrderBuilderController@settingValues')->name('teamorder_draft_setting_page');
-    
-    Route::post('/admin/order_builder/team_order/update_materials', 'Admin\OrderBuilder\TeamOrderBuilderController@setRequirements')->name('teamorder_draft_recheck_action');
-    Route::post('/admin/edit_orderdraft_2', 'Admin\OrderBuilder\TeamOrderBuilderController@fillValues')->name('teamorder_draft_fill_action');
-    Route::post('/admin/publish_orderdraft', 'Admin\OrderBuilder\TeamOrderBuilderController@publish')->name('admin_publish_orderdraft_action');
-    Route::post('/admin/order_builder/delete_draft', 'Admin\OrderBuilder\TeamOrderBuilderController@deleteDraft')->name('teamorder_draft_delete_action');
-
 
 
 
