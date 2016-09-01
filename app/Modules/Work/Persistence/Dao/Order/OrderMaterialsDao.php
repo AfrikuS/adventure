@@ -52,12 +52,12 @@ class OrderMaterialsDao
         }
     }
 
-    public function update($material)
+    public function update($id, $stock)
     {
         \DB::table($this->table)
-            ->where('id', $material->id)
+            ->where('id', $id)
             ->update([
-                'stock'  => $material->stock,
+                'stock'  => $stock,
             ]);
     }
 

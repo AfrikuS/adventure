@@ -3,22 +3,22 @@
 namespace App\Modules\Work\Commands\Order;
 
 use App\Modules\Work\Domain\Services\Order\OrderService;
-use App\Modules\Work\Persistence\Repositories\Order\OrderRepo;
+use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 
-class CancelApplySkill
+class CancelApplySkillAction
 {
-    /** @var OrderRepo  */
-    private $orderRepo;
+    /** @var OrdersRepo  */
+    private $ordersRepo;
 
-    public function __construct(OrderRepo $orderRepo)
+    public function __construct()
     {
-        $this->orderRepo = $orderRepo;
+        $this->ordersRepo = app('OrdersRepo');
     }
 
     public function cancel($order_id)
     {
 
-        $orderService = new OrderService($this->orderRepo);
+        $orderService = new OrderService($this->ordersRepo);
 
 
         \DB::beginTransaction();

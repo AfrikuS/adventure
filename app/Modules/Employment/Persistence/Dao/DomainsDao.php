@@ -4,7 +4,7 @@ namespace App\Modules\Employment\Persistence\Dao;
 
 use App\Exceptions\Persistence\EntityNotFound_Exception;
 
-class DomainDao
+class DomainsDao
 {
     private $table = 'employment_domains';
 

@@ -9,19 +9,23 @@ class Order
     const STATUS_COMPLETED = 'completed';
     const STATUS_STOCK_MATERIALS = 'stock_materials';
     const STATUS_STOCK_SKILLS = 'stock_skills';
-//    const STATUS_CREATED = 'created';
+
+    const TYPE_INDIVIDUAL = 'individual';
 
     public $id;
     public $desc;
     public $type;
     public $status;
-//    public $kind_work_title;
     public $domain_id;
     public $price;
     public $acceptor_worker_id;
     public $customer_hero_id;
-    
+
+    /** @var OrderMaterialsCollection */
     public $materials;
+
+    /** @var OrderSkill */
+    public $skill;
 
     public function __construct(\stdClass $orderData)
     {
@@ -31,26 +35,19 @@ class Order
         $this->domain_id = $orderData->domain_id;
         
         $this->status = $orderData->status;
-//        $this->kind_work_title = $orderData->kind_work_title;
         $this->price = $orderData->price;
         $this->acceptor_worker_id = $orderData->acceptor_worker_id;
         $this->customer_hero_id = $orderData->customer_hero_id;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getMaterials()
-    {
-        return $this->materials;
-    }
-
-    /**
-     * @param mixed $materials
-     */
-    public function setMaterials($materials)
+    public function setMaterials(OrderMaterialsCollection $materials)
     {
         $this->materials = $materials;
+    }
+
+    public function setSkill(OrderSkill $skill)
+    {
+        $this->skill = $skill;
     }
 
     
@@ -64,11 +61,6 @@ class Order
     {
         $this->acceptor_worker_id = $worker_id;
     }
-
-//    public function changeStatusAfterAccepting()
-//    {
-//        $this->status = 'accepted';
-//    }
 
     public function setStatusStockMaterials()
     {
@@ -94,59 +86,9 @@ class Order
     {
         $this->setStockSkillsStatus();
     }
-
-    protected function getAttributes()
-    {
-        return ['id', 'desc', 'type', 'status', 'kind_work_title', 'price',
-                'acceptor_worker_id', 'acceptor_team_id', 'customer_hero_id',
-        
-                'materials'];
-    }
-
-    // redo to checker
-    public function isStockCompleted(): bool
-    {
-        foreach ($this->materials->extract() as $material) {
-            
-            if ($material->need != $material->stock) {
-                
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-
+    
     public function finishStockSkills()
     {
-/*        if ($this->stateMachine->can('finish_stock_skills')) {
-            $this->stateMachine->apply('finish_stock_skills');*/
-
-            $this->status = self::STATUS_COMPLETED;
-/*            $this->model->update(['status' => $this->state]);
-        }*/
-
-    }
-
-
-    public function getNeedMaterialAmount($code)
-    {
-        $material = $this->findMaterialByCode($code); // $this->materials->findByCode($code);
-
-        return $material->need;
-    }
-
-    public function findMaterialByCode($code)
-    {
-        $material = array_filter($this->materials, function ($material) use ($code) {
-            return $material->code === $code;
-        });
-
-        if (count($material) != 1)  {
-            throw new \Exception;
-        }
-
-        return array_pop($material);
+        $this->status = self::STATUS_COMPLETED;
     }
 }

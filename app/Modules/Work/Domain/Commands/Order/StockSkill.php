@@ -10,5 +10,4 @@ class StockSkill
     {
         $this->order_id = $order_id;
     }
-
 }

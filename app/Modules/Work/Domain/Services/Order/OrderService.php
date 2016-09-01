@@ -2,25 +2,26 @@
 
 namespace App\Modules\Work\Domain\Services\Order;
 
+use App\Modules\Hero\Domain\Commands\Resources\IncrementGold;
 use App\Modules\Work\Domain\Commands\Order\AcceptOrder;
 use App\Modules\Work\Domain\Commands\Order\DeleteOrder;
-use App\Modules\Work\Domain\Commands\Order\Status\OrderAccepted;
 use App\Modules\Work\Domain\Commands\Order\Status\OrderCompleted;
 use App\Modules\Work\Domain\Commands\Order\Status\OrderEstimated;
-use App\Modules\Work\Domain\Commands\Order\Status\OrderStockedMaterials;
+use App\Modules\Work\Domain\Commands\Order\StockMaterial;
 use App\Modules\Work\Domain\Commands\Order\StockSkill;
-use App\Modules\Work\Persistence\Repositories\Order\OrderRepo;
-use App\Modules\Work\Persistence\Repositories\Order\OrderSkillsRepo;
+use App\Modules\Work\Domain\Commands\Worker\DecrementMaterial;
+use App\Modules\Work\Domain\Entities\Order\Order;
+use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 use Illuminate\Support\Facades\Bus;
 
 class OrderService
 {
-    /** @var OrderRepo */
-    private $orderRepo;
+    /** @var OrdersRepo */
+    private $ordersRepo;
 
     public function __construct()
     {
-        $this->orderRepo = app('OrderRepo');
+        $this->ordersRepo = app('OrdersRepo');
     }
 
     public function accept($order_id, $worker_id)
@@ -28,13 +29,6 @@ class OrderService
         $acceptOrder = new AcceptOrder($order_id, $worker_id);
 
         Bus::dispatch($acceptOrder);
-
-
-        // as callback, event
-
-        $setStatusAccepted = new OrderAccepted($order_id);
-
-        Bus::dispatch($setStatusAccepted);
     }
 
     public function estimate($order_id)
@@ -44,22 +38,26 @@ class OrderService
         Bus::dispatch($setStatusEstimated);
     }
 
-    public function checkStatusAfterStockMaterial($order_id)
+    public function stockMaterial($worker_id, $order_id, $code)
     {
-        $stockDataDto = $this->orderRepo->getStockMaterialsData($order_id);
+        /** @var Order $orderWithMaterials */
+        $orderWithMaterials = $this->ordersRepo->findOrderWithMaterialsById($order_id);
+
+        $needMaterialAmount = $orderWithMaterials->materials->getRemainMaterialAmount($code);
 
 
-        // if from id-map - good
-//        $order = $this->orderRepo->findOrderWithMaterialsById($order_id);
+        
+        $decrementMaterial = new DecrementMaterial($worker_id, $code, $needMaterialAmount);
+
+        $stockMaterial = new StockMaterial($order_id, $code, $needMaterialAmount);
 
 
-        if ($stockDataDto->isStockCompleted()) {
 
-            $orderStockedMaterials = new OrderStockedMaterials ($order_id);
-            
-            Bus::dispatch($orderStockedMaterials);
-        }
+        Bus::dispatch($decrementMaterial);
+
+        Bus::dispatch($stockMaterial);
     }
+
 
     public function deleteWithMaterialsAndSkills($order_id)
     {
@@ -71,40 +69,48 @@ class OrderService
     /** @deprecated */
     public function cancelStatusApplyingSkill($order_id)
     {
-        $order = $this->orderRepo->find($order_id);
+        $order = $this->ordersRepo->find($order_id);
 
         $order->setStockSkillsStatus();
 
-        $this->orderRepo->updateStatus($order);
+        $this->ordersRepo->updateStatus($order);
     }
 
-    public function stockSkill($order_id, $worker_id)
+    public function stockSkill($order_id)
     {
         $command = new StockSkill($order_id);
         
         Bus::dispatch($command);
+    }
 
-
+    public function checkOrderCompleted($order_id, $worker_id)
+    {
+        /** @var Order $order */
+        $order = $this->ordersRepo->findOrderWithSkill($order_id);
         
 
+        if ($order->skill->isFullStock()) {
 
+            $this->completeWork($order_id);
 
-        /** @var OrderSkillsRepo $skills */
-        $skills = app('OrderSkillsRepo');
-        
-        $skill = $skills->findSingleByOrder($order_id);
-        
-
-        $isFullStock = $skill->isFullStock(); //$skills->isFullStockSkills($order_id);
-
-        
-        return $isFullStock;
-   }
-
+            $this->takeReward($order_id, $worker_id);
+        }
+    }
+    
     public function completeWork($order_id)
     {
         $setStatusCompleted = new OrderCompleted($order_id);
 
         Bus::dispatch($setStatusCompleted);
+    }
+
+    public function takeReward($order_id, $worker_id)
+    {
+        $order = $this->ordersRepo->find($order_id);
+
+
+        $incrementGold = new IncrementGold($worker_id, $order->price);
+
+        Bus::dispatch($incrementGold);
     }
 }

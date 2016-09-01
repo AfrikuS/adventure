@@ -4,16 +4,16 @@ namespace App\Modules\Work\Domain\Handlers\Order\Status;
 
 use App\Modules\Work\Domain\Commands\Order\Status\OrderEstimated;
 use App\Modules\Work\Domain\Entities\Order\Order;
-use App\Modules\Work\Persistence\Repositories\Order\OrderRepo;
+use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 
 class OrderEstimatedHandler
 {
-    /** @var OrderRepo */
+    /** @var OrdersRepo */
     private $orderRepo;
 
     public function __construct()
     {
-        $this->orderRepo = app('OrderRepo');
+        $this->orderRepo = app('OrdersRepo');
     }
 
     public function handle(OrderEstimated $command)

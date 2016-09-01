@@ -5,17 +5,13 @@ namespace App\Modules\Work\Commands\Order;
 use App\Modules\Work\Domain\Services\Order\OrderBuilderService;
 use App\Modules\Work\Persistence\Repositories\Catalogs\MaterialsRepo;
 use App\Modules\Work\Persistence\Repositories\Order\OrderMaterialsRepo;
-use App\Modules\Work\Persistence\Repositories\Order\OrderRepo;
+use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 use App\Modules\Work\Persistence\Repositories\Worker\WorkerRepo;
 
-class GenerateOrderCommand
+class GenerateOrderAction
 {
-    /** @var OrderRepo */
-    private $orderRepo;
-
-    /** @var  WorkerRepo */
-    private $workerRepo;
-
+    /** @var OrdersRepo */
+    private $ordersRepo;
 
     /** @var MaterialsRepo */
     private $materialsRepo;
@@ -23,22 +19,19 @@ class GenerateOrderCommand
     /** @var OrderMaterialsRepo */
     private $orderMaterialsRepo;
 
-
-
     public function __construct()
     {
         $this->materialsRepo = app('CatalogMaterialsRepo');
         $this->orderMaterialsRepo = app('OrderMaterialsRepo');
-        $this->orderRepo = app('OrderRepo');
+        $this->ordersRepo = app('OrdersRepo');
     }
 
-    public function generateOrder($worker_id) // createWorkOrderWithMaterials
+    public function generateOrder($worker_id)
     {
         $orderBuilderService = new OrderBuilderService(
             $this->materialsRepo,
             $this->orderMaterialsRepo
         );
-
 
 
         \DB::beginTransaction();
@@ -56,5 +49,4 @@ class GenerateOrderCommand
 
         \DB::commit();
     }
-
 }

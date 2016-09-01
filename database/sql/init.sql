@@ -469,11 +469,12 @@ CREATE TABLE IF NOT EXISTS `work_shop_instruments` (
 CREATE TABLE IF NOT EXISTS `work_order_skills` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `order_id` INT UNSIGNED NOT NULL,
-    `code` VARCHAR(255) NOT NULL,
+    `domain_id` INT UNSIGNED NOT NULL,
     `need_times` INT UNSIGNED NOT NULL DEFAULT 0,
     `stock_times` INT UNSIGNED NOT NULL DEFAULT 0,
     PRIMARY KEY (id),
     FOREIGN KEY (order_id) REFERENCES work_orders(id),
+    FOREIGN KEY (domain_id) REFERENCES employment_domains(id),
     UNIQUE KEY `unique_order_skill` (`code`,`order_id`)
 );
 CREATE TABLE IF NOT EXISTS `work_order_materials` (

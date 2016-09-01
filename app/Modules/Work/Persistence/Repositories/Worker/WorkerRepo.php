@@ -3,15 +3,13 @@
 namespace App\Modules\Work\Persistence\Repositories\Worker;
 
 use App\Modules\Core\Facades\EntityStore;
+use App\Modules\Work\Domain\Entities\Order\Order;
 use App\Modules\Work\Domain\Entities\Worker\Worker;
 use App\Modules\Work\Persistence\Dao\Worker\WorkerDao;
-use App\Modules\Work\Persistence\Dao\Worker\WorkerMaterialsDao;
+use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 
 class WorkerRepo
 {
-    /** @var WorkerMaterialsDao */
-    private $materialsDao;
-
     /** @var  WorkerMaterialsRepo */
     private $materialsRepo;
 
@@ -20,13 +18,20 @@ class WorkerRepo
 
     /** @var WorkerDao */
     private $workerDao;
+    
+    /** @var OrdersRepo */
+    private $ordersRepo;
 
-    public function __construct()
+    public function __construct(WorkerMaterialsRepo $materialsRepo, 
+                                WorkerInstrumentsRepo $instrumentsRepo,
+                                OrdersRepo $ordersRepo,
+                                WorkerDao $workerDao
+    )
     {
-        $this->materialsDao = app('WorkerMaterialsDao');
-        $this->materialsRepo = app('WorkerMaterialsRepo');
-        $this->instrumentsRepo = app('WorkerInstrumentsRepo');
-        $this->workerDao = app('WorkerDao');
+        $this->materialsRepo = $materialsRepo;
+        $this->instrumentsRepo = $instrumentsRepo;
+        $this->ordersRepo = $ordersRepo;
+        $this->workerDao = $workerDao;
     }
 
     public function getMaterials($worker_id)
@@ -41,15 +46,6 @@ class WorkerRepo
         $instruments = $this->instrumentsRepo->getBy($worker_id);
 
         return $instruments;
-    }
-
-
-    /** @deprecated */
-    public function updateMaterialAmount(Worker $worker, $materialCode)
-    {
-        $material = $worker->materials->getByCode($materialCode);
-
-        $this->materialsDao->save($material);
     }
 
     public function findSimpleWorker($worker_id)
@@ -69,7 +65,8 @@ class WorkerRepo
         return $worker;
     }
 
-    public function getWithMaterialsByUser($user_id)
+    
+/*    public function getWithMaterialsByUser($user_id)
     {
         $worker = EntityStore::get(Worker::class, $user_id);
 
@@ -85,7 +82,7 @@ class WorkerRepo
 
 
 
-        $materials = $this->materialsDao->getMaterials($worker->id);
+        $materials = $this->materialsRepo->getBy($worker->id);
 
         $materialsMap = [];
 
@@ -95,30 +92,20 @@ class WorkerRepo
             $materialsMap[$code] = $material;
         }
 
-//        $materials = new Materials($materialsMap, $user_id);
-
-
         $worker->setMaterials($materialsMap);
         
         return $worker;
-    }
-
-/*    public function updateMaterials(Materials $materials)
-    {
-        $materialsArr = $materials->extract();
-        
-        foreach ($materialsArr as $material) {
-            
-            $this->materialsDao->save($material);
-        }
     }*/
 
-    public function getWorkerMaterialsByOrder($order_id)
+    public function getNeedMaterialsForOrder($user_id, $order_id)
     {
-        $orderMaterials_ids = 34;
+        /** @var Order $order */
+        $order = $this->ordersRepo->findOrderWithMaterialsById($order_id);
+        
+        $codes = $order->materials->getCodes();
 
-//        order_materials_ids
+        $workerNeedMaterials = $this->materialsRepo->getForOrder($user_id, $codes);
 
-//        intersect_ids (order_materials & worker_materials)
+        return $workerNeedMaterials;
     }
 }

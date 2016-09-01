@@ -2,35 +2,48 @@
 
 namespace App\Modules\Work\Domain\Handlers\Order;
 
-
 use App\Modules\Work\Domain\Commands\Order\StockMaterial;
-use App\Modules\Work\Persistence\Repositories\Order\OrderMaterialsRepo;
+use App\Modules\Work\Domain\Entities\Order\Order;
+use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 
 class StockMaterialHandler
 {
-    /** @var OrderMaterialsRepo */
-    private $orderMaterialsRepo;
+    /** @var OrdersRepo */
+    private $ordersRepo;
 
-    public function __construct()
+    public function __construct(OrdersRepo $ordersRepo)
     {
-        $this->orderMaterialsRepo = app('OrderMaterialsRepo');
+        $this->ordersRepo = $ordersRepo;
     }
-
-//    public function handle($order_id, $code, $amount)
-//    {
-//        /** @var OrderMaterial $material */
-//        $material = $this->orderMaterialsRepo->findBy($order_id, $code);
-//
-//        // method on null object except
-//
-//        $this->handleMaterial($material, $amount);
-//    }
 
     public function handle(StockMaterial $command)
     {
-        $command->orderMaterial->stockAmount($command->amount);
+        /** @var Order $order */
+        $order = $this->ordersRepo->findOrderWithMaterialsById($command->order_id);
+        
+        $material = $order->materials->getBy($command->materialCode);
 
-        $this->orderMaterialsRepo->update($command->orderMaterial);
+        
+        $material->stockAmount($command->amount);
+        
+
+        
+        $this->ordersRepo->updateMaterialAmount($material);
+        
+        
+        
+        $this->checkStatusAfterStockMaterial($order);
     }
 
+    private function checkStatusAfterStockMaterial(Order $order)
+    {
+        if ($order->materials->isStockCompleted()) {
+
+
+            $order->setStatusStockedMaterials();
+
+
+            $this->ordersRepo->updateStatus($order);
+        }
+    }
 }

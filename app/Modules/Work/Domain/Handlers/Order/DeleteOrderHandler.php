@@ -4,12 +4,12 @@ namespace App\Modules\Work\Domain\Handlers\Order;
 
 use App\Modules\Work\Domain\Commands\Order\DeleteOrder;
 use App\Modules\Work\Persistence\Repositories\Order\OrderMaterialsRepo;
-use App\Modules\Work\Persistence\Repositories\Order\OrderRepo;
+use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 use App\Modules\Work\Persistence\Repositories\Order\OrderSkillsRepo;
 
 class DeleteOrderHandler
 {
-    /** @var OrderRepo */
+    /** @var OrdersRepo */
     private $orderRepo;
     
     /** @var OrderMaterialsRepo */
@@ -20,7 +20,7 @@ class DeleteOrderHandler
 
     public function __construct()
     {
-        $this->orderRepo = app('OrderRepo');
+        $this->orderRepo = app('OrdersRepo');
         $this->materialsRepo = app('OrderMaterialsRepo');
         $this->skillsRepo = app('OrderSkillsRepo');
     }

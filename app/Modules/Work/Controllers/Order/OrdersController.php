@@ -3,29 +3,23 @@
 namespace App\Modules\Work\Controllers\Order;
 
 use App\Models\Work\Worker;
-use App\Modules\Work\Commands\Order\CreateBuildOrderCommand;
+use App\Modules\Work\Commands\Order\CreateBuildOrderAction;
 use App\Modules\Work\Controllers\WorkController;
-use App\Modules\Work\Persistence\Repositories\Order\OrderRepo;
+use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 use App\Repositories\Work\WorkerRepositoryObj;
 use Illuminate\Support\Facades\Input;
 
 class OrdersController extends WorkController
 {
-    /** @var OrderRepo */
-    protected $ordersRepo;
-
-    public function __construct(WorkerRepositoryObj $workerRepo)
-    {
-        $this->ordersRepo = app('OrderRepo');//$ordersRepo;
-
-        parent::__construct($workerRepo);
-    }
-
     public function index()
     {
-        $freeOrders = $this->ordersRepo->getFreeOrders();
+        /** @var OrdersRepo $ordersRepo */
+        $ordersRepo = app('OrdersRepo');
 
-        $workerOrders = $this->ordersRepo->getAcceptedOrders($this->user_id);
+
+        $freeOrders = $ordersRepo->getFreeOrders();
+
+        $workerOrders = $ordersRepo->getAcceptedOrders($this->user_id);
 
         return $this->view('work.order.orders_index', [
             'orders' => $freeOrders,
@@ -35,15 +29,11 @@ class OrdersController extends WorkController
 
     public function generateOrder()
     {
-        $data = Input::all();
-
-//        $this->dispatch(new SendMessageToWorker(\Auth::id()));
-
         $customer_id = $this->user_id;
         $reward = 400;
         $type = 'gates-s-s-s-s';
 
-        $cmd = new CreateBuildOrderCommand();
+        $cmd = new CreateBuildOrderAction();
 
         $cmd->createBuildOrder($customer_id, $type, $reward);
 

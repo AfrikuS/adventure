@@ -8,30 +8,14 @@ class LoreDao
 {
     private $table = 'employment_lore';
 
-    public function findByUser($user_id, $code)
-    {
-        $lore = \DB::table($this->table)
-            ->select(['id', 'user_id', 'mosaic', 'domain_id', 'size', 'domain_code'])
-            ->where('user_id', $user_id)
-//            ->where('domain_id', $domain_id)
-            ->where('domain_code', $code)
-            ->first();
-
-        if (null === $lore) {
-            throw new EntityNotFound_Exception;
-        }
-
-        return $lore;
-    }
-
     public function getByUser($user_id)
     {
-        $lore = \DB::table($this->table)
+        $lores = \DB::table($this->table)
             ->select(['id', 'user_id', 'mosaic', 'domain_id', 'size', 'domain_code'])
             ->where('user_id', $user_id)
             ->get();
 
-        return $lore;
+        return $lores;
     }
 
     public function find($id)
@@ -51,7 +35,6 @@ class LoreDao
     {
         $loreData = \DB::table($this->table)
             ->select(['id', 'user_id', 'mosaic', 'domain_id', 'size', 'domain_code'])
-//            ->where('domain_id', $lore_id)
             ->where('user_id', $user_id)
             ->where('domain_id', $domain_id)
             ->first();
@@ -75,13 +58,12 @@ class LoreDao
         return $domain_id;
     }
 
-    public function update($lore)
+    public function update($id, $mosaic)
     {
         \DB::table($this->table)
-            ->where('user_id', $lore->user_id)
-//            ->where('domain_id', $lore->domain_id)
+            ->where('id', $id)
             ->update([
-                'mosaic'  => $lore->mosaic,
+                'mosaic'  => $mosaic,
             ]);
     }
 

@@ -7,16 +7,13 @@ use App\Modules\Work\Domain\Services\Order\OrderBuilderService;
 use App\Modules\Work\Domain\Services\Order\OrderService;
 use App\Modules\Work\Persistence\Repositories\Catalogs\MaterialsRepo;
 use App\Modules\Work\Persistence\Repositories\Order\OrderMaterialsRepo;
-use App\Modules\Work\Persistence\Repositories\Order\OrderRepo;
+use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 use Finite\Exception\StateException;
 
-class EstimateOrderCommand
+class EstimateOrderAction
 {
-    /** @var OrderRepo */
+    /** @var OrdersRepo */
     private $orderRepo;
-//    /** @var  WorkerRepositoryObj */
-//    private $workerRepo;
-
     
     /** @var MaterialsRepo */
     private $materialsRepo;
@@ -24,13 +21,11 @@ class EstimateOrderCommand
     /** @var OrderMaterialsRepo */
     private $orderMaterialsRepo;
 
-    
-    
     public function __construct()
     {
         $this->materialsRepo = app('CatalogMaterialsRepo');
         $this->orderMaterialsRepo = app('OrderMaterialsRepo');
-        $this->orderRepo = app('OrderRepo');
+        $this->orderRepo = app('OrdersRepo');
 
     }
 
@@ -75,5 +70,4 @@ class EstimateOrderCommand
             throw new StateException;
         }
     }
-
 }

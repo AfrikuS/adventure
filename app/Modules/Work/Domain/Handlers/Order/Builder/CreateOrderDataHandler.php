@@ -3,21 +3,21 @@
 namespace App\Modules\Work\Domain\Handlers\Order\Builder;
 
 use App\Modules\Work\Domain\Commands\Order\Builder\CreateOrderData;
-use App\Modules\Work\Persistence\Repositories\Order\OrderRepo;
+use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 
 class CreateOrderDataHandler
 {
-    /** @var OrderRepo */
-    private $orderRepo;
+    /** @var OrdersRepo */
+    private $ordersRepo;
 
-    public function __construct(OrderRepo $orderRepo)
+    public function __construct(OrdersRepo $orderRepo)
     {
-        $this->orderRepo = $orderRepo;
+        $this->ordersRepo = $orderRepo;
     }
 
     public function handle(CreateOrderData $command)
     {
-        return $this->orderRepo->create(
+        return $this->ordersRepo->create(
             $command->desc,
             $command->domain_id,
             $command->price,

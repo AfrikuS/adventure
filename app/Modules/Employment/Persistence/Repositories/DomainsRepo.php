@@ -7,18 +7,18 @@ use App\Modules\Core\Facades\EntityStore;
 use App\Modules\Employment\Domain\Entities\Domain;
 use App\Modules\Employment\Domain\Entities\DomainsCatalog;
 use App\Modules\Employment\Persistence\Catalogs\DomainsCollection;
-use App\Modules\Employment\Persistence\Dao\DomainDao;
+use App\Modules\Employment\Persistence\Dao\DomainsDao;
 use App\Modules\Employment\Persistence\Dao\LoreDao;
 
 class DomainsRepo
 {
-    /** @var DomainDao */
+    /** @var DomainsDao */
     private $domainDao;
     
     /** @var LoreDao */
     private $loreDao;
 
-    public function __construct(DomainDao $domainDao, LoreDao $loreDao)
+    public function __construct(DomainsDao $domainDao, LoreDao $loreDao)
     {
         $this->domainDao = $domainDao;
         $this->loreDao = $loreDao;

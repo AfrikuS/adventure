@@ -8,19 +8,20 @@ use App\Modules\Work\Persistence\Repositories\Order\OrderSkillsRepo;
 class StockSkillHandler
 {
     /** @var OrderSkillsRepo */
-    private $skills;
+    private $skillsRepo;
 
-    public function __construct(OrderSkillsRepo $skills)
+    public function __construct(OrderSkillsRepo $skillsRepo)
     {
-        $this->skills = $skills;
+        $this->skillsRepo = $skillsRepo;
     }
 
     public function handle(StockSkill $command)
     {
-        $skill = $this->skills->findSingleByOrder($command->order_id);
+        $skill = $this->skillsRepo->findBy($command->order_id);
 
         $skill->stock();
 
-        $this->skills->update($skill);
+        
+        $this->skillsRepo->update($skill);
     }
 }

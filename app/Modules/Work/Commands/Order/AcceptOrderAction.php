@@ -4,13 +4,13 @@ namespace App\Modules\Work\Commands\Order;
 
 use App\Modules\Work\Domain\Entities\Order\Order;
 use App\Modules\Work\Domain\Services\Order\OrderService;
-use App\Modules\Work\Persistence\Repositories\Order\OrderRepo;
+use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 use App\Modules\Work\Persistence\Repositories\Worker\WorkerRepo;
 use Finite\Exception\StateException;
 
-class AcceptOrderCommand
+class AcceptOrderAction
 {
-    /** @var OrderRepo */
+    /** @var OrdersRepo */
     private $orderRepo;
 
     /** @var  WorkerRepo */
@@ -18,7 +18,7 @@ class AcceptOrderCommand
 
     public function __construct()
     {
-        $this->orderRepo = app('OrderRepo');
+        $this->orderRepo = app('OrdersRepo');
         $this->workerRepo = app('WorkerRepo');
     }
 
@@ -50,6 +50,7 @@ class AcceptOrderCommand
 
     private function validateCommand($order_id)
     {
+        // have lore_domain_id === order->domain_id
         $order = $this->orderRepo->find($order_id);
 
         if ($order->status != Order::STATUS_FREE) {

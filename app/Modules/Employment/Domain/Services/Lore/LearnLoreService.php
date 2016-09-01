@@ -5,6 +5,7 @@ namespace App\Modules\Employment\Domain\Services\Lore;
 use App\Modules\Employment\Domain\Commands\Lore\LevelUpLoreSkill;
 use App\Modules\Employment\Domain\Entities\Lore;
 use App\Modules\Employment\Persistence\Repositories\LoreRepo;
+use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 use Illuminate\Support\Facades\Bus;
 
 class LearnLoreService
@@ -12,28 +13,29 @@ class LearnLoreService
     /** @var LoreRepo */
     private $loreRepo;
 
+    /** @var OrdersRepo */
+    private $ordersRepo;
+
     public function __construct()
     {
         $this->loreRepo = app('LoreRepo');
+
+        $this->ordersRepo = app('OrdersRepo');
     }
 
     public function attemptLearnInOrderWork($order_id, $user_id)
     {
-        $orders = app('OrderRepo');
-        $order = $orders->find($order_id);
-
-        $domain_id = $order->domain_id;
-
-
-
+        $order = $this->ordersRepo->find($order_id);
+        
         /** @var Lore $lore */
-        $lore = $this->loreRepo->findBy($user_id, $domain_id);
+        $lore = $this->loreRepo->findBy($user_id, $order->domain_id);
 
+        
+        
+        
         $index = rand(0, $lore->size - 1);
-//        $index = 49;
 
         if ($lore->isMaxValue($index)) {
-
             return;
         }
 
@@ -41,7 +43,7 @@ class LearnLoreService
         if ($this->getLucky()) {
 
 
-            $command = new LevelUpLoreSkill($user_id, $domain_id, $index);
+            $command = new LevelUpLoreSkill($lore->id, $index);
 
 
             Bus::dispatch($command);
@@ -59,7 +61,6 @@ class LearnLoreService
         $mosaicIndex = rand(0, $lore->size - 1);
 
         if ($lore->isMaxValue($mosaicIndex)) {
-
             return;
         }
 
@@ -74,10 +75,6 @@ class LearnLoreService
 
 
             \Session::flash('message', "Навык {$mosaicIndex} повышен");
-        }
-        else {
-
-            \Session::flash('message', "Неудачная попытка");
         }
     }
 

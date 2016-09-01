@@ -6,7 +6,7 @@ class OrderSkill
 {
     public $id;
     public $order_id;
-    public $code;
+    public $domain_id;
     public $needTimes;
     public $stockTimes;
 
@@ -14,7 +14,7 @@ class OrderSkill
     {
         $this->id = $orderSkillData->id;
         $this->order_id = $orderSkillData->order_id;
-        $this->code = $orderSkillData->code;
+        $this->domain_id = $orderSkillData->domain_id;
         $this->needTimes = $orderSkillData->need_times;
         $this->stockTimes = $orderSkillData->stock_times;
     }
@@ -26,6 +26,6 @@ class OrderSkill
 
     public function isFullStock()
     {
-        return $this->needTimes === $this->stockTimes;
+        return $this->needTimes <= $this->stockTimes;
     }
 }

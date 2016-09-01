@@ -2,7 +2,8 @@
 
 namespace App\Modules\Employment\Domain\Entities;
 
-class LoreDto
+/** @deprecated  */
+class LorePresenter
 {
     public $user_id;
     public $mosaic;

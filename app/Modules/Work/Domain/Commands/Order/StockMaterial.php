@@ -2,18 +2,18 @@
 
 namespace App\Modules\Work\Domain\Commands\Order;
 
-use App\Modules\Work\Domain\Entities\Order\OrderMaterial;
-
 class StockMaterial
 {
-    /** @var OrderMaterial */
-    public $orderMaterial;
+    public $order_id;
+    
+    public $materialCode;
     
     public $amount;
 
-    public function __construct(OrderMaterial $orderMaterial, $amount)
+    public function __construct($order_id, $materialCode, $amount)
     {
-        $this->orderMaterial = $orderMaterial;
+        $this->order_id = $order_id;
+        $this->materialCode = $materialCode;
         $this->amount = $amount;
     }
 }

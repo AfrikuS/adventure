@@ -11,6 +11,7 @@ class LoreController extends Controller
     {
         /** @var LoreRepo $loreRepo */
         $loreRepo = app('LoreRepo');
+
         $lores = $loreRepo->getBy($this->user_id);
 
 
@@ -18,5 +19,4 @@ class LoreController extends Controller
             'lores' => $lores,
         ]);
     }
-
 }

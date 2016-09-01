@@ -3,10 +3,12 @@
 namespace App\Modules\Work\Domain\Services\Order;
 
 use App\Modules\Work\Domain\Commands\Order\Builder\CreateOrderData;
+use App\Modules\Work\Domain\Commands\Order\Builder\GenerateMaterials;
+use App\Modules\Work\Domain\Commands\Order\Builder\GenerateSkills;
 use App\Modules\Work\Domain\Handlers\Order\Builder\GenerateMaterialsHandler;
 use App\Modules\Work\Persistence\Repositories\Catalogs\MaterialsRepo;
 use App\Modules\Work\Persistence\Repositories\Order\OrderMaterialsRepo;
-use App\Modules\Work\Persistence\Repositories\Order\OrderRepo;
+use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 use App\Modules\Work\Persistence\Repositories\Order\OrderSkillsRepo;
 use Illuminate\Support\Facades\Bus;
 
@@ -21,7 +23,7 @@ class OrderBuilderService
     /** @var OrderSkillsRepo */
     private $skillsRepo;
     
-    /** @var OrderRepo */
+    /** @var OrdersRepo */
     private $orders;
 
     public function __construct()
@@ -29,7 +31,7 @@ class OrderBuilderService
         $this->materialsRepo = app('CatalogMaterialsRepo');
         $this->orderMaterialsRepo = app('OrderMaterialsRepo');
         $this->skillsRepo = app('OrderSkillsRepo');
-        $this->orders = app('OrderRepo');
+        $this->orders = app('OrdersRepo');
     }
 
     public function generateOrderData($customer_id)
@@ -59,31 +61,15 @@ class OrderBuilderService
 
     public function generateMaterials($order_id, $count)
     {
-        $generateMaterialsEvent = new GenerateMaterialsHandler(
-            $this->materialsRepo,
-            $this->orderMaterialsRepo
-        );
+        $generateMaterials = new GenerateMaterials($order_id, $count);
 
-        $generateMaterialsEvent->handle($order_id, $count);
+        Bus::dispatch($generateMaterials);
     }
 
     public function generateSkill($order_id, $need)
     {
-        $order = $this->orders->find($order_id);
-        
-        $domain_id = $order->domain_id;
-        
-//        $domainsCodes = $domains->getCodes();
-//
-//
-//        $faker = \Faker\Factory::create();
-//
-//
-////        for ($i = 0; $i < $count; $i++)
-////        {
-//            $skillCode = $faker->unique()->randomElement($domainsCodes);
+        $generateSkills = new GenerateSkills($order_id, $need);
 
-        $this->skillsRepo->createOrderSkill($order_id, $domain_id, $need);
-//            $this->orderMaterialsRepo->createOrderMaterial($order_id, $code, $need = 2);
+        Bus::dispatch($generateSkills);
     }
 }

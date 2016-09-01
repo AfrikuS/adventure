@@ -17,19 +17,6 @@ class OrderMaterialsRepo
         $this->materialsDao = $materialsDao;
     }
 
-/*    public function getCodes()
-    {
-//        $materialsCodes = Material::get(['id', 'code'])->pluck('code');
-        
-        $codes = $this->materialsDao->getCodes();
-        
-        $codesArr = array_map(function ($codeObj) {
-            return $codeObj->code;
-        }, $codes);
-
-        return $codesArr;
-    }*/
-
     public function createOrderMaterial($order_id, $code, $need, $stock = 0)
     {
         return
@@ -43,7 +30,7 @@ class OrderMaterialsRepo
 
     public function getMaterialsCollection($order_id)
     {
-        $materials = EntityStore::get(OrderMaterialsCollection::class, 'order'.$order_id);
+        $materials = EntityStore::get(OrderMaterialsCollection::class, 'order:'.$order_id);
 
         if ($materials != null) {
             return $materials;
@@ -57,29 +44,17 @@ class OrderMaterialsRepo
 
             $material = new OrderMaterial($materialData);
 
-            $materials->addMaterial($material);
+            $materials->add($material);
         }
 
-        EntityStore::add($materials, 'order'.$order_id);
+        EntityStore::add($materials, 'order:'.$order_id);
 
         return $materials;
-
-    }
-
-    public function getCodesByOrderId($order_id)
-    {
-        $materials = $this->materialsDao->getByOrder($order_id);
-
-        $codesArr = array_map(function ($material) {
-            return $material->code;
-        }, $materials);
-
-        return $codesArr;
     }
 
     public function findBy($order_id, $code)
     {
-        $materialData = $this->materialsDao->find($order_id, $code);
+        $materialData = $this->materialsDao->findBy($order_id, $code);
 
         if (null == $materialData) {
             return null;
@@ -88,11 +63,14 @@ class OrderMaterialsRepo
         return new OrderMaterial($materialData);
     }
 
-    public function update($material)
+    public function updateStockAmount(OrderMaterial $material)
     {
-        $this->materialsDao->update($material);
+        $this->materialsDao->update(
+            $material->id, 
+            $material->stock
+        );
     }
-
+    
     public function deleteByOrder($order_id)
     {
         $this->materialsDao->deleteByOrder($order_id);

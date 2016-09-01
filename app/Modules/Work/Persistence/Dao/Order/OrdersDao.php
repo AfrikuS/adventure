@@ -2,13 +2,11 @@
 
 namespace App\Modules\Work\Persistence\Dao\Order;
 
-use App\Modules\Work\Domain\Entities\Order\Order;
-
 class OrdersDao
 {
     private $table = 'work_orders';
 
-    public function findById(int $id)
+    public function find(int $id)
     {
         $order = \DB::table($this->table)
             ->select(['id', 'desc', 'type', 'status', 'domain_id', 'price',
@@ -18,21 +16,8 @@ class OrdersDao
 
         return $order;
     }
-
-    public function save(Order $order)
-    {
-        if ($order->id != null) {
-
-            \DB::table($this->table)
-                ->where('id', $order->id)
-                ->update([
-                    'status'  => $order->status,
-                    'acceptor_worker_id'   => $order->acceptor_worker_id,
-                ]);
-        }
-    }
-
-    public function create($desc, $domain_id, $price, $customer_id)
+    
+    public function create($desc, $domain_id, $price, $customer_id, $status, $type)
     {
         $order_id = \DB::table($this->table)->insertGetId([
             'desc' => $desc,
@@ -40,8 +25,8 @@ class OrdersDao
             'price' => $price,
             'acceptor_worker_id' => null,
             'acceptor_team_id' => null,
-            'status' => 'free',
-            'type' => 'individual',
+            'status' => $status,
+            'type' => $type,
             'customer_hero_id' => $customer_id,
         ]);
 
@@ -74,5 +59,15 @@ class OrdersDao
             ->get();
 
         return $orders;
+    }
+
+    public function update($id, $status, $acceptor_worker_id)
+    {
+        \DB::table($this->table)
+            ->where('id', $id)
+            ->update([
+                'status' => $status,
+                'acceptor_worker_id' => $acceptor_worker_id,
+            ]);
     }
 }

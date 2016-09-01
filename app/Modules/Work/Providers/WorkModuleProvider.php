@@ -14,7 +14,7 @@ use App\Modules\Work\Persistence\Dao\Worker\WorkerInstrumentsDao;
 use App\Modules\Work\Persistence\Dao\Worker\WorkerMaterialsDao;
 use App\Modules\Work\Persistence\Repositories\Catalogs\MaterialsRepo;
 use App\Modules\Work\Persistence\Repositories\Order\OrderMaterialsRepo;
-use App\Modules\Work\Persistence\Repositories\Order\OrderRepo;
+use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 use App\Modules\Work\Persistence\Repositories\Order\OrderSkillsRepo;
 use App\Modules\Work\Persistence\Repositories\Shop\ShopMaterialsRepo;
 use App\Modules\Work\Persistence\Repositories\Shop\ShopRepo;
@@ -27,15 +27,9 @@ use Illuminate\Support\ServiceProvider;
 
 class WorkModuleProvider extends ServiceProvider
 {
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
     public function register()
     {
         $this->registerRepositories();
-        $this->registerDao();
 
         $this->registerDomainServices();
     }
@@ -46,20 +40,11 @@ class WorkModuleProvider extends ServiceProvider
             'CatalogMaterialsRepo', MaterialsRepo::class
         );
         $this->app->singleton(
-            'OrderRepo', OrderRepo::class
+            'OrdersRepo', OrdersRepo::class
         );
-
-/*        $this->app->singleton(
-            'WorkShopRepo', ShopRepo::class
-        );*/
-
 
         $this->app->singleton(
             'WorkerRepo', WorkerRepo::class
-        );
-
-        $this->app->singleton(
-            'OrderRepo', OrderRepo::class
         );
 
         $this->app->singleton(
@@ -95,37 +80,6 @@ class WorkModuleProvider extends ServiceProvider
         $this->app->singleton(
             'TeamRepo', TeamRepo::class
         );
-
-        
-        
-
-    }
-
-    private function registerDao()
-    {
-        $this->app->singleton(
-            'OrderDao', OrdersDao::class
-        );
-        $this->app->singleton(
-            'OrderMaterialsDao', OrderMaterialsDao::class
-        );
-
-        $this->app->singleton(
-            'WorkerDao', WorkerDao::class
-        );
-        $this->app->singleton(
-            'WorkerMaterialsDao', WorkerMaterialsDao::class
-        );
-        $this->app->singleton(
-            'WorkerInstrumentsDao', WorkerInstrumentsDao::class
-        );
-
-        $this->app->singleton(
-            'ShopMaterialsDao', ShopMaterialsDao::class
-        );
-        $this->app->singleton(
-            'ShopInstrumentsDao', ShopInstrumentsDao::class
-        );
     }
 
     private function registerDomainServices()
@@ -135,12 +89,7 @@ class WorkModuleProvider extends ServiceProvider
         );
 
         $this->app->singleton(
-            'WorkerOrderService', WorkerOrderService::class
-        );
-
-        $this->app->singleton(
             'WorkShopService', ShopService::class
         );
-
     }
 }

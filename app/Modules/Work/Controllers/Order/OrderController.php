@@ -3,79 +3,63 @@
 namespace App\Modules\Work\Controllers\Order;
 
 use App\Exceptions\NotEnoughMaterialException;
-use App\Models\Work\Worker;
 use App\Modules\Employment\Persistence\Repositories\LoreRepo;
-use App\Modules\Work\Commands\Order\AcceptOrderCommand;
-use App\Modules\Work\Commands\Order\ApplySkill;
-use App\Modules\Work\Commands\Order\CancelApplySkill;
-use App\Modules\Work\Commands\Order\DeleteOrderCommand;
-use App\Modules\Work\Commands\Order\EstimateOrderCommand;
-use App\Modules\Work\Commands\Order\GenerateOrderCommand;
-use App\Modules\Work\Commands\Order\StockMaterialCommand;
+use App\Modules\Work\Commands\Order\AcceptOrderAction;
+use App\Modules\Work\Commands\Order\ApplySkillAction;
+use App\Modules\Work\Commands\Order\CancelApplySkillAction;
+use App\Modules\Work\Commands\Order\DeleteOrderAction;
+use App\Modules\Work\Commands\Order\EstimateOrderAction;
+use App\Modules\Work\Commands\Order\GenerateOrderAction;
+use App\Modules\Work\Commands\Order\StockMaterialAction;
 use App\Modules\Work\Controllers\WorkController;
 use App\Modules\Work\Domain\Entities\Order\Order;
-use App\Modules\Work\Persistence\Repositories\Order\OrderRepo;
+use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 use App\Modules\Work\Persistence\Repositories\Order\OrderSkillsRepo;
 use App\Modules\Work\Persistence\Repositories\Worker\WorkerRepo;
-use App\Repositories\Work\WorkerRepositoryObj;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 
 class OrderController extends WorkController
 {
-    /** @var OrderRepo */
-    protected $orderRepo;
-
-    public function __construct()
+    public function index($order_id)
     {
-        parent::__construct();
-        
-        $this->orderRepo = app('OrderRepo'); // $orderRepo;
-    }
+        /** @var OrdersRepo $ordersRepo */
+        $ordersRepo = app('OrdersRepo');
 
-    public function index($id)
-    {
-//        /** @var OrderEntity $order */
-//        $order = $this->orderRepo->findOrderWithMaterialsById($id);
-
-        /** @var OrderRepo $orderRepoNew */
-        $orderRepoNew = app('OrderRepo'); // new OrderRepo();
-
-        $order = $orderRepoNew->findOrderWithMaterialsById($id);
+        $order = $ordersRepo->findOrderWithMaterialsById($order_id);
 
 
         switch ($order->status) {
 
+
+            case Order::STATUS_FREE:
+
+                Session::flash('message', 'It\'s not your order');
+                return \Redirect::route('work_orders_page');
+
+
             case Order::STATUS_ACCEPTED:
 
 
-/*                if ($order->haveAcceptor() && ($order->acceptor_worker_id == $user_id)) {
-                    return true;
-                }
-*/
                 return $this->view('work.order.show.accepted', [
                     'order' => $order,
                 ]);
+            
 
             case Order::STATUS_STOCK_MATERIALS:
 
-                $orderMaterials = $order->materials;
-                $viewOrderMaterials = $order->materials; //->extract();
+                $viewOrderMaterials = $order->materials;
 
                 /** @var WorkerRepo $workerRepo */
                 $workerRepo = app('WorkerRepo');
-                $worker = $workerRepo->getWithMaterialsByUser($this->user_id);
-                $workerMaterials = $worker->materials;
 
 
+                $workerNeedMaterials = $workerRepo->getNeedMaterialsForOrder($this->user_id, $order_id);
 
-
-//                $workerNeedMaterials = $this->workerRepo->selectWorkerMaterialsNeedForOrder($order, $this->worker);
-                $workerNeedMaterials = $orderMaterials->selectIntersect($workerMaterials);
 
                 return $this->view('work.order.show.stock_materials', [
                     'order' => $order,
-                    'orderMaterials' => $viewOrderMaterials,
+                    'orderMaterials' => $viewOrderMaterials->materials,
                     'userMaterials' => $workerNeedMaterials,
                 ]);
 
@@ -83,16 +67,15 @@ class OrderController extends WorkController
 
                 /** @var OrderSkillsRepo $skills */
                 $skills = app('OrderSkillsRepo');
-                $orderSkill = $skills->findSingleByOrder($id);
+                $orderSkill = $skills->findBy($order_id);
 
-                $domainCode = $orderSkill->code;
+                $domain_id = $orderSkill->domain_id;
                 /** @var LoreRepo $loreRepo */
                 $loreRepo = app('LoreRepo');
 
-                $lore = $loreRepo->findBy($domainCode, $this->user_id);
+                $lore = $loreRepo->findBy($this->user_id, $domain_id);
 
                 $mosaic = $lore->extractToViewDto();
-                
 
 
 
@@ -107,12 +90,6 @@ class OrderController extends WorkController
                 return $this->view('work.order.show.completed', [
                     'order' => $order,
                 ]);
-
-            case Order::STATUS_FREE:
-
-                // order not accepted, free
-                Session::flash('message', 'It\'s not your order');
-                return \Redirect::route('work_orders_page');
         }
     }
 
@@ -122,7 +99,7 @@ class OrderController extends WorkController
         $order_id = $data['order_id'];
 
 
-        $cmd = new AcceptOrderCommand();
+        $cmd = new AcceptOrderAction();
 
         $cmd->acceptOrder($order_id, $this->user_id);
 
@@ -139,7 +116,7 @@ class OrderController extends WorkController
 
 
 
-        $cmd = new EstimateOrderCommand();
+        $cmd = new EstimateOrderAction();
 
         $cmd->estimateOrder($order_id);
         
@@ -158,7 +135,7 @@ class OrderController extends WorkController
         try 
         {
 
-            $cmd = new StockMaterialCommand();
+            $cmd = new StockMaterialAction();
 
             $cmd->addMaterial($order_id, $materialCode, $this->user_id);
 
@@ -175,10 +152,11 @@ class OrderController extends WorkController
     public function applySkill()
     {
         $data = Input::all();
-
         $order_id = $data['order_id'];
 
-        $cmd = new ApplySkill();
+        
+        
+        $cmd = new ApplySkillAction();
 
         $cmd->applySkill($order_id, $this->user_id);
 
@@ -193,7 +171,8 @@ class OrderController extends WorkController
 
         $order_id = $data['order_id'];
 
-        $cmd = new CancelApplySkill();
+        
+        $cmd = new CancelApplySkillAction();
 
         $cmd->cancel($order_id);
 
@@ -215,7 +194,7 @@ class OrderController extends WorkController
         $order_id = $data['order_id'];
 
 
-        $cmd = new DeleteOrderCommand();
+        $cmd = new DeleteOrderAction();
 
         $cmd->deleteOrder($order_id);
 
@@ -225,7 +204,7 @@ class OrderController extends WorkController
 
     public function generate()
     {
-        $cmd = new GenerateOrderCommand();
+        $cmd = new GenerateOrderAction();
 
         $cmd->generateOrder($this->user_id);
 

@@ -3,27 +3,29 @@
 namespace App\Modules\Work\Commands\Order;
 
 use App\Modules\Work\Domain\Services\Order\OrderService;
-use App\Modules\Work\Persistence\Repositories\Order\OrderRepo;
+use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 
-class DeleteOrderCommand
+class DeleteOrderAction
 {
-    /** @var OrderRepo */
-    private $orderRepo;
+    /** @var OrdersRepo */
+    private $ordersRepo;
 
     public function __construct()
     {
-        $this->orderRepo = app('OrderRepo');
+        $this->ordersRepo = app('OrdersRepo');
     }
 
     public function deleteOrder($order_id)
     {
-        $orderService = new OrderService($this->orderRepo);
+        $orderService = new OrderService($this->ordersRepo);
 
         \DB::beginTransaction();
         try {
 
+            
             $orderService->deleteWithMaterialsAndSkills($order_id);
 
+            
         }
         catch (\Exception $e) {
             \DB::rollBack();
@@ -31,5 +33,4 @@ class DeleteOrderCommand
         }
         \DB::commit();
     }
-
 }

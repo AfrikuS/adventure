@@ -2,6 +2,7 @@
 
 namespace App\Modules\Work\Persistence\Repositories\Worker;
 
+use App\Modules\Core\Facades\EntityStore;
 use App\Modules\Work\Domain\Entities\Worker\WorkerMaterial;
 use App\Modules\Work\Persistence\Dao\Worker\WorkerMaterialsDao;
 
@@ -10,74 +11,17 @@ class WorkerMaterialsRepo
     /** @var WorkerMaterialsDao */
     private $materialsDao;
 
-    public function __construct()
+    public function __construct(WorkerMaterialsDao $workerMaterialsDao)
     {
-        $this->materialsDao = app('WorkerMaterialsDao');
+        $this->materialsDao = $workerMaterialsDao;
     }
 
-/*    public function getCodes()
-    {
-//        $materialsCodes = Material::get(['id', 'code'])->pluck('code');
-        
-        $codes = $this->materialsDao->getCodes();
-        
-        $codesArr = array_map(function ($codeObj) {
-            return $codeObj->code;
-        }, $codes);
-
-        return $codesArr;
-    }*/
-
-    public function createMaterial($code, $worker_id)
-    {
-        $material = new \stdClass();
-        
-        $material->code = $code;
-        $material->worker_id = $worker_id;
-        $material->value = 0;
-        
-        return $material;
-    }
-
-    /** @deprecated */
-    public function save($material)
+    public function update(WorkerMaterial $material)
     {
         $this->materialsDao->update(
             $material->id,
             $material->value
         );
-    }
-
-    public function update($material)
-    {
-        $this->materialsDao->update(
-            $material->id,
-            $material->value
-        );
-    }
-
-    public function getCodesByWorkerId($worker_id)
-    {
-        $materials = $this->materialsDao->getMaterials($worker_id);
-
-        $codesArr = array_map(function ($material) {
-            return $material->code;
-        }, $materials);
-
-        return $codesArr;
-    }
-
-    /** @deprecated  */
-    public function updateMaterials($worker)
-    {
-//        $worker_id = $materials->worker
-        $materialsArr = $worker->materials->extractMeterials();
-            
-        foreach ($materialsArr as $material) {
-            
-            $this->materialsDao->update($material->id, $material->value);
-        }
-        
     }
 
     public function getBy($worker_id)
@@ -89,17 +33,31 @@ class WorkerMaterialsRepo
 
     public function findBy($worker_id, $code) 
     {
+        $material = EntityStore::get(WorkerMaterial::class, 'worker:'.$worker_id);
+
+        if ($material != null) {
+            return $material;
+        }
+
         $materialData = $this->materialsDao->find($worker_id, $code);
 
-        if (null == $materialData) {
-            return null;
-        }
-        
-        return new WorkerMaterial($materialData);
+        $material = new WorkerMaterial($materialData);
+
+
+        EntityStore::add($material, 'worker:'.$worker_id);
+
+        return $material;
     }
 
-    public function create($user_id, $code, $amount)
+    public function create($worker_id, $code, $amount)
     {
-        $this->materialsDao->create($user_id, $code, $amount);
+        $this->materialsDao->create($worker_id, $code, $amount);
+    }
+
+    public function getForOrder($user_id, $materials_codes)
+    {
+        $materials = $this->materialsDao->getByCodes($user_id, $materials_codes);
+        
+        return $materials;
     }
 }

@@ -4,6 +4,8 @@ namespace App\Modules\Work\Providers;
 
 use App\Modules\Work\Domain\Commands\Order\AcceptOrder;
 use App\Modules\Work\Domain\Commands\Order\Builder\CreateOrderData;
+use App\Modules\Work\Domain\Commands\Order\Builder\GenerateMaterials;
+use App\Modules\Work\Domain\Commands\Order\Builder\GenerateSkills;
 use App\Modules\Work\Domain\Commands\Order\DeleteOrder;
 use App\Modules\Work\Domain\Commands\Order\Status\OrderAccepted;
 use App\Modules\Work\Domain\Commands\Order\Status\OrderCompleted;
@@ -16,6 +18,8 @@ use App\Modules\Work\Domain\Commands\Worker\AddMaterial;
 use App\Modules\Work\Domain\Commands\Worker\DecrementMaterial;
 use App\Modules\Work\Domain\Handlers\Order\AcceptOrderHandler;
 use App\Modules\Work\Domain\Handlers\Order\Builder\CreateOrderDataHandler;
+use App\Modules\Work\Domain\Handlers\Order\Builder\GenerateMaterialsHandler;
+use App\Modules\Work\Domain\Handlers\Order\Builder\GenerateSkillsHandler;
 use App\Modules\Work\Domain\Handlers\Order\DeleteOrderHandler;
 use App\Modules\Work\Domain\Handlers\Order\Status\OrderAcceptedHandler;
 use App\Modules\Work\Domain\Handlers\Order\Status\OrderCompletedHandler;
@@ -42,6 +46,9 @@ class CommandsHandlersProviders extends ServiceProvider
         
         // order commands
         CreateOrderData::class => CreateOrderDataHandler::class, 
+        
+        GenerateMaterials::class => GenerateMaterialsHandler::class, 
+        GenerateSkills::class => GenerateSkillsHandler::class, 
         
         AcceptOrder::class => AcceptOrderHandler::class,
         OrderAccepted::class => OrderAcceptedHandler::class,

@@ -4,22 +4,23 @@ namespace App\Modules\Work\Commands\Order;
 
 use App\Models\Work\Worker;
 use App\Modules\Work\Domain\Entities\Order\Order;
+use App\Modules\Work\Domain\Services\Order\OrderService;
 use App\Modules\Work\Domain\Services\Order\WorkerOrderService;
-use App\Modules\Work\Persistence\Repositories\Order\OrderRepo;
+use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 use App\Modules\Work\Persistence\Repositories\Worker\WorkerRepo;
 use Finite\Exception\StateException;
 
-class StockMaterialCommand
+class StockMaterialAction
 {
-    /** @var OrderRepo */
-    private $orderRepo;
+    /** @var OrdersRepo */
+    private $ordersRepo;
 
-    /** @var  WorkerRepo */
+    /** @var WorkerRepo */
     private $workerRepo;
 
     public function __construct()
     {
-        $this->orderRepo = app('OrderRepo');
+        $this->ordersRepo = app('OrdersRepo');
         $this->workerRepo = app('WorkerRepo');
     }
 
@@ -27,7 +28,7 @@ class StockMaterialCommand
     {        
         $this->validateCommand($order_id);
         
-        $workerOrderService = new WorkerOrderService($this->orderRepo, $this->workerRepo);
+        $workerOrderService = new OrderService();
 
         
         \DB::beginTransaction();
@@ -43,12 +44,12 @@ class StockMaterialCommand
             throw  $e;
         }
         \DB::commit();
-        
     }
 
     private function validateCommand($order_id)
     {
-        $order = $this->orderRepo->find($order_id);
+        // validate code in order
+        $order = $this->ordersRepo->find($order_id);
 
         if ($order->status != Order::STATUS_STOCK_MATERIALS) {
 

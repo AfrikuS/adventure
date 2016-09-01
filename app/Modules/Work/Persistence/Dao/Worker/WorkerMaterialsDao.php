@@ -61,4 +61,14 @@ class WorkerMaterialsDao
             ]);
     }
 
+    public function getByCodes($user_id, $codes)
+    {
+        $materials = \DB::table($this->table)
+            ->select(['id', 'user_id', 'code', 'value'])
+            ->where('user_id', $user_id)
+            ->whereIn('code', $codes)
+            ->get();
+
+        return $materials;
+    }
 }

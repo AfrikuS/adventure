@@ -3,26 +3,28 @@
 namespace App\Modules\Work\Domain\Handlers\Order;
 
 use App\Modules\Work\Domain\Commands\Order\AcceptOrder;
-use App\Modules\Work\Persistence\Repositories\Order\OrderRepo;
+use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 
 class AcceptOrderHandler
 {
-    /** @var OrderRepo */
-    private $orderRepo;
+    /** @var OrdersRepo */
+    private $ordersRepo;
 
-    public function __construct()
+    public function __construct(OrdersRepo $ordersRepo)
     {
-        $this->orderRepo = app('OrderRepo');
+        $this->ordersRepo = $ordersRepo;
     }
 
     public function handle(AcceptOrder $command)
     {
-        $order = $this->orderRepo->find($command->order_id);
+        $order = $this->ordersRepo->find($command->order_id);
 
 
         $order->setAcceptor($command->worker_id);
 
-        
-        $this->orderRepo->updateStatus($order);
+        $order->setStatusAccepted();
+
+
+        $this->ordersRepo->updateStatus($order);
     }
 }
