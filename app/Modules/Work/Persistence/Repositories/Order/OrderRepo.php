@@ -5,7 +5,7 @@ namespace App\Modules\Work\Persistence\Repositories\Order;
 use App\Modules\Core\Facades\EntityStore;
 use App\Modules\Work\Domain\Entities\Order\Order;
 use App\Modules\Work\Domain\Entities\Order\OrderMaterial;
-use App\Modules\Work\Persistence\Dao\Order\OrderDao;
+use App\Modules\Work\Persistence\Dao\Order\OrdersDao;
 use App\Modules\Work\Persistence\Dao\Order\OrderMaterialsDao;
 use App\Persistence\Models\Work\Order\StockDataDto;
 
@@ -14,7 +14,7 @@ class OrderRepo
     /** @var OrderMaterialsDao */
     private $materialsDao;
 
-    /** @var OrderDao */
+    /** @var OrdersDao */
     private $orderDao;
 
     public function __construct()
@@ -27,7 +27,7 @@ class OrderRepo
     {
         $orderData = $this->orderDao->findById($order_id);
         
-        $materialsData = $this->materialsDao->getAllByOrderId($order_id);
+        $materialsData = $this->materialsDao->getByOrder($order_id);
 
         $materialsMap = [];
 
@@ -133,7 +133,7 @@ class OrderRepo
     public function getWithMaterialsById($order_id)
     {
         $order = $this->orderDao->findById($order_id);
-        $materialsData = $this->materialsDao->getAllByOrderId($order->id);
+        $materialsData = $this->materialsDao->getByOrder($order->id);
 
         $materialsMap = [];
 
@@ -162,12 +162,12 @@ class OrderRepo
         return $idsArr;
     }
 
-    public function create($desc, $domainCode, $price, $customer_id)
+    public function create($desc, $domain_id, $price, $customer_id)
     {
         return 
             $this->orderDao->create(
                 $desc,
-                $domainCode,
+                $domain_id,
                 $price,
                 $customer_id
             );

@@ -2,11 +2,11 @@
 
 namespace App\Modules\Drive\Controllers\Raid;
 
-use App\Models\Core\Hero;
 use App\Modules\Drive\Actions\Raid\Robbery\FinishRobberyCommand;
 use App\Modules\Drive\Domain\Services\Raid\RobberyService;
 use App\Modules\Drive\Persistence\Repositories\Raid\RobberyRepo;
 use App\Modules\Hero\Domain\Entities\Buildings;
+use App\Modules\Hero\Domain\Entities\Hero;
 use Illuminate\Support\Facades\Redirect;
 
 class RobberyController extends RaidController
@@ -14,8 +14,8 @@ class RobberyController extends RaidController
     /** @var RobberyRepo */
     protected $robberyRepo;
 
-    /** @var Hero */
-    protected $victim;
+//    /** @var Hero */
+//    protected $victim;
 
     public function __construct()
     {
@@ -32,7 +32,7 @@ class RobberyController extends RaidController
         /** @var Buildings $victimBuildings */
         $victimBuildings = $buildingsRepo->getByHero($this->user_id);
 
-        $robbery = $this->robberyRepo->findRobbery($this->user_id);
+        $robbery = $this->robberyRepo->findByRaid($this->user_id);
 
         switch ($robbery->robbery_status) {
 

@@ -4,41 +4,32 @@
 @section('head')
     @parent
 
-
-
 @endsection
 
 @section('center')
 
-    Выбирай сферу, вермя проходить начальный курс
+    Выбирай профессию, будем осваивать её азы
     <p></p>
     <p></p>
-
-{{--    {!! Form::open(['route' => 'school_get_building_license_action', 'class' => '']) !!}--}}
-{{--    {!! Form::submit('Строительство', array('class' => 'btn btn-primary')) !!}--}}
-    {{--{!! Form::close() !!}--}}
 
 
     <p></p>
     @foreach($remainingDomains as $domain)
         <p></p>
 
-        {!! Form::open(['route' => 'school_get_license_action', 'class' => '']) !!}
-        {!! Form::hidden('code', $domain->code) !!}
-        {!! Form::submit($domain->title, array('class' => 'btn btn-primary')) !!}
-        {!! Form::close() !!}
+        @if ($domain->isLicense)
+
+            <b>Продолжить обучение </b>
+            {{ link_to_route('school_classroom_page', $domain->title, [$domain->id]) }}
+        @else
+            Купить лицензию на обучение
+            <br>
+            {!! Form::open(['route' => 'school_get_license_action', 'class' => '']) !!}
+            {!! Form::hidden('domain_id', $domain->id) !!}
+            {!! Form::submit($domain->title, array('class' => 'btn btn-primary')) !!}
+            {!! Form::close() !!}
+        @endif
 
     @endforeach
-
-    <p></p>
-    @foreach($userDomains as $domain)
-        <p></p>
-
-        {{ link_to_route('school_classroom_page', $domain->title, ['code' => $domain->id]) }}
-
-    @endforeach
-
-
-
 
 @endsection

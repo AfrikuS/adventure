@@ -19,7 +19,7 @@ class CreateOrderDataHandler
     {
         return $this->orderRepo->create(
             $command->desc,
-            $command->domainCode,
+            $command->domain_id,
             $command->price,
             $command->customer_id
         );

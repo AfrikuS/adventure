@@ -60,7 +60,7 @@ class OrderController extends WorkController
             case Order::STATUS_STOCK_MATERIALS:
 
                 $orderMaterials = $order->materials;
-                $viewOrderMaterials = $order->materials->extract();
+                $viewOrderMaterials = $order->materials; //->extract();
 
                 /** @var WorkerRepo $workerRepo */
                 $workerRepo = app('WorkerRepo');
@@ -89,7 +89,7 @@ class OrderController extends WorkController
                 /** @var LoreRepo $loreRepo */
                 $loreRepo = app('LoreRepo');
 
-                $lore = $loreRepo->find($domainCode, $this->user_id);
+                $lore = $loreRepo->findBy($domainCode, $this->user_id);
 
                 $mosaic = $lore->extractToViewDto();
                 

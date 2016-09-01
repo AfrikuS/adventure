@@ -43,7 +43,7 @@
                                 </td>
                                 <td>{{ $order->price }}</td>
                                 <td>{{ $order->acceptor_worker_id | 'no' }}</td>
-                                <td>{{ $order->domain_code }}</td>
+                                <td>{{ $order->domain_id }}</td>
                                 <td>{{ $order->status }}</td>
                                 <td>{{ link_to_route('work_show_order_page', 'Выбрать', ['id' => $order->id]) }}</td>
                                 {{--<td>{{ link_to_route('work_delete_order_action', 'Del', ['id' => $order->id]) }}</td>--}}

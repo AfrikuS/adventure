@@ -2,8 +2,10 @@
 
 namespace App\Modules\Work\Persistence\Repositories\Order;
 
+use App\Modules\Core\Facades\EntityStore;
+use App\Modules\Work\Domain\Entities\Order\OrderMaterial;
+use App\Modules\Work\Domain\Entities\Order\OrderMaterialsCollection;
 use App\Modules\Work\Persistence\Dao\Order\OrderMaterialsDao;
-use App\Persistence\Models\Work\Order\OrderMaterial;
 
 class OrderMaterialsRepo
 {
@@ -39,9 +41,34 @@ class OrderMaterialsRepo
             );
     }
 
+    public function getMaterialsCollection($order_id)
+    {
+        $materials = EntityStore::get(OrderMaterialsCollection::class, 'order'.$order_id);
+
+        if ($materials != null) {
+            return $materials;
+        }
+
+        $materialsData = $this->materialsDao->getByOrder($order_id);
+
+        $materials = new OrderMaterialsCollection();
+
+        foreach ($materialsData as $materialData) {
+
+            $material = new OrderMaterial($materialData);
+
+            $materials->addMaterial($material);
+        }
+
+        EntityStore::add($materials, 'order'.$order_id);
+
+        return $materials;
+
+    }
+
     public function getCodesByOrderId($order_id)
     {
-        $materials = $this->materialsDao->getAllByOrderId($order_id);
+        $materials = $this->materialsDao->getByOrder($order_id);
 
         $codesArr = array_map(function ($material) {
             return $material->code;

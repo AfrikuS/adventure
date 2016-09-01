@@ -98,7 +98,6 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Other<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>{{ link_to_route('maxovik_page', 'Maxovik') }}</li>
-                        <li>{{ link_to_route('employment_index_page', 'Employment') }}</li>
                     </ul>
                 </li>
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Drive\Commands\Garage;
+namespace App\Modules\Drive\Actions\Garage;
 
 use App\Modules\Drive\Domain\Entities\Vehicle;
 use App\Modules\Drive\Domain\Services\Garage\RepairVehicleService;

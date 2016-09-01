@@ -17,13 +17,13 @@ class LoreBuilderService
         $this->loreRepo = app('LoreRepo');
     }
 
-    public function createLore($domainCode, $user_id)
+    public function createLore($user_id, $domain_id)
     {
-        /** @var DomainsRepo $domain */
-        $domain = app('DomainRepo')->findByCode($domainCode);
+//        /** @var DomainsRepo $domain */
+//        $domain = app('DomainsRepo')->find($domain_id);
         
 
-        $command = new CreateLore($user_id, $domain);
+        $command = new CreateLore($user_id, $domain_id);
         
         Bus::dispatch($command);
         

@@ -5,7 +5,7 @@ namespace App\Modules\Work\Providers;
 use App\Modules\Work\Domain\Services\Order\OrderService;
 use App\Modules\Work\Domain\Services\Order\WorkerOrderService;
 use App\Modules\Work\Domain\Services\Shop\ShopService;
-use App\Modules\Work\Persistence\Dao\Order\OrderDao;
+use App\Modules\Work\Persistence\Dao\Order\OrdersDao;
 use App\Modules\Work\Persistence\Dao\Order\OrderMaterialsDao;
 use App\Modules\Work\Persistence\Dao\Shop\ShopInstrumentsDao;
 use App\Modules\Work\Persistence\Dao\Shop\ShopMaterialsDao;
@@ -104,7 +104,7 @@ class WorkModuleProvider extends ServiceProvider
     private function registerDao()
     {
         $this->app->singleton(
-            'OrderDao', OrderDao::class
+            'OrderDao', OrdersDao::class
         );
         $this->app->singleton(
             'OrderMaterialsDao', OrderMaterialsDao::class

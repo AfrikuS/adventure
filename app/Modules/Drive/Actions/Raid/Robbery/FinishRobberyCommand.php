@@ -6,12 +6,12 @@ use App\Entities\Drive\RobberyEntity;
 use App\Models\Drive\Robbery;
 use App\Modules\Drive\Domain\Services\Raid\ActiveRaidService;
 use App\Modules\Drive\Domain\Services\Raid\RobberyService;
-use App\Modules\Drive\Persistence\Repositories\Raid\RaidRepo;
+use App\Modules\Drive\Persistence\Repositories\Raid\RaidsRepo;
 use App\Repositories\Drive\RaidRepository;
 
 class FinishRobberyCommand
 {
-    /** @var RaidRepo */
+    /** @var RaidsRepo */
     private $raidRepo;
 
     public function __construct()

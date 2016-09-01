@@ -2,6 +2,10 @@
 
 namespace App\Modules\Employment\Providers;
 
+use App\Handlers\Commands\AddEmploymentDomain;
+use App\Handlers\Commands\AddEmploymentDomainHandler;
+use App\Handlers\Commands\Employment\CreateLore;
+use App\Handlers\Commands\Employment\CreateLoreHandler;
 use App\Modules\Employment\Domain\Commands\Lore\LevelUpLoreSkill;
 use App\Modules\Employment\Domain\Handlers\Lore\LevelUpLoreSkillHandler;
 use Illuminate\Support\Facades\Bus;

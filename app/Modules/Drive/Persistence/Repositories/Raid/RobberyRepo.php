@@ -2,7 +2,6 @@
 
 namespace App\Modules\Drive\Persistence\Repositories\Raid;
 
-use App\Infrastructure\IdentityMap;
 use App\Modules\Core\Facades\EntityStore;
 use App\Modules\Drive\Domain\Entities\Raid\Robbery;
 use App\Modules\Drive\Persistence\Dao\Raid\RaidsDao;
@@ -16,9 +15,8 @@ class RobberyRepo
     {
         $this->raidsDao = app('DriveRaidsDao');
     }
-
-
-    public function findRobbery($raid_id)
+    
+    public function findByRaid($raid_id)
     {
         $robbery = EntityStore::get(Robbery::class, $raid_id);
 

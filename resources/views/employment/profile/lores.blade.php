@@ -12,6 +12,15 @@
 
     <h3>Работа, занятость, деятельность</h3>
 
+    @foreach($lores as $lore)
+
+        <p></p>
+        {{ $lore->domain_code }}
+        <p></p>
+        @include('_partials.employment.profile.lore_mosaic', ['lore' => $lore])
+
+    @endforeach
+
     <p></p>
     <p></p>
     <p></p>
@@ -20,7 +29,7 @@
     Мозаика знаний-умений
     <p></p>
 
-    {{ $mosaic }}
+    {{--{{ $mosaic }}--}}
     <p></p>
     <p></p>
 

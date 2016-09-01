@@ -2,7 +2,7 @@
 
 namespace App\Modules\Drive\Domain\Commands\Raid;
 
-class DeleteRaid
+class FinishRaid
 {
     public $raid_id;
 

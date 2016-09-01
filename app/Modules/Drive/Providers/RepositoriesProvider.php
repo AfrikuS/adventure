@@ -8,7 +8,7 @@ use App\Modules\Drive\Persistence\Dao\Raid\RaidsDao;
 use App\Modules\Drive\Persistence\Dao\VehiclesDao;
 use App\Modules\Drive\Persistence\Repositories\CatalogsRepo;
 use App\Modules\Drive\Persistence\Repositories\DriversRepo;
-use App\Modules\Drive\Persistence\Repositories\Raid\RaidRepo;
+use App\Modules\Drive\Persistence\Repositories\Raid\RaidsRepo;
 use App\Modules\Drive\Persistence\Repositories\Raid\RobberyRepo;
 use App\Modules\Drive\Persistence\Repositories\ShopRepo;
 use App\Modules\Drive\Persistence\Repositories\Vehicle\DetailsRepo;
@@ -100,7 +100,7 @@ class RepositoriesProvider extends ServiceProvider
     private function registerRaidRepositories()
     {
         $this->app->singleton(
-            'DriveRaidRepo', RaidRepo::class
+            'DriveRaidRepo', RaidsRepo::class
         );
         $this->app->singleton(
             'DriveRaidsDao', RaidsDao::class

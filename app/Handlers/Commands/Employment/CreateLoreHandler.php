@@ -2,8 +2,9 @@
 
 namespace App\Handlers\Commands\Employment;
 
-use App\Persistence\Repositories\Employment\DomainsRepo;
-use App\Persistence\Repositories\Employment\LoreRepo;
+
+use App\Modules\Employment\Persistence\Repositories\DomainsRepo;
+use App\Modules\Employment\Persistence\Repositories\LoreRepo;
 
 class CreateLoreHandler
 {
@@ -22,7 +23,7 @@ class CreateLoreHandler
 
     public function handle(CreateLore $command)
     {
-        $domain = $this->domainsRepo->findByCode($command->domainCode);
+        $domain = $this->domainsRepo->find($command->domain_id);
         
         $mosaic = $this->buildMosaic($domain->mosaic_size);
         

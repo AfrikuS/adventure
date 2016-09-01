@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Modules\Drive\Actions\Drive\Vehicle;
+namespace App\Modules\Drive\Actions\Garage;
 
+use App\Modules\Drive\Domain\Entities\Vehicle;
 use App\Modules\Drive\Domain\Services\Garage\RepairVehicleService;
 use App\Modules\Drive\Persistence\Repositories\VehiclesRepo;
 

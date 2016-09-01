@@ -6,13 +6,12 @@ class CreateLore
 {
     public $user_id;
     
-    /** @var string */
-    public $domainCode;
+    public $domain_id;
     
-    public function __construct($user_id, $domainCode)
+    public function __construct($user_id, $domain_id)
     {
         $this->user_id = $user_id;
 
-        $this->domainCode = $domainCode;
+        $this->domain_id = $domain_id;
     }
 }

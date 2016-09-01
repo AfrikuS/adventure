@@ -13,7 +13,9 @@
 
     <div class="row row-offcanvas">
         <div class="col-lg-4">
-            Рабочие навыки
+
+
+            {{ link_to_route('employment_profile_page', 'Рабочие навыки') }}
             {{--@if (count($workSkills) > 0)--}}
                 {{--<ul>--}}
                     {{--<li>Скилл_Код \ Скилл_Title</li>--}}

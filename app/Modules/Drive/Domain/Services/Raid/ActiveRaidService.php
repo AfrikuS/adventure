@@ -2,19 +2,19 @@
 
 namespace App\Modules\Drive\Domain\Services\Raid;
 
-use App\Modules\Drive\Domain\Commands\Raid\DeleteRaid;
+use App\Modules\Drive\Domain\Commands\Raid\FinishRaid;
 use App\Modules\Drive\Domain\Entities\Driver;
 use App\Modules\Drive\Domain\Entities\Raid\Raid;
 use App\Modules\Drive\Domain\Entities\Vehicle;
 use App\Modules\Drive\Persistence\Repositories\DriversRepo;
-use App\Modules\Drive\Persistence\Repositories\Raid\RaidRepo;
+use App\Modules\Drive\Persistence\Repositories\Raid\RaidsRepo;
 use App\Modules\Hero\Domain\Commands\Resources\IncrementGold;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Bus;
 
 class ActiveRaidService
 {
-    /** @var RaidRepo */
+    /** @var RaidsRepo */
     private $raidRepo;
     
     /** @var DriversRepo */
@@ -28,7 +28,7 @@ class ActiveRaidService
 
     public function completeRaid($raid_id)
     {
-        $raid = $this->raidRepo->findSimpleRaid($raid_id);
+        $raid = $this->raidRepo->findByDriver($raid_id);
         
         $driver_id = $raid->id;
 
@@ -39,7 +39,7 @@ class ActiveRaidService
         Bus::dispatch($getReward);
 
         
-        $deleteRaid = new DeleteRaid($raid->id);
+        $deleteRaid = new FinishRaid($raid->id);
 
         Bus::dispatch($deleteRaid);
     }
@@ -47,7 +47,7 @@ class ActiveRaidService
     public function startRobbery($raid_id)
     {
         /** @var Raid $raid */
-        $raid = $this->raidRepo->findSimpleRaid($raid_id);
+        $raid = $this->raidRepo->findByDriver($raid_id);
         
         $raid->setStatusInRobbery();
         
@@ -57,7 +57,7 @@ class ActiveRaidService
     public function completeRobbery($raid_id)
     {
         /** @var Raid $raid */
-        $raid = $this->raidRepo->findSimpleRaid($raid_id);
+        $raid = $this->raidRepo->findByDriver($raid_id);
 
         
         
@@ -75,7 +75,7 @@ class ActiveRaidService
             $vehicle->driver_id, 
             $vehicle->id, 
             $startTime, 
-            Raid::RAID_STATUS_FREE
+            Raid::STATUS_FREE
         );
         
         $driver = $this->driversRepo->findById($vehicle->driver_id);

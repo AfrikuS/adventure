@@ -10,49 +10,51 @@ use App\Modules\Drive\Actions\Raid\StartRaidCommand;
 use App\Modules\Drive\Domain\Entities\Raid\Raid;
 use App\Modules\Drive\Exceptions\Controllers\SearchFail_Exception;
 use App\Modules\Drive\Exceptions\Controllers\SearchSuccess_Exception;
-use App\Modules\Drive\Persistence\Repositories\Raid\RaidRepo;
+use App\Modules\Drive\Persistence\Repositories\Raid\RaidsRepo;
+use Finite\Exception\StateException;
 use Illuminate\Support\Facades\Input;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class RaidController extends Controller
 {
-    /** @var RaidRepo */
-    protected $raidRepo;
+//    /** @var RaidRepo */
+//    protected $raidRepo;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->raidRepo = app('DriveRaidRepo');
+//        $this->raidRepo = app('DriveRaidRepo');
     }
 
     public function show()
     {
-        /** @var RaidRepo $raidRepo */
+        /** @var RaidsRepo $raidRepo */
         $raidRepo = app('DriveRaidRepo');
 
         /** @var Raid $raid */
-        $raid = $raidRepo->findSimpleRaid($this->user_id);
+        $raid = $raidRepo->findByDriver($this->user_id);
         $raidStatus = $raid->status;
 
         
         switch ($raidStatus)
         {
-            case Raid::RAID_STATUS_FREE:
+            case Raid::STATUS_FREE:
 
                 return $this->view('drive.raid.switch_action', [
                 ]);
 
-            case Raid::RAID_STATUS_IN_ROBBERY:
+            case Raid::STATUS_IN_ROBBERY:
 
                 return \Redirect::route('drive_robbery_page');
 
-            case Raid::RAID_STATUS_SEARCH_VICTIM:
+            case Raid::STATUS_SEARCH_VICTIM:
 
                 return $this->view('drive.raid.search_results', [
                     'raid' => $raid,
                 ]);
 
-            case Raid::RAID_STATUS_ON_REPAIR:
+            case Raid::STATUS_ON_REPAIR:
 
                 return $this->view('drive.raid.repair', [
                 ]);
@@ -65,26 +67,37 @@ class RaidController extends Controller
 
         $cmd = new StartRaidCommand();
 
-        $cmd->createRaid($this->user_id);
+        try {
+
+            $cmd->createRaid($this->user_id);
+
+        }
+        catch (StateException $e) {
+
+            \Session::flash('message', $e->getMessage());
+        }
 
 
         return \Redirect::route('drive_raid_page');
     }
 
-
-
     public function startRobbery()
     {
-        $data = Input::all();
+//        $data = Input::all();
 //        $victim_id = $data['victim_id'];
         $victim_id = $this->user_id;
         
         $cmd = new StartRobberyCommand();
 
-        $cmd->startRobbery($this->user_id, $victim_id);
-        
-        
-        
+        try {
+
+            $cmd->startRobbery($this->user_id, $victim_id);
+        }
+        catch (StateException $e) {
+
+            \Session::flash('message', $e->getMessage());
+        }
+
         return \Redirect::route('drive_robbery_page');
     }
 
@@ -131,10 +144,10 @@ class RaidController extends Controller
     protected function view($view = null, $data = [])
     {
 //        $raid = $this->raidRepo->findRobberyById($this->driver->id);
-        /** @var RaidRepo $raidRepo */
+        /** @var RaidsRepo $raidRepo */
         $raidRepo = app('DriveRaidRepo');
 
-        $raid = $raidRepo->findSimpleRaid($this->user_id);
+        $raid = $raidRepo->findByDriver($this->user_id);
         $data['raid'] = $raid;
 
         return parent::view($view, $data);

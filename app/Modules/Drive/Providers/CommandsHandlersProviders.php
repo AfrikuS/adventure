@@ -2,7 +2,7 @@
 
 namespace App\Modules\Drive\Providers;
 
-use App\Modules\Drive\Domain\Commands\Raid\DeleteRaid;
+use App\Modules\Drive\Domain\Commands\Raid\FinishRaid;
 use App\Modules\Drive\Domain\Commands\Shop\CreateDetailOffer;
 use App\Modules\Drive\Domain\Commands\Shop\DeleteDetailOffer;
 use App\Modules\Drive\Domain\Commands\Shop\PurchaseDetail;
@@ -30,7 +30,7 @@ class CommandsHandlersProviders extends ServiceProvider
 
 
 
-        DeleteRaid::class          => DeleteRaidHandler::class,
+        FinishRaid::class          => DeleteRaidHandler::class,
     ];
 
     /**

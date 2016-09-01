@@ -4,7 +4,7 @@ namespace App\Modules\Employment\Persistence\Dao;
 
 use App\Exceptions\Persistence\EntityNotFound_Exception;
 
-class DomainDao // catalog, memory-catalog via repo
+class DomainDao
 {
     private $table = 'employment_domains';
 
@@ -22,6 +22,10 @@ class DomainDao // catalog, memory-catalog via repo
         $domains = \DB::table($this->table)
             ->select(['id', 'code', 'title', 'mosaic_size'])
             ->get();
+
+        if (null == $domains) {
+            throw new EntityNotFound_Exception('no entries in ' . $this->table . ' table');
+        }
 
         return $domains;
     }
@@ -84,4 +88,5 @@ class DomainDao // catalog, memory-catalog via repo
 
         return $domainsCodes;
     }
+
 }

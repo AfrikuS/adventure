@@ -4,14 +4,14 @@ namespace App\Modules\Work\Persistence\Dao\Order;
 
 use App\Modules\Work\Domain\Entities\Order\Order;
 
-class OrderDao
+class OrdersDao
 {
     private $table = 'work_orders';
 
     public function findById(int $id)
     {
         $order = \DB::table($this->table)
-            ->select(['id', 'desc', 'type', 'status', 'domain_code', 'price',
+            ->select(['id', 'desc', 'type', 'status', 'domain_id', 'price',
                         'acceptor_worker_id', 'acceptor_team_id', 'customer_hero_id'])
 
             ->find($id);
@@ -32,12 +32,11 @@ class OrderDao
         }
     }
 
-    public function create($desc, $domainCode, $price, $customer_id)
+    public function create($desc, $domain_id, $price, $customer_id)
     {
         $order_id = \DB::table($this->table)->insertGetId([
             'desc' => $desc,
-//            'kind_work_title' => $domainCode,
-            'domain_code' => $domainCode,
+            'domain_id' => $domain_id,
             'price' => $price,
             'acceptor_worker_id' => null,
             'acceptor_team_id' => null,

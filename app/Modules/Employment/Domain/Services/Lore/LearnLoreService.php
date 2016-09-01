@@ -22,12 +22,12 @@ class LearnLoreService
         $orders = app('OrderRepo');
         $order = $orders->find($order_id);
 
-        $domainCode = $order->domainCode;
+        $domain_id = $order->domain_id;
 
 
 
         /** @var Lore $lore */
-        $lore = $this->loreRepo->find($domainCode, $user_id);
+        $lore = $this->loreRepo->findBy($user_id, $domain_id);
 
         $index = rand(0, $lore->size - 1);
 //        $index = 49;
@@ -41,13 +41,43 @@ class LearnLoreService
         if ($this->getLucky()) {
 
 
-            $command = new LevelUpLoreSkill($domainCode, $user_id, $index);
+            $command = new LevelUpLoreSkill($user_id, $domain_id, $index);
 
 
             Bus::dispatch($command);
 
 
             \Session::flash('message', "Навык {$index} повышен");
+        }
+    }
+
+    public function attemptLearnInSchool($user_id, $lore_id)
+    {
+        /** @var Lore $lore */
+        $lore = $this->loreRepo->find($lore_id);
+
+        $mosaicIndex = rand(0, $lore->size - 1);
+
+        if ($lore->isMaxValue($mosaicIndex)) {
+
+            return;
+        }
+
+
+        if ($this->getLucky()) {
+
+
+            $command = new LevelUpLoreSkill($lore->id, $mosaicIndex);
+
+
+            Bus::dispatch($command);
+
+
+            \Session::flash('message', "Навык {$mosaicIndex} повышен");
+        }
+        else {
+
+            \Session::flash('message', "Неудачная попытка");
         }
     }
 

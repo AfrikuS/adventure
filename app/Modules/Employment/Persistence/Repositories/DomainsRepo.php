@@ -3,8 +3,10 @@
 namespace App\Modules\Employment\Persistence\Repositories;
 
 use App\Infrastructure\CatalogsIdentityMap;
+use App\Modules\Core\Facades\EntityStore;
 use App\Modules\Employment\Domain\Entities\Domain;
 use App\Modules\Employment\Domain\Entities\DomainsCatalog;
+use App\Modules\Employment\Persistence\Catalogs\DomainsCollection;
 use App\Modules\Employment\Persistence\Dao\DomainDao;
 use App\Modules\Employment\Persistence\Dao\LoreDao;
 
@@ -32,17 +34,22 @@ class DomainsRepo
         return $this->domainDao->getCodes();
     }
     
+    
     public function findByCode($code)
     {
+        $domains = EntityStore::get(Domain::class, 'code'.$code);
+
+        if ($domains != null) {
+            return $domains;
+        }
+
         $domainData = $this->domainDao->findByCode($code);
-        
-        return 
-            new Domain(
-                $domainData->id,
-                $domainData->code,
-                $domainData->title,
-                $domainData->mosaic_size
-            );
+
+        $domain = new Domain($domainData);
+
+        EntityStore::add($domains, 'code'.$code);
+
+        return $domain;
     }
 
     public function getByUser($user_id)
@@ -52,35 +59,11 @@ class DomainsRepo
 
         return $this->domainDao->getByIds($userDomains_ids);
     }
-    
+
+    /** @deprecated  */
     public function getAll()
     {
         
-    }
-
-    public function getCatalog()
-    {
-        // object-entity level
-        $domains = CatalogsIdentityMap::getInstance()->getCatalog('DomainsCatalog');
-
-        if ($domains != null) {
-
-            return $domains;
-        }
-
-        $domainsData = $this->domainDao->getAll();
-
-        if (null == $domainsData) {
-
-            throw new \Exception('no entries in table');
-        }
-
-        $domains = new DomainsCatalog($domainsData);
-
-
-        CatalogsIdentityMap::getInstance()->addCatalog($domains);
-
-        return $domains;
     }
 
     public function create($title, $code, $mosaicSize)
@@ -95,4 +78,38 @@ class DomainsRepo
         return $this->domainDao->getDiffsUserDomains($userDomains_ids);
     }
 
+    public function getDomainsCollection()
+    {
+        $domains = EntityStore::get(DomainsCollection::class, 1);
+
+        if ($domains != null) {
+            return $domains;
+        }
+
+        $domainsData = $this->domainDao->getAll();
+
+        $domains = new DomainsCollection();
+
+        foreach ($domainsData as $domainData) {
+
+            $domain = new Domain($domainData);
+
+            $domains->addDomain($domain);
+        }
+
+        EntityStore::add($domains, 1);
+
+        return $domains;
+    }
+
+    public function getUserRemainingsDomains($user_id)
+    {
+        $userDomains_ids = $this->loreDao->getDomainsIdsByUser($user_id);
+        
+        $domainsColl = $this->getDomainsCollection();
+            
+        $diffDomains = $domainsColl->differencesBy($userDomains_ids);
+        
+        return $diffDomains;
+    }
 }

@@ -36,13 +36,15 @@ class OrderBuilderService
     {
         $domains = app('DomainsRepo');
 
-        $domainsCodes = $domains->getCodes();
+        $domainsCollection = $domains->getDomainsCollection();
+        
+        $domains_ids = $domainsCollection->getIds();
 
 
         $faker = \Faker\Factory::create();
 
 
-        $domainCode = $faker->unique()->randomElement($domainsCodes);
+        $domain_id = $faker->unique()->randomElement($domains_ids);
 
 
         $desc = 'fence';
@@ -50,7 +52,7 @@ class OrderBuilderService
 
         
         
-        $createOrderData = new CreateOrderData($desc, $domainCode, $price, $customer_id);
+        $createOrderData = new CreateOrderData($desc, $domain_id, $price, $customer_id);
 
         $order_id = Bus::dispatch($createOrderData);
     }
@@ -69,7 +71,7 @@ class OrderBuilderService
     {
         $order = $this->orders->find($order_id);
         
-        $domainCode = $order->domainCode;
+        $domain_id = $order->domain_id;
         
 //        $domainsCodes = $domains->getCodes();
 //
@@ -81,7 +83,7 @@ class OrderBuilderService
 ////        {
 //            $skillCode = $faker->unique()->randomElement($domainsCodes);
 
-        $this->skillsRepo->createOrderSkill($order_id, $domainCode, $need);
+        $this->skillsRepo->createOrderSkill($order_id, $domain_id, $need);
 //            $this->orderMaterialsRepo->createOrderMaterial($order_id, $code, $need = 2);
     }
 }

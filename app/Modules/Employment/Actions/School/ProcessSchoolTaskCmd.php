@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Commands\Employment\School;
+namespace App\Modules\Employment\Actions\School;
 
-use App\Domain\Services\Employment\Lore\LearnLoreService;
+use App\Modules\Employment\Domain\Services\Lore\LearnLoreService;
 
 class ProcessSchoolTaskCmd
 {
-    public function process($lore_id, $user_id)
+    public function process($user_id, $lore_id)
     {
 
         $loreService = new LearnLoreService();
@@ -15,7 +15,7 @@ class ProcessSchoolTaskCmd
         try {
 
 
-            $loreService->attemptLearnSkill($lore_id, $user_id);
+            $loreService->attemptLearnInSchool($user_id, $lore_id);
 
 
         }
@@ -25,6 +25,5 @@ class ProcessSchoolTaskCmd
         }
 
         \DB::commit();
-
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Modules\Drive\Persistence\Repositories\VehiclesRepo;
 use App\Repositories\Drive\RaidRepository;
 use App\Repositories\Drive\VehicleRepository;
 use Closure;
@@ -17,10 +18,14 @@ class VehicleBrokenMiddleware
 //        $raidRepo = new RaidRepository();
 //        $raid = $raidRepo->findRaidById($user_id);
 
-        $vehicleRepo = new VehicleRepository();
-        $vehicle = $vehicleRepo->findSimpleVehicleByDriverId($user_id);
 
-        if ($vehicle->state == 'broken') {
+
+//        $vehicleRepo = new VehicleRepository();
+        /** @var VehiclesRepo $vehicleRepo */
+        $vehicleRepo = app('DriveVehiclesRepo');
+        $vehicle = $vehicleRepo->findActiveByDriver($user_id);
+
+        if ($vehicle->isBroken()) {
 
             return \Redirect::route('drive_raid_vehicle_broken_page');
         }

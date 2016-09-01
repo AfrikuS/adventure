@@ -18,7 +18,7 @@ class LevelUpLoreSkillHandler
 
     public function handle(LevelUpLoreSkill $command)
     {
-        $lore = $this->loreRepo->find($command->domainCode, $command->user_id);
+        $lore = $this->loreRepo->find($command->lore_id);
 
         
         $lore->upUnitOfLore($command->skillIndex);

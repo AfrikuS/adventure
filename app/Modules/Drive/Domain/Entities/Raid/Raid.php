@@ -4,10 +4,10 @@ namespace App\Modules\Drive\Domain\Entities\Raid;
 
 class Raid
 {
-    const RAID_STATUS_SEARCH_VICTIM = 'search_victim';
-    const RAID_STATUS_ON_REPAIR = 'repair';
-    const RAID_STATUS_IN_ROBBERY = 'in_robbery';
-    const RAID_STATUS_FREE = 'switch_action';
+    const STATUS_SEARCH_VICTIM = 'search_victim';
+    const STATUS_ON_REPAIR = 'repair';
+    const STATUS_IN_ROBBERY = 'in_robbery';
+    const STATUS_FREE = 'switch_action';
 
     public $id;
     public $vehicle_id;
@@ -26,19 +26,18 @@ class Raid
 
     public function fondVictim($victim_id)
     {
-        $this->status = self::RAID_STATUS_SEARCH_VICTIM;
+        $this->status = self::STATUS_SEARCH_VICTIM;
 
         $this->victim_id = $victim_id;
     }
 
     public function setStatusInRobbery()
     {
-        $this->status = self::RAID_STATUS_IN_ROBBERY;
+        $this->status = self::STATUS_IN_ROBBERY;
     }
 
     public function setStatusFree()
     {
-        $this->status = self::RAID_STATUS_FREE;
+        $this->status = self::STATUS_FREE;
     }
-
 }

@@ -16,14 +16,16 @@ class Lore
     
     public $size;
 
-    public $code;
+    public $domain_id;
+    public $domain_code;
 
     public function __construct(\stdClass $loreData)
     {
         $this->id = $loreData->id;
         $this->user_id = $loreData->user_id;
         $this->size = $loreData->size;
-        $this->code = $loreData->domain_code;
+        $this->domain_id = $loreData->domain_id;
+        $this->domain_code = $loreData->domain_code;
 
         $this->unpackMosaic($loreData->mosaic);
     }

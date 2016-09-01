@@ -8,7 +8,7 @@ class OrderMaterialsDao
 {
     private $table = 'work_order_materials';
     
-    public function getAllByOrderId($order_id)
+    public function getByOrder($order_id)
     {
         $materials = \DB::table($this->table)
             ->select(['id', 'order_id', 'code', 'need', 'stock'])

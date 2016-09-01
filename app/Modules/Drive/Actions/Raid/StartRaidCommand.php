@@ -3,20 +3,21 @@
 namespace App\Modules\Drive\Actions\Raid;
 
 use App\Modules\Drive\Domain\Services\Raid\ActiveRaidService;
-use App\Modules\Drive\Persistence\Repositories\Raid\RaidRepo;
+use App\Modules\Drive\Persistence\Repositories\Raid\RaidsRepo;
 use App\Modules\Drive\Persistence\Repositories\VehiclesRepo;
+use Finite\Exception\StateException;
 
 class StartRaidCommand
 {
-    /** @var RaidRepo */
-    private $raidRepo;
+    /** @var RaidsRepo */
+    private $raidsRepo;
     
     /** @var VehiclesRepo */
     private $vehiclesRepo;
 
     public function __construct()
     {
-        $this->raidRepo = app('DriveRaidRepo');
+        $this->raidsRepo = app('DriveRaidRepo');
         $this->vehiclesRepo = app('DriveVehiclesRepo');
     }
 
@@ -24,7 +25,7 @@ class StartRaidCommand
     {
         $vehicle = $this->vehiclesRepo->findActiveByDriver($driver_id);
         
-        $this->validateAction();
+        $this->validateAction($driver_id);
         
         $raidService = new ActiveRaidService();
         
@@ -43,9 +44,13 @@ class StartRaidCommand
         \DB::commit();
     }
 
-    private function validateAction()
+    private function validateAction($driver_id)
     {
-//        isRaidExist => to middleware
+        $raidExist = $this->raidsRepo->isExistRaid($driver_id);
+        
+        if ($raidExist) {
+            throw new StateException('Вы уже участвуете в рейде');
+        }
     }
 
 }

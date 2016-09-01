@@ -19,11 +19,11 @@ class OrderSkillsRepo
         $this->skillsDao = $skillsDao;
     }
 
-    public function createOrderSkill($order_id, $code, $need, $stock = 0)
+    public function createOrderSkill($order_id, $domain_id, $need, $stock = 0)
     {
         $this->skillsDao->create(
             $order_id,
-            $code,
+            $domain_id,
             $need,
             $stock
         );

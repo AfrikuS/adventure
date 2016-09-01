@@ -34,17 +34,29 @@ class LoreDao
         return $lore;
     }
 
-    public function find($code, $user_id)
+    public function find($id)
+    {
+        $loreData = \DB::table($this->table)
+            ->select(['id', 'user_id', 'mosaic', 'domain_id', 'size', 'domain_code'])
+            ->find($id);
+
+        if (null === $loreData) {
+            throw new EntityNotFound_Exception;
+        }
+
+        return $loreData;
+    }
+
+    public function findBy($user_id, $domain_id)
     {
         $loreData = \DB::table($this->table)
             ->select(['id', 'user_id', 'mosaic', 'domain_id', 'size', 'domain_code'])
 //            ->where('domain_id', $lore_id)
-            ->where('domain_code', $code)
             ->where('user_id', $user_id)
+            ->where('domain_id', $domain_id)
             ->first();
 
         if (null === $loreData) {
-
             throw new EntityNotFound_Exception;
         }
 
@@ -75,15 +87,10 @@ class LoreDao
 
     public function getDomainsIdsByUser($user_id)
     {
-        $domainsCodes = \DB::table($this->table)
-//            ->select(['domain_id'])
+        $domains_ids = \DB::table($this->table)
             ->where('user_id', $user_id)
-            ->pluck('domain_code');
+            ->pluck('domain_id');
 
-        return $domainsCodes;
-
-//        return array_map(function ($item) {
-//            return $item->domain_id;
-//        }, $domains_ids);
+        return $domains_ids;
     }
 }

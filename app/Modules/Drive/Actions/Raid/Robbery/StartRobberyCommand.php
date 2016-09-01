@@ -48,11 +48,11 @@ class StartRobberyCommand
 
     private function validateAction($raid_id)
     {
-        $raid = $this->robberyRepo->findRobbery($raid_id);
+        $robbery = $this->robberyRepo->findByRaid($raid_id);
 
-        if ($raid->robbery_status != null) {
+        if ($robbery->robbery_status != null) {
 
-            throw new StateException;
+            throw new StateException('Вы участвуете в разбое');
         }
     }
 }

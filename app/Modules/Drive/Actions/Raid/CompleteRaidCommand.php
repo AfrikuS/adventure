@@ -4,14 +4,14 @@ namespace App\Modules\Drive\Actions\Raid;
 
 use App\Models\Core\Hero;
 use App\Modules\Drive\Domain\Services\Raid\ActiveRaidService;
-use App\Modules\Drive\Persistence\Repositories\Raid\RaidRepo;
+use App\Modules\Drive\Persistence\Repositories\Raid\RaidsRepo;
 use App\Repositories\Drive\RaidRepository;
 use App\Repositories\HeroRepositoryObj;
 use Finite\Exception\StateException;
 
 class CompleteRaidCommand
 {
-    /** @var RaidRepo */
+    /** @var RaidsRepo */
     private $raidRepo;
 
     public function __construct()
@@ -47,7 +47,7 @@ class CompleteRaidCommand
     /** @deprecated  */ // redo
     private function validateCommand($raid_id)
     {
-        $raid = $this->raidRepo->findSimpleRaid($raid_id);
+        $raid = $this->raidRepo->findByDriver($raid_id);
         
         if (null === $raid) {
 

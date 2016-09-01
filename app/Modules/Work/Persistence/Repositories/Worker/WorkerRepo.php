@@ -113,4 +113,12 @@ class WorkerRepo
         }
     }*/
 
+    public function getWorkerMaterialsByOrder($order_id)
+    {
+        $orderMaterials_ids = 34;
+
+//        order_materials_ids
+
+//        intersect_ids (order_materials & worker_materials)
+    }
 }

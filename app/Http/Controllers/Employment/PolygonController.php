@@ -10,37 +10,6 @@ use Illuminate\Support\Facades\Input;
 class PolygonController extends EmploymentController
 {
     
-    /** @deprecated  */
-    public function index()
-    {
-        $loreRepo = app('LoreRepo');
-        $lore = $loreRepo->find($this->user_id);
-        
-//        if (null == $lore) {
-//
-//            $loreBuilder = new LoreBuilderService();
-//
-//            $domain_id = 1;
-//            $loreBuilder->createLore($this->user_id, $domain_id, 30);
-//        }
-
-//        $lore = $loreRepo->find($this->user_id);
-
-        $mosaic = $lore->extractToViewDto();
-
-
-
-
-
-//        factory()
-
-
-
-
-        return $this->view('employment.index', [
-            'mosaic' => $mosaic,
-        ]);
-    }
 
 
 

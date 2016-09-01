@@ -9,19 +9,11 @@ class Domain
     public $title;
     public $mosaic_size;
 
-    /**
-     * Domain constructor.
-     * @param $code
-     * @param $id
-     * @param $mosaic_size
-     * @param $title
-     */
-    public function __construct($id, $code, $title, $mosaic_size)
+    public function __construct(\stdClass $domainData)
     {
-        $this->code = $code;
-        $this->id = $id;
-        $this->mosaic_size = $mosaic_size;
-        $this->title = $title;
+        $this->id = $domainData->id;
+        $this->code = $domainData->code;
+        $this->title = $domainData->title;
+        $this->mosaic_size = $domainData->mosaic_size;
     }
-
 }

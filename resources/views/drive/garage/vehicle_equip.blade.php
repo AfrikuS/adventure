@@ -85,7 +85,7 @@
         <div class="col-lg-3">
             {{--@if($raid == null)--}}
             {!! Form::open(['route' => 'drive_raid_start_action', 'class' => '']) !!}
-            {!! Form::hidden('vehicle_id', $vehicle->id) !!}
+            {{--{!! Form::hidden('vehicle_id', $vehicle->id) !!}--}}
             {!! Form::submit('Начать РЕЙД', array('class' => 'btn btn-warning')) !!}
             {!! Form::close() !!}
             {{--@else--}}

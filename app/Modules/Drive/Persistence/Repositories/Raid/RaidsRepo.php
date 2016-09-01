@@ -7,7 +7,7 @@ use App\Modules\Drive\Domain\Entities\Raid\Raid;
 use App\Modules\Drive\Domain\Entities\Raid\Robbery;
 use App\Modules\Drive\Persistence\Dao\Raid\RaidsDao;
 
-class RaidRepo
+class RaidsRepo
 {
     /** @var RaidsDao */
     private $raidsDao;
@@ -27,8 +27,7 @@ class RaidRepo
         );
     }
     
-    /** @deprecated  */
-    public function findSimpleRaid($driver_id)
+    public function findByDriver($driver_id)
     {
         $raid = EntityStore::get(Raid::class, $driver_id);
 
@@ -47,43 +46,10 @@ class RaidRepo
         return $raid;
     }
 
-    /** @deprecated @see RobberyRepo */
-    public function findRobbery($raid_id)
-    {
-        $robbery = EntityStore::get(Robbery::class, $raid_id);
-
-        if (null != $robbery) {
-
-            return $robbery;
-        }
-
-        $robberyData = $this->raidsDao->findRobbery($raid_id);
-
-
-        $robbery = new Robbery($robberyData);
-
-        EntityStore::add($robbery, $robbery->id);
-
-
-        return $robbery;
-    }
-
     public function deleteRaid($raid_id)
     {
         $this->raidsDao->delete($raid_id);
     }
-
-
-//    /** @deprecated @see RobberyRepo */
-//    public function updateRobberyData($raid)
-//    {
-//        return
-//            $this->raidsDao->updateRobberyData(
-//                $raid->id,
-//                $raid->status,
-//                $raid->robbery_status
-//            );
-//    }
 
     public function updateRaidData(Raid $raid)
     {
@@ -93,5 +59,10 @@ class RaidRepo
             $raid->victim_id,
             $raid->reward
         );
+    }
+
+    public function isExistRaid($id)
+    {
+        return $this->raidsDao->isExistRaid($id);
     }
 }

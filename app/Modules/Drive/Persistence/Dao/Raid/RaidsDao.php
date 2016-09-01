@@ -87,4 +87,14 @@ class RaidsDao
                     'robbery_status' => null,
                 ]);
     }
+
+    public function isExistRaid($id)
+    {
+        $exist = 
+            \DB::table($this->table)
+                ->where('id', $id)
+                ->exists();
+
+        return $exist;
+    }
 }

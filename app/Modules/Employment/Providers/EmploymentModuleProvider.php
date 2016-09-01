@@ -32,9 +32,9 @@ class EmploymentModuleProvider extends ServiceProvider
             'LoreRepo', LoreRepo::class
         );
 
-        $this->app->singleton('DomainsCatalog', function () {
-            return app('DomainsRepo')->getCatalog();
-        });
+//        $this->app->singleton('DomainsCatalog', function () {
+//            return app('DomainsRepo')->getCatalog();
+//        });
 
     }
 

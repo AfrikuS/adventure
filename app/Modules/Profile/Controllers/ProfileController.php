@@ -15,14 +15,25 @@ class ProfileController extends Controller
 {
     public function index()
     {
-//        if (null === Worker::find(\Auth::id())) {
-//            WorkerFactory::createWorker(\Auth::id());
-//        }
 
-        /** @var WorkerRepo $workerRepo */
-        $workerRepo = app('WorkerRepo');
+//        \Schema::table('work_orders', function ($table) {
+//
+//            $table->dropColumn('domain_code');
+//            $table->integer('size')->unsigned()->nullable()->after('mosaic');
+//            $table->integer('domain_id')->unsigned()->after('type');
+//            $table->integer('user_id')->unsigned()->default(2);
+//
+//            $table->foreign('domain_id')->references('id')->on('employment_domains');
+//            $table->foreign('user_id')->references('id')->on('auth_app_users');
+//        });
+//
 
-        $worker = $workerRepo->findSimpleWorker($this->user_id);
+
+
+//        /** @var WorkerRepo $workerRepo */
+//        $workerRepo = app('WorkerRepo');
+
+//        $worker = $workerRepo->findSimpleWorker($this->user_id);
 //        $skills = $worker->skills;
 
         return $this->view('profile.profile', [

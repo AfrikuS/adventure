@@ -2,6 +2,7 @@
 
 namespace App\Modules\Employment\Domain\Entities;
 
+/** @deprecated  */
 class DomainsCatalog
 {
     /** @var array */

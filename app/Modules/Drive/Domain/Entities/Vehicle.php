@@ -13,6 +13,8 @@ class Vehicle implements RepairVehicle
     public $damage_percent;
     public $fuel_level;
 
+    public $mobility;
+
     public $details;
 
     public function __construct(\stdClass $vehicleData)
@@ -22,6 +24,8 @@ class Vehicle implements RepairVehicle
         $this->status = $vehicleData->status;
         $this->damage_percent = $vehicleData->damage_percent;
         $this->fuel_level = $vehicleData->fuel_level;
+
+        $this->mobility = $vehicleData->mobility;
     }
 
     public function setDetails($details)
@@ -73,4 +77,8 @@ class Vehicle implements RepairVehicle
         $this->damage_percent = $summaryDamage;
     }
 
+    public function isBroken()
+    {
+        return $this->status == self::STATUS_BROKEN;
+    }
 }

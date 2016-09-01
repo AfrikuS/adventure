@@ -4,12 +4,12 @@ namespace App\Modules\Drive\Actions\Raid;
 
 use App\Modules\Drive\Domain\Entities\Raid\Raid;
 use App\Modules\Drive\Exceptions\Controllers\SearchSuccess_Exception;
-use App\Modules\Drive\Persistence\Repositories\Raid\RaidRepo;
+use App\Modules\Drive\Persistence\Repositories\Raid\RaidsRepo;
 use Finite\Exception\StateException;
 
 class SearchVictimCommand
 {
-    /** @var RaidRepo */
+    /** @var RaidsRepo */
     private $raidRepo;
 
     public function __construct()
@@ -21,7 +21,7 @@ class SearchVictimCommand
     public function searchVictim($driver_id)
     {
         /** @var Raid $raid */
-        $raid = $this->raidRepo->findSimpleRaid($driver_id);
+        $raid = $this->raidRepo->findByDriver($driver_id);
 
         $this->validateCommand($raid);
         
@@ -41,8 +41,8 @@ class SearchVictimCommand
 
     private function validateCommand(Raid $raid)
     {
-        if ($raid->status !== Raid::RAID_STATUS_FREE &&
-            $raid->status !== Raid::RAID_STATUS_SEARCH_VICTIM) {
+        if ($raid->status !== Raid::STATUS_FREE &&
+            $raid->status !== Raid::STATUS_SEARCH_VICTIM) {
 
             throw new StateException;
         }

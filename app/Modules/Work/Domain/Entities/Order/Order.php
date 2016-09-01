@@ -16,7 +16,7 @@ class Order
     public $type;
     public $status;
 //    public $kind_work_title;
-    public $domainCode;
+    public $domain_id;
     public $price;
     public $acceptor_worker_id;
     public $customer_hero_id;
@@ -28,9 +28,10 @@ class Order
         $this->id = $orderData->id;
         $this->desc = $orderData->desc;
         $this->type = $orderData->type;
+        $this->domain_id = $orderData->domain_id;
+        
         $this->status = $orderData->status;
 //        $this->kind_work_title = $orderData->kind_work_title;
-        $this->domainCode = $orderData->domain_code;
         $this->price = $orderData->price;
         $this->acceptor_worker_id = $orderData->acceptor_worker_id;
         $this->customer_hero_id = $orderData->customer_hero_id;

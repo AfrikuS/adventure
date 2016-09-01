@@ -3,9 +3,9 @@
 namespace App\Modules\Drive\Controllers\Garage;
 
 use App\Http\Controllers\Controller;
-use App\Modules\Drive\Actions\Drive\Vehicle\RecoveryVehicleAction;
-use App\Modules\Drive\Actions\Drive\Vehicle\RepairVehicleAction;
-use App\Modules\Drive\Commands\Garage\RefuelVehicleAction;
+use App\Modules\Drive\Actions\Garage\RecoveryVehicleAction;
+use App\Modules\Drive\Actions\Garage\RefuelVehicleAction;
+use App\Modules\Drive\Actions\Garage\RepairVehicleAction;
 use App\Modules\Drive\Persistence\Repositories\DriversRepo;
 use App\Modules\Drive\Persistence\Repositories\VehiclesRepo;
 use Illuminate\Support\Facades\Redirect;
@@ -36,12 +36,12 @@ class WorkroomController extends Controller
 
     public function repair()
     {
-        $driver = $this->driversRepo->findById($this->user_id);
+//        $driver = $this->driversRepo->findById($this->user_id);
         
         
         $repair = new RepairVehicleAction();
         
-        $repair->repair($driver->vehicle_id);
+        $repair->repair($this->user_id);
         
         
 
@@ -50,13 +50,13 @@ class WorkroomController extends Controller
 
     public function recovery()
     {
-        $driver = $this->driversRepo->findById($this->user_id);
+//        $driver = $this->driversRepo->findById($this->user_id);
 
         
         
         $recoveryVehicleAction = new RecoveryVehicleAction();
 
-        $recoveryVehicleAction->recovery($driver->vehicle_id);
+        $recoveryVehicleAction->recovery($this->user_id);
 
         
 

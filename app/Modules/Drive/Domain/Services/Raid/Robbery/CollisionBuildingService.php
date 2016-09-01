@@ -25,13 +25,13 @@ class CollisionBuildingService
     public function handleGatesCollision($driver_id)
     {
         /** @var Robbery $robbery */
-        $robbery = $this->robberyRepo->findRobbery($driver_id);
+        $robbery = $this->robberyRepo->findByRaid($driver_id);
 
         $buildings = $this->buildingsRepo->getByHero($robbery->victim_id);
 
 
         /** @var RobberyVehicle $robberyVehicle */
-        $robberyVehicle = app('DriveVehiclesRepo')->findRobberyVehicle($robbery->vehicle_id);
+        $robberyVehicle = app('DriveVehiclesRepo')->find($robbery->vehicle_id);
 
         $processor = new GatesCollisionProcessor();
 

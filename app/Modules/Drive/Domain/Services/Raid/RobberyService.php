@@ -26,7 +26,7 @@ class RobberyService
 
     public function visitVictim($raid_id, $victim_id)
     {
-        $robbery = $this->robberyRepo->findRobbery($raid_id);
+        $robbery = $this->robberyRepo->findByRaid($raid_id);
         
         
         $robbery->victim_id = $victim_id;
