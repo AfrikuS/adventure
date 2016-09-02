@@ -13,7 +13,7 @@
     Мозаика знаний-умений
     <p></p>
 
-    {{ $mosaic }}
+    {{ $lore->present()->mosaicTable }}
     <p></p>
     <p></p>
 

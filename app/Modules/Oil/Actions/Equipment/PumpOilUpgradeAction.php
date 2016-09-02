@@ -2,38 +2,40 @@
 
 namespace App\Modules\Oil\Actions\Equipment;
 
-use App\Repositories\Core\Equipment\PumpOilRepo;
+
+use App\Modules\Oil\Domain\Entities\OilPump;
+use App\Modules\Oil\Persistence\Repositories\OilPumpRepo;
+use Finite\Exception\StateException;
 
 class PumpOilUpgradeAction
 {
-    const MAX_PUMP_OIL_LEVEL    = 4;
+    /** @var  OilPumpRepo */
+    private $oilPumpRepo;
 
-    /** @var  PumpOilRepo */
-    private $pumpOilRepo;
-
-    public function __construct(PumpOilRepo $pumpOilRepo)
+    public function __construct()
     {
-        $this->pumpOilRepo = $pumpOilRepo;
+        $this->oilPumpRepo = app('OilPumpRepo');
     }
 
     public function upgrade($hero_id)
     {
-        $pumpOil = $this->pumpOilRepo->findPumpOilByHeroId($hero_id);
+        /** @var OilPump $oilPump */
+        $oilPump = $this->oilPumpRepo->findBy($hero_id);
+        
+        $this->validateAction($oilPump);
 
-
-        $newLevel = $pumpOil->pump_level + 1;
-
-
-        if ($newLevel > self::MAX_PUMP_OIL_LEVEL) {
-
-            throw new \Exception;
-        }
-
-        $pumpOil->update([
-            'pump_level'  => $newLevel,
-
-        ]);
-
+        
+        $oilPump->upgradeLevel();
+        
+        
+        $this->oilPumpRepo->updateLevel($oilPump);
     }
 
+    private function validateAction(OilPump $oilPump)
+    {
+        if ($oilPump->isFullUpgrade()) {
+            
+            throw new StateException('Нефтяной насос прокачан по максимуму');
+        }
+    }
 }

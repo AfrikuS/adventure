@@ -4,7 +4,7 @@ namespace App\Repositories\Core\ResourceStore;
 
 use App\Commands\Hero\ResourceStore\PetrolStoreUpgradeCmd;
 use App\Models\Core\ResourceStore;
-use App\ViewData\Hero\ResourceStore\PetrolStoreDto;
+use App\ViewData\Hero\ResourceStore\PetrolStore;
 
 class PetrolStoreRepo
 {
@@ -21,7 +21,7 @@ class PetrolStoreRepo
     {
         $petrolStoreModel = $this->findPetrolStoreModel($hero_id);
 
-        $petrolStoreDto = new PetrolStoreDto
+        $petrolStoreDto = new PetrolStore
                             (
                                 $petrolStoreModel->petrol_capacity_level,
                                 $petrolStoreModel->petrol_capacity_amount,
@@ -41,7 +41,7 @@ class PetrolStoreRepo
 
         $capacity = PetrolStoreUpgradeCmd::getPetrolStoreCapacityByLevel($nextLevel);
 
-        return new PetrolStoreDto(
+        return new PetrolStore(
             $nextLevel,
             $capacity,
             0

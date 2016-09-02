@@ -4,20 +4,14 @@ namespace App\Modules\Employment\Providers;
 
 use App\Modules\Employment\Persistence\Repositories\DomainsRepo;
 use App\Modules\Employment\Persistence\Repositories\LoreRepo;
+use App\Modules\Employment\View\Repositories\SchoolRepo;
 use Illuminate\Support\ServiceProvider;
 
 class EmploymentModuleProvider extends ServiceProvider
 {
-
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
     public function register()
     {
         $this->registerRepositories();
-        $this->registerDao();
 
         $this->registerDomainServices();
     }
@@ -32,15 +26,20 @@ class EmploymentModuleProvider extends ServiceProvider
             'LoreRepo', LoreRepo::class
         );
 
+        
+        
+        
+        
+        $this->app->singleton(
+            'SchoolRepo', SchoolRepo::class
+        );
+
 //        $this->app->singleton('DomainsCatalog', function () {
 //            return app('DomainsRepo')->getCatalog();
 //        });
 
     }
 
-    private function registerDao()
-    {
-    }
 
     private function registerDomainServices()
     {

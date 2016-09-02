@@ -23,6 +23,7 @@ use App\Modules\Work\Persistence\Repositories\Worker\WorkerInstrumentsRepo;
 use App\Modules\Work\Persistence\Repositories\Worker\WorkerMaterialsRepo;
 use App\Modules\Work\Persistence\Repositories\Worker\WorkerRepo;
 use App\Modules\Work\Persistence\Repositories\Worker\WorkerSkillsRepo;
+use App\Modules\Work\View\Repositories\OrdersItemsRepo;
 use Illuminate\Support\ServiceProvider;
 
 class WorkModuleProvider extends ServiceProvider
@@ -79,6 +80,13 @@ class WorkModuleProvider extends ServiceProvider
 
         $this->app->singleton(
             'TeamRepo', TeamRepo::class
+        );
+
+        
+        
+        
+        $this->app->singleton(
+            'OrdersItemsRepo', OrdersItemsRepo::class
         );
     }
 

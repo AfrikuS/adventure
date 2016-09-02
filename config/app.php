@@ -182,6 +182,11 @@ return [
 
 
 
+
+        App\Modules\Employment\Providers\EmploymentModuleProvider::class,
+        App\Modules\Employment\Providers\CommandsHandlersProviders::class,
+
+
         App\Modules\Geo\Providers\GeoModuleProvider::class,
         App\Modules\Geo\Providers\ComposerServiceProvider::class,
 
@@ -194,16 +199,16 @@ return [
         App\Modules\Hero\Providers\CommandsHandlersProviders::class,
         App\Modules\Hero\Providers\ComposerServiceProvider::class,
 
+        App\Modules\Npc\Providers\NpcModuleProvider::class,
+        App\Modules\Npc\Providers\ComposerServiceProvider::class,
+
+
+        App\Modules\Oil\Providers\OilModuleProvider::class,
+
+
         App\Modules\Work\Providers\WorkModuleProvider::class,
         App\Modules\Work\Providers\CommandsHandlersProviders::class,
         App\Modules\Work\Providers\ComposerServiceProvider::class,
-
-        App\Modules\Employment\Providers\EmploymentModuleProvider::class,
-        App\Modules\Employment\Providers\CommandsHandlersProviders::class,
-
-        
-        App\Modules\Npc\Providers\NpcModuleProvider::class,
-        App\Modules\Npc\Providers\ComposerServiceProvider::class,
 
     ],
 

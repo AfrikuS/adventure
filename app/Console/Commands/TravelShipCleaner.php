@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Sea\TravelShip;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 

@@ -3,7 +3,7 @@
 namespace App\Modules\Employment\Persistence\Catalogs;
 
 use App\Modules\Employment\Domain\Entities\Domain;
-use App\Modules\Employment\Persistence\Dto\LoreProgress;
+use App\Modules\Employment\View\DataObjects\School\LoreLicense;
 
 class DomainsCollection
 {
@@ -28,14 +28,8 @@ class DomainsCollection
     {
         return array_keys($this->domains);
     }
-    
-//    public function getViewSelect()
-//    {
-//        $options = array_pluck($this->domains, 'title', 'id');
-//
-//        return $options;
-//    }
 
+    /** @deprecated  */ // intersect-filter realise
     public function differencesBy($domains_ids)
     {
 //        $allDomains_ids = array_keys($this->domains);
@@ -50,7 +44,7 @@ class DomainsCollection
 
         foreach ($this->domains as $domain) {
 
-            $license = new LoreProgress(
+            $license = new LoreLicense(
                 $domain->id,
                 $domain->title,
                 in_array($domain->id, $domains_ids)

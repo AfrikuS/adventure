@@ -103,16 +103,4 @@ class OrdersRepo
             $order->acceptor_worker_id
         );
     }
-
-    public function getAcceptedOrders($worker_id)
-    {
-        return $this->ordersDao->getAcceptedOrders($worker_id);
-    }
-
-    public function getFreeOrders()
-    {
-        $ordersArr = $this->ordersDao->getFreeOrders();
-        
-        return $ordersArr;
-    }
 }

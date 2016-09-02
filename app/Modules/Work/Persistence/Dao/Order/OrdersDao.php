@@ -2,6 +2,8 @@
 
 namespace App\Modules\Work\Persistence\Dao\Order;
 
+use App\Modules\Work\Domain\Entities\Order\Order;
+
 class OrdersDao
 {
     private $table = 'work_orders';
@@ -42,19 +44,23 @@ class OrdersDao
 
     public function getFreeOrders()
     {
-        $orders = \DB::table($this->table)
-                    ->select(['*'])
-                    ->where('status', 'free')
-                    ->where('type', 'individual')
-                    ->get();
+        $orders =
+            \DB::table($this->table . ' AS o')
+                ->select(['o.id', 'o.price', 'o.status', 'do.title AS domain_title'])
+                ->join('employment_domains AS do', 'do.id', '=', 'o.domain_id')
+                ->where('status', Order::STATUS_FREE)
+                ->where('type', Order::TYPE_INDIVIDUAL)
+                ->get();
 
         return $orders;
     }
 
     public function getAcceptedOrders($worker_id)
     {
-        $orders = \DB::table($this->table)->select(['*'])
-            ->where('type', 'individual')
+        $orders = \DB::table($this->table . ' AS o')
+            ->select(['o.id', 'o.price', 'o.status', 'do.title AS domain_title'])
+            ->join('employment_domains AS do', 'do.id', '=', 'o.domain_id')
+            ->where('type', Order::TYPE_INDIVIDUAL)
             ->where('acceptor_worker_id', $worker_id)
             ->get();
 

@@ -4,6 +4,7 @@ namespace App\Modules\Hero\Domain\Entities;
 
 use App\Exceptions\NotEnoughResourceException;
 use App\Persistence\Models\DataObject;
+use Finite\Exception\StateException;
 
 class Hero
 {
@@ -29,9 +30,14 @@ class Hero
     {
         if ($this->gold < $amount) {
             
-            throw new NotEnoughResourceException;
+            throw new StateException('Не хватает денег');
         }
 
         $this->gold -= $amount;
+    }
+
+    public function incrementOil($oilAmount)
+    {
+        $this->oil += $oilAmount;
     }
 }

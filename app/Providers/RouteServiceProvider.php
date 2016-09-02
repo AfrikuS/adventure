@@ -91,6 +91,7 @@ class RouteServiceProvider extends ServiceProvider
                 require app_path('Modules/Geo/Resources/Routes/_routes.php');
                 require app_path('Modules/Geo/Resources/Routes/business.php');
                 require app_path('Modules/Geo/Resources/Routes/admin.php');
+                require app_path('Modules/Oil/Resources/routes.php');
             });
         });
     }

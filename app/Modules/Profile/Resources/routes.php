@@ -18,8 +18,6 @@ Route::post('/profile/oil_store/upgrade', 'Profile\ResourceStoreController@upgra
 Route::post('/profile/petrol_store/upgrade', 'Profile\ResourceStoreController@upgradePetrolStore')->name('hero_petrol_store_upgrade_action');
 Route::post('/profile/water_store/upgrade', 'Profile\ResourceStoreController@upgradeWaterStore')->name('hero_water_store_upgrade_action');
 
-Route::post('/profile/pump_oil/upgrade', 'Profile\EquipmentController@upgradePumpOil')->name('hero_pumpoil_upgrade_action');
-Route::post('/profile/pump_oil/buy', 'Profile\EquipmentController@buyPumpOil')->name('hero_pumpoil_buy_action');
 
 Route::post('/profile/oildistillator/upgrade', 'Profile\EquipmentController@upgradeOilDistillator')->name('hero_oildistillator_upgrade_action');
 Route::post('/profile/oildistillator/buy', 'Profile\EquipmentController@buyOilDistillator')->name('hero_oildistillator_buy_action');

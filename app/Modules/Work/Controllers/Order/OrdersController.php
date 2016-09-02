@@ -6,6 +6,7 @@ use App\Models\Work\Worker;
 use App\Modules\Work\Commands\Order\CreateBuildOrderAction;
 use App\Modules\Work\Controllers\WorkController;
 use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
+use App\Modules\Work\View\Repositories\OrdersItemsRepo;
 use App\Repositories\Work\WorkerRepositoryObj;
 use Illuminate\Support\Facades\Input;
 
@@ -13,13 +14,15 @@ class OrdersController extends WorkController
 {
     public function index()
     {
-        /** @var OrdersRepo $ordersRepo */
-        $ordersRepo = app('OrdersRepo');
+        /** @var OrdersItemsRepo $ordersRepo */
+        $ordersRepo = app('OrdersItemsRepo');
 
 
+        
+        
         $freeOrders = $ordersRepo->getFreeOrders();
 
-        $workerOrders = $ordersRepo->getAcceptedOrders($this->user_id);
+        $workerOrders = $ordersRepo->getAcceptedBy($this->user_id);
 
         return $this->view('work.order.orders_index', [
             'orders' => $freeOrders,

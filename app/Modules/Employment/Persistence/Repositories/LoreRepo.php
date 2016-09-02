@@ -65,16 +65,18 @@ class LoreRepo
         return $lore;
     }
 
+    public function isHaveLoreDomain($worker, $domain_id)
+    {
+        return $this->loresDao->isExistBy($worker, $domain_id);
+    }
+
     public function updateMosaic(Lore $lore)
     {
-        $packedMosaic = implode(',', $lore->mosaic);
-
-        $lore->mosaic = $packedMosaic;
-
+        $packedMosaic = $lore->getPackedMosaicForDb();
         
         $this->loresDao->update(
             $lore->id, 
-            $lore->mosaic
+            $packedMosaic
         );
     }
 

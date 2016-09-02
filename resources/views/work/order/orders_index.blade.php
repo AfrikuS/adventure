@@ -24,7 +24,6 @@
                             <th>Order ID</th>
                             <th>accept</th>
                             <th>price</th>
-                            <th>acceptor</th>
                             <th>domain</th>
                             <th>status</th>
                             <th>show</th>
@@ -42,8 +41,7 @@
                                     {!! Form::close() !!}
                                 </td>
                                 <td>{{ $order->price }}</td>
-                                <td>{{ $order->acceptor_worker_id | 'no' }}</td>
-                                <td>{{ $order->domain_id }}</td>
+                                <td>{{ $order->domainTitle }}</td>
                                 <td>{{ $order->status }}</td>
                                 <td>{{ link_to_route('work_show_order_page', 'Выбрать', ['id' => $order->id]) }}</td>
                                 {{--<td>{{ link_to_route('work_delete_order_action', 'Del', ['id' => $order->id]) }}</td>--}}
@@ -82,8 +80,7 @@
                         <tr>
                             <th>Order ID</th>
                             <th>price</th>
-                            <th>acceptor_id</th>
-                            <th>type</th>
+                            <th>domain</th>
                             <th>status</th>
                             <th>show</th>
                             <th>del</th>
@@ -94,8 +91,7 @@
                             <tr>
                                 <td>{{ $order->id }}</td>
                                 <td>{{ $order->price }}</td>
-                                <td>{{ $order->acceptor_worker_id }}</td>
-                                <td>{{ $order->type }}</td>
+                                <td>{{ $order->domainTitle }}</td>
                                 <td>{{ $order->status }}</td>
                                 <td>{{ link_to_route('work_show_order_page', 'Выбрать', ['id' => $order->id]) }}</td>
                                 {{--<td>{{ link_to_route('work_delete_order_action', 'Del', ['id' => $order->id]) }}</td>--}}

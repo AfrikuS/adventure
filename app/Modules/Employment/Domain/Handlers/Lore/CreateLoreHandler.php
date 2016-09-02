@@ -2,6 +2,7 @@
 
 namespace App\Modules\Employment\Domain\Handlers\Lore;
 
+use App\Modules\Employment\Domain\Commands\Lore\CreateLore;
 use App\Modules\Employment\Persistence\Repositories\DomainsRepo;
 use App\Modules\Employment\Persistence\Repositories\LoreRepo;
 

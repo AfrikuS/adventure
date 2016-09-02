@@ -77,16 +77,18 @@ class DomainsDao
         return $domains;
     }
 
-    public function getCodes()
+    public function getLoreLicenses($user_id)
     {
-        $domainsCodes =
-            \DB::table($this->table)
-//                ->select(['id', 'code', 'title', 'mosaic_size'])
-//                ->whereIn('id', $domains_ids)
-                ->pluck('code');
-//                ->get();
-
-        return $domainsCodes;
+        $licensesData =
+            \DB::table($this->table.' AS do')
+                ->select(['do.id AS domain_id', 'do.title AS domain_title', 'lo.user_id AS is_exist'])
+                ->leftJoin('employment_lore AS lo', function ($join) use ($user_id) {
+                    $join->on('lo.domain_id', '=', 'do.id')
+                        ->where('lo.user_id', '=', $user_id);
+                    })
+                ->get();
+        
+        return $licensesData;
     }
 
 }

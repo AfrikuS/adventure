@@ -2,17 +2,15 @@
 
 namespace App\Modules\Oil\Actions;
 
+use App\Modules\Oil\Persistence\Repositories\EquipmentsRepo;
+
 class InitiEquipment
 {
-    public function createEquipments()
+    /** @var EquipmentsRepo */
+    private $equipmentsRepo;
+    
+    public function createEquipments($hero_id)
     {
-        Equipment::create([
-
-            'hero_id' => $hero_id,
-
-            'pump_level' => 0,
-            'oil_distillator_level' => 0,
-
-        ]);
+        $this->equipmentsRepo->createBy($hero_id);
     }
 }

@@ -2,8 +2,6 @@
 
 namespace App\Console\Commands\Process;
 
-use App\Domain\AuctionActions;
-use App\Domain\Process\EmploymentResultCalculator;
 use App\Models\Macro\Resources;
 use App\Models\Macro\Timer;
 use Exception;

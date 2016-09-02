@@ -2,7 +2,7 @@
 
 namespace App\Modules\Employment\Domain\Services\Lore;
 
-use App\Handlers\Commands\Employment\CreateLore;
+use App\Modules\Employment\Domain\Commands\Lore\CreateLore;
 use App\Modules\Employment\Persistence\Repositories\DomainsRepo;
 use App\Modules\Employment\Persistence\Repositories\LoreRepo;
 use Illuminate\Support\Facades\Bus;

@@ -5,19 +5,19 @@ namespace App\Modules\Profile\Controllers;
 use App\Commands\Hero\Equipment\OilDistillatorUpgradeAction;
 use App\Commands\Hero\Equipment\PumpOilUpgradeAction;
 use App\Http\Controllers\Controller;
-use App\Repositories\Core\Equipment\PumpOilRepo;
+use App\Repositories\Core\Equipment\OilPumpRepo;
 
 class EquipmentController extends Controller
 {
 
-    /** @var PumpOilRepo */
+    /** @var OilPumpRepo */
     protected $pumpOilRepo;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->pumpOilRepo = new PumpOilRepo();
+        $this->pumpOilRepo = new OilPumpRepo();
     }
 
     public function index()

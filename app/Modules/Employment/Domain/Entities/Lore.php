@@ -2,22 +2,27 @@
 
 namespace App\Modules\Employment\Domain\Entities;
 
+use App\Modules\Employment\View\Presenters\LorePresenter;
+use Laracasts\Presenter\PresentableTrait;
+
 class Lore
 {
-    const MAX_IN_GAME_SKILL_VALUE = 10;
+    use PresentableTrait;
+
+    protected $presenter = LorePresenter::class;
+    
+    const MAX_SKILL_VALUE = 10;
     const MAX_IN_SCHOOL_SKILL_VALUE = 3;
     const DELIMETER = ':';
 
     public $id;
-    
     public $user_id;
-
     public $mosaic;
-    
     public $size;
 
     public $domain_id;
     public $domain_code;
+
 
     public function __construct(\stdClass $loreData)
     {
@@ -39,22 +44,20 @@ class Lore
     {
         return $this->mosaic[$index];
     }
-
-    public function extractToViewDto()
-    {
-        $mosaicStr = implode(' : ', $this->mosaic);
-        
-        return $mosaicStr;
-    }
-
+    
     public function isMaxValue($index)
     {
-        return $this->mosaic[$index] == Lore::MAX_IN_GAME_SKILL_VALUE;
+        return $this->mosaic[$index] == Lore::MAX_SKILL_VALUE;
     }
 
     public function isMaxInSchoolValue($index)
     {
         return $this->mosaic[$index] >= Lore::MAX_IN_SCHOOL_SKILL_VALUE;
+    }
+
+    public function getPackedMosaicForDb()
+    {
+        return implode(',', $this->mosaic);
     }
 
     private function unpackMosaic($mosaic)

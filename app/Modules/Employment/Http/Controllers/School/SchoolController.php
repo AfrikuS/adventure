@@ -5,26 +5,22 @@ namespace App\Modules\Employment\Http\Controllers\School;
 use App\Http\Controllers\Controller;
 use App\Modules\Employment\Actions\BuyLicenseCmd;
 use App\Modules\Employment\Actions\School\ProcessSchoolTaskCmd;
-use App\Modules\Employment\Persistence\Repositories\DomainsRepo;
 use App\Modules\Employment\Persistence\Repositories\LoreRepo;
+use App\Modules\Employment\View\Repositories\SchoolRepo;
 use Illuminate\Support\Facades\Input;
 
 class SchoolController extends Controller
 {
     public function index()
     {
-        // список курсов-школ доменных областей
-
-        /** @var DomainsRepo $domainsRepo */
-        $domainsRepo = app('DomainsRepo');
+        /** @var SchoolRepo $schoolRepo */
+        $schoolRepo = app('SchoolRepo');
 
 
-        $userRemainingsDomains = $domainsRepo->getUserRemainingsDomains($this->user_id);
-
-//        $queryRepo -> getDomains With UserData - buy|not_buy
+        $userLicenses = $schoolRepo->getLoreLicensesBy($this->user_id);
 
         return $this->view('employment.school.index', [
-            'remainingDomains' => $userRemainingsDomains,
+            'userLicenses' => $userLicenses,
         ]);
     }
 
@@ -47,13 +43,10 @@ class SchoolController extends Controller
 
         $lore = $loreRepo->findBy($this->user_id, $domain_id);
 
-        $mosaic = $lore->extractToViewDto();
-
 
 
 
         return $this->view('employment.school.classroom.index', [
-            'mosaic' => $mosaic,
             'lore' => $lore,
         ]);
     }

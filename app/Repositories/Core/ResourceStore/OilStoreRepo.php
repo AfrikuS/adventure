@@ -5,7 +5,7 @@ namespace App\Repositories\Core\ResourceStore;
 use App\Commands\Hero\ResourceStore\OilStoreUpgradeCmd;
 use App\Factories\Hero\ResourceStoreFactory;
 use App\Models\Core\ResourceStore;
-use App\ViewData\Hero\ResourceStore\OilStoreDto;
+use App\ViewData\Hero\ResourceStore\OilStore;
 
 class OilStoreRepo
 {
@@ -36,7 +36,7 @@ class OilStoreRepo
     {
         $oilStoreModel = $this->findOilStoreModel($hero_id);
 
-        $oilStoreDto = new OilStoreDto
+        $oilStoreDto = new OilStore
                             (
                                 $oilStoreModel->oil_capacity_level,
                                 $oilStoreModel->oil_capacity_amount,
@@ -56,7 +56,7 @@ class OilStoreRepo
 
         $capacity = OilStoreUpgradeCmd::getOilStoreCapacityByLevel($nextLevel);
 
-        return new OilStoreDto(
+        return new OilStore(
             $nextLevel,
             $capacity,
             0

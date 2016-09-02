@@ -6,7 +6,7 @@ use App\Commands\Hero\ResourceStore\OilStoreUpgradeCmd;
 use App\Commands\Hero\ResourceStore\PetrolStoreUpgradeCmd;
 use App\Commands\Hero\ResourceStore\WaterStoreUpgradeCmd;
 use App\Http\Controllers\Controller;
-use App\Repositories\Core\Equipment\PumpOilRepo;
+use App\Repositories\Core\Equipment\OilPumpRepo;
 use App\Repositories\Core\ResourceStore\OilStoreRepo;
 use App\Repositories\Core\ResourceStore\PetrolStoreRepo;
 use App\Repositories\Core\ResourceStore\WaterStoreRepo;
@@ -23,7 +23,7 @@ class ResourceStoreController extends Controller
     protected $waterStoreRepo;
 
     
-    /** @var PumpOilRepo */
+    /** @var OilPumpRepo */
     protected $pumpOilRepo;
 
     public function __construct()
@@ -33,7 +33,7 @@ class ResourceStoreController extends Controller
         $this->oilStoreRepo = new OilStoreRepo();
         $this->petrolStoreRepo = new PetrolStoreRepo();
         $this->waterStoreRepo = new WaterStoreRepo();
-        $this->pumpOilRepo = new PumpOilRepo();
+        $this->pumpOilRepo = new OilPumpRepo();
     }
 
     public function index()

@@ -3,6 +3,7 @@
 namespace App\Modules\Work\Controllers\Order;
 
 use App\Exceptions\NotEnoughMaterialException;
+use App\Modules\Employment\Persistence\Repositories\DomainsRepo;
 use App\Modules\Employment\Persistence\Repositories\LoreRepo;
 use App\Modules\Work\Commands\Order\AcceptOrderAction;
 use App\Modules\Work\Commands\Order\ApplySkillAction;
@@ -16,6 +17,7 @@ use App\Modules\Work\Domain\Entities\Order\Order;
 use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 use App\Modules\Work\Persistence\Repositories\Order\OrderSkillsRepo;
 use App\Modules\Work\Persistence\Repositories\Worker\WorkerRepo;
+use Finite\Exception\StateException;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 
@@ -75,13 +77,17 @@ class OrderController extends WorkController
 
                 $lore = $loreRepo->findBy($this->user_id, $domain_id);
 
-                $mosaic = $lore->extractToViewDto();
+                /** @var DomainsRepo $domainsRepo */
+                $domainsRepo = app('DomainsRepo');
+                
+                $domain = $domainsRepo->find($order->domain_id);
 
 
 
                 return $this->view('work.order.show.stock_skills', [
                     'order' => $order,
-                    'mosaic' => $mosaic,
+                    'domain' => $domain,
+                    'lore' => $lore,
                     'orderSkill' => $orderSkill,
                 ]);
 
@@ -101,7 +107,14 @@ class OrderController extends WorkController
 
         $cmd = new AcceptOrderAction();
 
-        $cmd->acceptOrder($order_id, $this->user_id);
+        try {
+            $cmd->acceptOrder($order_id, $this->user_id);
+        }
+        catch (StateException $e) {
+
+            Session::flash('message', $e->getMessage());
+            return \Redirect::route('work_orders_page');
+        }
 
 
         return \Redirect::route('work_show_order_page', ['id' => $order_id]);

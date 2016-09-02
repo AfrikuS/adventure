@@ -4,7 +4,7 @@
 @section('stock_skills')
 
     <p></p><p></p><p></p>
-    <B>Вид работ: {{ $order->domain_id}}</B>
+    <B>Вид работ: {{ $domain->title }}</B>
     <p></p>
     <B>Вознаграждение: {{ $order->price }}</B>
     <p></p>
@@ -32,8 +32,9 @@
 
 
 
-    Ваши знания по данной спец-ти: <b>{{ $orderSkill->domain_id }}</b>
+    Ваши знания по данной спец-ти: <b>{{ $domain->title }}</b>
     <p></p>
-    {{ $mosaic }}
+    {{ $lore->present()->mosaicTable }}
+
 
 @endsection

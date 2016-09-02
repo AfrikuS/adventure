@@ -2,16 +2,16 @@
 
 namespace App\Modules\Oil\Actions\Equipment;
 
-use App\Repositories\Core\Equipment\PumpOilRepo;
+use App\Repositories\Core\Equipment\OilPumpRepo;
 
 class OilDistillatorUpgradeAction
 {
     const MAX_OIL_DISTILLATOR_LEVEL    = 5;
 
-    /** @var  PumpOilRepo */
+    /** @var  OilPumpRepo */
     private $pumpOilRepo;
 
-    public function __construct(PumpOilRepo $pumpOilRepo)
+    public function __construct(OilPumpRepo $pumpOilRepo)
     {
         $this->pumpOilRepo = $pumpOilRepo;
     }

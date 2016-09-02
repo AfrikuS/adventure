@@ -8,25 +8,25 @@
 
 @section('center')
 
-    Выбирай профессию, будем осваивать её азы
+    Выбирай профессию. Здесь в школе будем осваивать её азы
     <p></p>
     <p></p>
 
 
     <p></p>
-    @foreach($remainingDomains as $domain)
+    @foreach($userLicenses as $userLicense)
         <p></p>
 
-        @if ($domain->isLicense)
+        @if ($userLicense->isExist)
 
             <b>Продолжить обучение </b>
-            {{ link_to_route('school_classroom_page', $domain->title, [$domain->id]) }}
+            {{ link_to_route('school_classroom_page', $userLicense->domainTitle, [$userLicense->domain_id]) }}
         @else
             Купить лицензию на обучение
             <br>
             {!! Form::open(['route' => 'school_get_license_action', 'class' => '']) !!}
-            {!! Form::hidden('domain_id', $domain->id) !!}
-            {!! Form::submit($domain->title, array('class' => 'btn btn-primary')) !!}
+            {!! Form::hidden('domain_id', $userLicense->domain_id) !!}
+            {!! Form::submit($userLicense->domainTitle, array('class' => 'btn btn-primary')) !!}
             {!! Form::close() !!}
         @endif
 

@@ -3,6 +3,8 @@
 namespace App\Modules\Oil\Providers;
 
 use App\Modules\Oil\Persistence\Repositories\EquipmentsRepo;
+use App\Modules\Oil\Persistence\Repositories\OilDistillerRepo;
+use App\Modules\Oil\Persistence\Repositories\OilPumpRepo;
 use App\Modules\Oil\Persistence\Repositories\ResourceStoresRepo;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,6 +25,16 @@ class OilModuleProvider extends ServiceProvider
 
         $this->app->singleton(
             'EquipmentsRepo', EquipmentsRepo::class
+        );
+
+        
+        
+        $this->app->singleton(
+            'OilPumpRepo', OilPumpRepo::class
+        );
+
+        $this->app->singleton(
+            'OilDistillerRepo', OilDistillerRepo::class
         );
     }
 

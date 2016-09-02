@@ -75,4 +75,14 @@ class LoreDao
 
         return $domains_ids;
     }
+
+    public function isExistBy($user_id, $domain_id)
+    {
+        $isExist = \DB::table($this->table)
+            ->where('user_id', $user_id)
+            ->where('domain_id', $domain_id)
+            ->exists();
+        
+        return $isExist;
+    }
 }
