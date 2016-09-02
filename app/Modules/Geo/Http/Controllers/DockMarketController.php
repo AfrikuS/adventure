@@ -3,7 +3,7 @@
 namespace App\Modules\Geo\Http\Controllers;
 
 use App\Commands\Shop\BuyMaterialCommand;
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Http\Requests;
 use App\Models\Geo\Travel\MaterialPrice;
 use App\Models\Geo\Travel\TempShop;

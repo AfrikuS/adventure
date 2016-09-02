@@ -6,15 +6,16 @@ class EquipmentsDao
 {
     protected $table = 'hero_equipment';
 
-    public function create($hero_id, $pumpLevel, $oilDistillatorLevel)
+    public function create($hero_id, $pumpLevel, $oilDistillerLevel)
     {
         \DB::table($this->table)->insert([
             'hero_id' => $hero_id,
             'pump_level' => $pumpLevel,
-            'oil_distillator_level' => $oilDistillatorLevel,
+            'oil_distillator_level' => $oilDistillerLevel,
         ]);
     }
 
+    /** @deprecated  */
     public function find($hero_id)
     {
         $equipments =
@@ -42,6 +43,25 @@ class EquipmentsDao
             ->where('hero_id', $hero_id)
             ->update([
                 'pump_level' => $level,
+            ]);
+    }
+
+    public function findOilDistillerBy($hero_id)
+    {
+        return
+            \DB::table($this->table)
+                ->select(['hero_id', 'oil_distillator_level AS level'])
+                ->where('hero_id', $hero_id)
+                ->first();
+    }
+
+    public function updateDistiller($hero_id, $level)
+    {
+        return
+            \DB::table($this->table)
+                ->where('hero_id', $hero_id)
+                ->update([
+                    'oil_distillator_level' => $level,
             ]);
     }
 }

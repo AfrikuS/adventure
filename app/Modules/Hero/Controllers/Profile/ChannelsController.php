@@ -2,7 +2,7 @@
 
 namespace App\Modules\Hero\Controllers\Profile;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Modules\Hero\Persistence\Repositories\ResourceChannelsRepo;
 
 class ChannelsController extends Controller

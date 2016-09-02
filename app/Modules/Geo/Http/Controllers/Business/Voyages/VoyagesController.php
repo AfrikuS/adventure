@@ -2,7 +2,7 @@
 
 namespace App\Modules\Geo\Http\Controllers\Business\Voyages;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Http\Requests;
 use App\Modules\Geo\Actions\Business\Voyages\CreateVoyageAction;
 use App\Modules\Geo\Actions\Business\Voyages\ShipMoorAction;

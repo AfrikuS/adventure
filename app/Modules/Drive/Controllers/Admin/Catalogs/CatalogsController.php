@@ -2,7 +2,7 @@
 
 namespace App\Modules\Drive\Controllers\Admin\Catalogs;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Models\Drive\Catalogs\DetailKind;
 use App\Models\Drive\Catalogs\DetailTitle;
 use App\Modules\Drive\Persistence\Repositories\CatalogsRepo;

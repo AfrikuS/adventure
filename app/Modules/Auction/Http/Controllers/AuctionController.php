@@ -2,7 +2,7 @@
 
 namespace App\Modules\Auction\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Http\Requests;
 use App\Modules\Auction\Actions\CancelAuctionLot;
 use App\Modules\Auction\Actions\CommitPurchasingCommand;

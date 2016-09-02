@@ -9,7 +9,7 @@ use App\Commands\Work\OrderBuilder\ReCheckSkillsCommand;
 use App\Commands\Work\OrderBuilder\SettingMaterialsValuesCommand;
 use App\Commands\Work\OrderBuilder\SettingOrderDataCommand;
 use App\Commands\Work\OrderBuilder\SettingSkillsValuesCommand;
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Models\Work\Catalogs\Instrument;
 use App\Models\Work\Catalogs\Material;
 use App\Models\Work\Catalogs\Skill;

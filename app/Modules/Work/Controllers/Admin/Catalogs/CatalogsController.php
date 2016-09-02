@@ -2,7 +2,7 @@
 
 namespace App\Modules\Work\Controllers\Admin\Catalogs;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Models\Work\Catalogs\Instrument;
 use App\Models\Work\Catalogs\Material;
 use App\Models\Work\Catalogs\Skill;

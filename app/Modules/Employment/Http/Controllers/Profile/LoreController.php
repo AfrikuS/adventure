@@ -2,7 +2,7 @@
 
 namespace App\Modules\Employment\Http\Controllers\Profile;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Modules\Employment\Persistence\Repositories\LoreRepo;
 
 class LoreController extends Controller

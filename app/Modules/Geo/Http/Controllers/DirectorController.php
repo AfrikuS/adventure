@@ -2,7 +2,7 @@
 
 namespace App\Modules\Geo\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 
 class DirectorController extends Controller
 {

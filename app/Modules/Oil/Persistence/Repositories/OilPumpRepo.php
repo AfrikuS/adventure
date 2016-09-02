@@ -5,7 +5,6 @@ namespace App\Modules\Oil\Persistence\Repositories;
 use App\Models\Core\Equipment;
 use App\Modules\Oil\Domain\Entities\OilPump;
 use App\Modules\Oil\Persistence\Dao\EquipmentsDao;
-use App\ViewData\Hero\Equipment\OilDistillatorDto;
 
 class OilPumpRepo
 {

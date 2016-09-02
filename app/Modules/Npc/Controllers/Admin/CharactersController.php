@@ -3,7 +3,7 @@
 namespace App\Modules\Npc\Controllers\Admin;
 
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Models\Npc\Character;
 use App\Modules\Npc\Persistence\Repositories\CharactersRepo;
 use Illuminate\Support\Facades\Input;

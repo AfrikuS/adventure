@@ -2,7 +2,7 @@
 
 namespace App\Modules\Geo\Http\Controllers\Harbour;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Http\Requests;
 use App\Modules\Geo\Persistence\Repositories\LocationsRepo;
 use App\Repositories\Geo\LocationsRepository;

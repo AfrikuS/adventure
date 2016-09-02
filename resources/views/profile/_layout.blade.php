@@ -9,6 +9,7 @@
 
 
         <li>{{ link_to_route('base_oilpump_page', 'Нефтяной насос') }}</li>
+        <li>{{ link_to_route('base_oil_distiller_page', 'Перегонный аппарат') }}</li>
         {{--<li>{{ link_to_route('drive_garage_shop_page', 'Garage-Shop') }}</li>--}}
         {{--<p></p>--}}
         {{--<li>{{ link_to_route('drive_workroom_page', 'Мастерская') }}</li>--}}

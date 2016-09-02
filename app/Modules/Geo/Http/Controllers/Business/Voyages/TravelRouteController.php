@@ -4,7 +4,7 @@ namespace App\Modules\Geo\Http\Controllers\Business\Voyages;
 
 use App\Exceptions\Commands\Geo\OneRoutePointException;
 use App\Exceptions\Commands\Geo\RouteCommitedException;
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Modules\Geo\Actions\Business\AddRoutePointCommand;
 use App\Modules\Geo\Actions\Business\CommitRouteCommand;
 use App\Modules\Geo\Actions\Business\CreateRouteTravelCommand;

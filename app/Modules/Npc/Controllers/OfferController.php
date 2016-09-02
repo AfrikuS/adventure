@@ -2,7 +2,7 @@
 
 namespace App\Modules\Npc\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Modules\Npc\Actions\GenerateNpcOffer;
 use App\Modules\Npc\Actions\NpcOfferAcceptCommand;
 use App\Modules\Npc\Actions\NpcOfferRefuseCommand;

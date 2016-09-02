@@ -3,7 +3,7 @@
 namespace App\Modules\Drive\Controllers\Garage;
 
 use App\Exceptions\DetailNotFoundExeption;
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Modules\Drive\Commands\Shop\BuyDetailCommand;
 use App\Modules\Drive\Commands\Shop\UpdateDetailOffersCommand;
 use App\Modules\Drive\Persistence\Repositories\ShopRepo;

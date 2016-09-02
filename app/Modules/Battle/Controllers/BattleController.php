@@ -2,7 +2,7 @@
 
 namespace App\Modules\Battle\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;

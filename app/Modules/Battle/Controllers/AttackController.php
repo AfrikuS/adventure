@@ -2,7 +2,7 @@
 
 namespace App\Modules\Battle\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Http\Requests;
 use App\Modules\Battle\Actions\AttackOpponentCommand;
 use App\Modules\Battle\Domain\Services\SearchService;

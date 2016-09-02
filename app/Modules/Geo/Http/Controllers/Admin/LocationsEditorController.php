@@ -2,7 +2,7 @@
 
 namespace App\Modules\Geo\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Modules\Geo\Actions\BindLocationsCommand;
 use App\Modules\Geo\Actions\CreateLocationCommand;
 use App\Modules\Geo\Actions\RemovePathAction;

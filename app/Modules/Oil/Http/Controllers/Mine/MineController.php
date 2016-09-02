@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Mine;
 
 use App\Factories\MineFactory;
 use App\Factories\WorkerFactory;
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Http\Requests;
 use App\Models\Mine\Miner;
 use App\Models\Work\Worker;

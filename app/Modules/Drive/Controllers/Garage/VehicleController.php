@@ -2,7 +2,7 @@
 
 namespace App\Modules\Drive\Controllers\Garage;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Modules\Drive\Actions\Garage\MountDetailCommand;
 use App\Modules\Drive\Actions\Garage\UnmountDetailCommand;
 use App\Modules\Drive\Persistence\Repositories\Vehicle\DetailsRepo;

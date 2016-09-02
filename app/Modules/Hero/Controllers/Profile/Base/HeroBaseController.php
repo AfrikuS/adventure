@@ -2,7 +2,7 @@
 
 namespace App\Modules\Hero\Controllers\Profile\Base;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 
 class HeroBaseController extends Controller
 {

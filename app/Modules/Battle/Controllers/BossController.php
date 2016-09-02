@@ -6,7 +6,7 @@ use App\Commands\Battle\DeleteBossCommand;
 use App\Deleters\BattleDeleter;
 use App\Domain\MassActions;
 use App\Factories\BattleFactory;
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Http\Requests;
 use App\Http\Requests\MassBossJoinRequest;
 use App\Repositories\Battle\BossRepository;

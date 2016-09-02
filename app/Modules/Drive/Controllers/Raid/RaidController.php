@@ -2,7 +2,7 @@
 
 namespace App\Modules\Drive\Controllers\Raid;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Modules\Drive\Actions\Raid\CompleteRaidCommand;
 use App\Modules\Drive\Actions\Raid\Robbery\StartRobberyCommand;
 use App\Modules\Drive\Actions\Raid\SearchVictimCommand;

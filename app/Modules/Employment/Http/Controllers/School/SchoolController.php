@@ -2,7 +2,7 @@
 
 namespace App\Modules\Employment\Http\Controllers\School;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Modules\Employment\Actions\BuyLicenseCmd;
 use App\Modules\Employment\Actions\School\ProcessSchoolTaskCmd;
 use App\Modules\Employment\Persistence\Repositories\LoreRepo;

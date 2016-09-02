@@ -5,7 +5,7 @@ namespace App\Modules\Profile\Controllers;
 use App\Commands\Hero\ResourceStore\OilStoreUpgradeCmd;
 use App\Commands\Hero\ResourceStore\PetrolStoreUpgradeCmd;
 use App\Commands\Hero\ResourceStore\WaterStoreUpgradeCmd;
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Repositories\Core\Equipment\OilPumpRepo;
 use App\Repositories\Core\ResourceStore\OilStoreRepo;
 use App\Repositories\Core\ResourceStore\PetrolStoreRepo;

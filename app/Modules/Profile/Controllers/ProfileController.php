@@ -2,8 +2,7 @@
 
 namespace App\Modules\Profile\Controllers;
 
-use App\Commands\Drive\CreateDriverCommand;
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Http\Requests;
 use App\Models\Battle\ResourceChannel;
 use App\Models\Work\Worker;
@@ -28,7 +27,25 @@ class ProfileController extends Controller
 //            $table->foreign('user_id')->references('id')->on('auth_app_users');
 //        });
 //
+        /*        \Schema::table('film_episodes', function ($table) {
 
+//            $table->dropColumn('position');
+//            $table->dropForeign('film_episodes_user_id_foreign');
+//            $table->integer('position')->after('title')->unsigned()->nullable();
+            $table->integer('importance')->unsigned()->nullable();
+//            $table->foreign('user_id')->references('id')->on('auth_app_users');
+        });*/
+
+//        \Schema::table('work_orders', function ($table) {
+//
+//            $table->dropColumn('description');
+//            $table->integer('size')->unsigned()->nullable()->after('mosaic');
+//            $table->string('domain_code', 255)->nullable()->after('type');
+//            $table->integer('user_id')->unsigned()->default(2);
+//
+//            $table->foreign('type_id')->references('id')->on('questions_types');
+//            $table->foreign('user_id')->references('id')->on('auth_app_users');
+//        });
 
 
 //        /** @var WorkerRepo $workerRepo */

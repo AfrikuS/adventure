@@ -3,7 +3,7 @@
 namespace App\Modules\Geo\Http\Controllers\Business;
 
 use App\Factories\GeoFactory;
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Models\Geo\Trader\Ship;
 use App\Models\Geo\TravelRoute;
 use App\Models\Geo\Voyage;

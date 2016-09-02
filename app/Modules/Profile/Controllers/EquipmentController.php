@@ -4,7 +4,7 @@ namespace App\Modules\Profile\Controllers;
 
 use App\Commands\Hero\Equipment\OilDistillatorUpgradeAction;
 use App\Commands\Hero\Equipment\PumpOilUpgradeAction;
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Repositories\Core\Equipment\OilPumpRepo;
 
 class EquipmentController extends Controller

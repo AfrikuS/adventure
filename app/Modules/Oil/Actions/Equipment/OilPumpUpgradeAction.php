@@ -2,12 +2,12 @@
 
 namespace App\Modules\Oil\Actions\Equipment;
 
-
 use App\Modules\Oil\Domain\Entities\OilPump;
+use App\Modules\Oil\Domain\Services\Base\EquipmentService;
 use App\Modules\Oil\Persistence\Repositories\OilPumpRepo;
 use Finite\Exception\StateException;
 
-class PumpOilUpgradeAction
+class OilPumpUpgradeAction
 {
     /** @var  OilPumpRepo */
     private $oilPumpRepo;
@@ -25,10 +25,10 @@ class PumpOilUpgradeAction
         $this->validateAction($oilPump);
 
         
-        $oilPump->upgradeLevel();
+        $equipmentService = new EquipmentService();
+
+        $equipmentService->upgradeOilPump($hero_id);
         
-        
-        $this->oilPumpRepo->updateLevel($oilPump);
     }
 
     private function validateAction(OilPump $oilPump)

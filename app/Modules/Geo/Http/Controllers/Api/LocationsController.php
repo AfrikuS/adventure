@@ -2,7 +2,7 @@
 
 namespace App\Modules\Geo\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Models\Geo\LocationPath;
 use App\Modules\Geo\Persistence\Repositories\LocationsRepo;
 use stdClass;

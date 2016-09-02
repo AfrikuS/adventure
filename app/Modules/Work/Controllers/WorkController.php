@@ -2,7 +2,7 @@
 
 namespace App\Modules\Work\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Models\Work\Worker;
 use App\Repositories\Work\WorkerRepositoryObj;
 use Illuminate\Support\Facades\Session;

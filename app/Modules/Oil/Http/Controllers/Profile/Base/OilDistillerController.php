@@ -2,9 +2,12 @@
 
 namespace App\Modules\Oil\Http\Controllers\Profile\Base;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
+use App\Modules\Oil\Actions\Equipment\OilDistillerProcessAction;
+use App\Modules\Oil\Actions\Equipment\OilDistillerUpgradeAction;
 use App\Modules\Oil\Domain\Entities\OilDistiller;
 use App\Modules\Oil\Persistence\Repositories\OilDistillerRepo;
+use Finite\Exception\StateException;
 
 class OilDistillerController extends Controller
 {
@@ -17,8 +20,8 @@ class OilDistillerController extends Controller
         $oilDistiller = $oilDistillerRepo->findBy($this->user_id);
 
 
-        return $this->view('oil.profile.base.oilpump', [
-            'oilDistiller' => $oilDistiller,
+        return $this->view('oil.profile.base.oil_distiller', [
+            'distiller' => $oilDistiller,
         ]);
     }
 
@@ -29,7 +32,7 @@ class OilDistillerController extends Controller
         $oilDistillerProcess->process($this->user_id);
 
 
-        return \Redirect::route('base_oilpump_page');
+        return \Redirect::route('base_oil_distiller_page');
     }
 
     public function waitProcess()
@@ -39,7 +42,7 @@ class OilDistillerController extends Controller
 
     public function upgrade()
     {
-        $oilDistillerUpgrade = new PumpOilUpgradeAction();
+        $oilDistillerUpgrade = new OilDistillerUpgradeAction();
 
         try {
 
@@ -52,6 +55,6 @@ class OilDistillerController extends Controller
         }
 
 
-        return \Redirect::route('base_oilpump_page');
+        return \Redirect::route('base_oil_distiller_page');
     }
 }

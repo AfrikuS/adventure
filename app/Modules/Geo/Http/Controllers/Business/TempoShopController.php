@@ -2,7 +2,7 @@
 
 namespace App\Modules\Geo\Http\Controllers\Business;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Models\Geo\Trader\TempoShop;
 use App\Repositories\Generate\EntityGenerator;
 use Carbon\Carbon;

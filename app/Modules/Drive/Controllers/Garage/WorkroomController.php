@@ -2,7 +2,7 @@
 
 namespace App\Modules\Drive\Controllers\Garage;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Modules\Drive\Actions\Garage\RecoveryVehicleAction;
 use App\Modules\Drive\Actions\Garage\RefuelVehicleAction;
 use App\Modules\Drive\Actions\Garage\RepairVehicleAction;

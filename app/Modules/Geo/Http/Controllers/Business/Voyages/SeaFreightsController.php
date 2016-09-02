@@ -2,7 +2,7 @@
 
 namespace App\Modules\Geo\Http\Controllers\Business\Voyages;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Modules\Geo\Persistence\Repositories\Business\ShipsRepo;
 use App\Modules\Geo\Persistence\Repositories\Business\VoyagesRepo;
 use App\Modules\Geo\Persistence\Repositories\TravelRoutesRepo;

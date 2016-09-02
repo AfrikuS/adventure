@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Modules\Core\Http;
 
 use App\Models\Npc\NpcDeal;
 use App\Repositories\HeroRepositoryObj;

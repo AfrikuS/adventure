@@ -2,9 +2,9 @@
 
 namespace App\Modules\Oil\Http\Controllers\Profile\Base;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Modules\Oil\Actions\Equipment\OilPumpProcessAction;
-use App\Modules\Oil\Actions\Equipment\PumpOilUpgradeAction;
+use App\Modules\Oil\Actions\Equipment\OilPumpUpgradeAction;
 use App\Modules\Oil\Domain\Entities\OilPump;
 use App\Modules\Oil\Persistence\Repositories\OilPumpRepo;
 use Finite\Exception\StateException;
@@ -42,7 +42,7 @@ class OilPumpController extends Controller
 
     public function upgrade()
     {
-        $oilPumpUpgrade = new PumpOilUpgradeAction();
+        $oilPumpUpgrade = new OilPumpUpgradeAction();
 
         try {
 

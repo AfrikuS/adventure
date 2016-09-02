@@ -3,7 +3,7 @@
 namespace App\Modules\Geo\Http\Controllers\Harbour;
 
 use App\Factories\GeoFactory;
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Http\Requests;
 use App\Models\Geo\LiveVoyage;
 use App\Modules\Geo\Actions\Cruise\SailToAction;

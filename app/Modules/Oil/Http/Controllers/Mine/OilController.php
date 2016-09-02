@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Mine;
 
-use App\Http\Controllers\Controller;
+use App\Modules\Core\Http\Controller;
 use App\Models\Mine\Miner;
 
 class OilController extends Controller
