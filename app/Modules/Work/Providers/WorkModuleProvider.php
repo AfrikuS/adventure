@@ -13,6 +13,7 @@ use App\Modules\Work\Persistence\Dao\Worker\WorkerDao;
 use App\Modules\Work\Persistence\Dao\Worker\WorkerInstrumentsDao;
 use App\Modules\Work\Persistence\Dao\Worker\WorkerMaterialsDao;
 use App\Modules\Work\Persistence\Repositories\Catalogs\MaterialsRepo;
+use App\Modules\Work\Persistence\Repositories\Order\OrderDraftsRepo;
 use App\Modules\Work\Persistence\Repositories\Order\OrderMaterialsRepo;
 use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
 use App\Modules\Work\Persistence\Repositories\Order\OrderSkillsRepo;
@@ -87,6 +88,10 @@ class WorkModuleProvider extends ServiceProvider
         
         $this->app->singleton(
             'OrdersItemsRepo', OrdersItemsRepo::class
+        );
+
+        $this->app->singleton(
+            'OrderDraftsRepo', OrderDraftsRepo::class
         );
     }
 

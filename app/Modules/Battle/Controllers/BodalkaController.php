@@ -5,31 +5,49 @@ namespace App\Modules\Battle\Controllers;
 use App\Modules\Core\Http\Controller;
 use App\Http\Requests;
 use App\Models\ActionTimer;
-use App\Repositories\TimerRepository;
-use Illuminate\Support\Facades\Auth;
+use App\Modules\Timer\Exceptions\TimerExpired_Exception;
+use App\Modules\Timer\Persistence\Repositories\TimersRepo;
 
 class BodalkaController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
+        /** @var TimersRepo $timersRepo */
+        $timersRepo = app('TimersRepo');
 
-        $timer = TimerRepository::getTimerByActionCode('bodalka', $user->id);
 
-        if ($timer && $timer->duration_seconds < 0) {
-            ActionTimer::destroy($timer->id);
-            $timer = null;
+        try {
+
+            $timer = $timersRepo->findBy($this->user_id, 'bodalka');
+        }
+        catch (TimerExpired_Exception $e) {
+
+            return $this->view('battle.bodalka.index', []);
         }
 
-        return $this->view('battle.bodalka', [
-            'timer'  => $timer,
-        ]);
+        if ($timer->isActive()) {
+
+            return $this->view('battle.bodalka.waiting', [
+                'timer'  => $timer,
+            ]);
+        }
+        else {
+
+            $timersRepo->delete($timer);
+
+            return $this->view('battle.bodalka.index', []);
+        }
     }
 
-    public function start ()
+    public function startWalking ()
     {
-        TimerRepository::addTimer('bodalka', $this->user_id);
+        /** @var TimersRepo $timersRepo */
+        $timersRepo = app('TimersRepo');
 
-        return redirect()->route('bodalka_page');
+        $seconds = 13;
+        $timersRepo->addTimer($this->user_id, 'bodalka', $seconds);
+
+
+        return \Redirect::route('bodalka_page');
     }
 }

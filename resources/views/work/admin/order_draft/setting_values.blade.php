@@ -1,4 +1,4 @@
-@extends('admin.orders.layout')
+@extends('work.admin.order_draft._layout')
 
 @section('title', 'Team-Order-Builder. 1. Select Requrements')
 @section('head')
@@ -56,7 +56,7 @@
             <br>{{ Form::text('order[price]', $draftOrder->price, ['size' => 5]) }}
             <br>{{ Form::label('desc', 'Описание') }}
             <br>{{ Form::text('order[desc]', $draftOrder->desc, ['size' => 25]) }}
-            <br>{{ Form::label('kind_work_title', 'Доп. сведения') }}
+{{--            <br>{{ Form::label('kind_work_title', 'Доп. сведения') }}--}}
 {{--            <br>{{ Form::text('order[kind_work_title]', $draftOrder->kind_work_title, ['size' => 25]) }}--}}
             <p></p><p></p>
 
@@ -65,7 +65,7 @@
                 {{--'S',--}}
                 {{--['class' => 'order_kind_work_title', 'size' => '5'])--}}
             {{--!!}--}}
-_title        </div>
+        </div>
 
         <div class="col-lg-6">
         </div>

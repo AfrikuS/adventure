@@ -16,7 +16,7 @@ class CatalogsController extends Controller
         $instruments = Instrument::get();
         $skills = Skill::get();
 
-        return $this->view('admin.work.catalogs', [
+        return $this->view('work.admin.catalogs.index', [
             'materials' => $materials,
             'instruments' => $instruments,
             'skills' => $skills,

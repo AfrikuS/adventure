@@ -3,6 +3,7 @@
 namespace App\Modules\Work\Persistence\Dao\Order;
 
 use App\Modules\Work\Domain\Entities\Order\Order;
+use App\Modules\Work\Domain\Entities\Order\OrderDraft;
 
 class OrdersDao
 {
@@ -75,5 +76,30 @@ class OrdersDao
                 'status' => $status,
                 'acceptor_worker_id' => $acceptor_worker_id,
             ]);
+    }
+
+    public function getDrafts()
+    {
+        $orders =
+            \DB::table($this->table . ' AS o')
+                ->select(['o.id', 'o.price', 'o.status', 'do.title AS domain_title',
+                     'o.desc', 'o.type', 'o.domain_id', 'o.customer_hero_id'])
+                ->join('employment_domains AS do', 'do.id', '=', 'o.domain_id')
+                ->where('status', OrderDraft::STATUS_DRAFT)
+//                ->where('type', Order::TYPE_INDIVIDUAL)
+                ->get();
+
+        return $orders;
+    }
+
+    public function updateData($id, $desc, $price)
+    {
+        return
+            \DB::table($this->table)
+                ->where('id', $id)
+                ->update([
+                    'desc' => $desc,
+                    'price' => $price,
+                ]);
     }
 }

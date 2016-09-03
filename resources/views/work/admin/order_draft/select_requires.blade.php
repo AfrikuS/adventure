@@ -1,4 +1,4 @@
-@extends('admin.orders.layout')
+@extends('work.admin.order_draft._layout')
 
 @section('title', 'Team-Order-Builder. 1. Select Requrements')
 @section('head')

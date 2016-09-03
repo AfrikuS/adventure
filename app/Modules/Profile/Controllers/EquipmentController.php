@@ -2,24 +2,13 @@
 
 namespace App\Modules\Profile\Controllers;
 
-use App\Commands\Hero\Equipment\OilDistillatorUpgradeAction;
-use App\Commands\Hero\Equipment\PumpOilUpgradeAction;
 use App\Modules\Core\Http\Controller;
-use App\Repositories\Core\Equipment\OilPumpRepo;
+use App\Modules\Oil\Actions\Equipment\OilDistillerUpgradeAction;
+use App\Modules\Oil\Actions\Equipment\OilPumpUpgradeAction;
+use App\Modules\Oil\Persistence\Repositories\OilPumpRepo;
 
 class EquipmentController extends Controller
 {
-
-    /** @var OilPumpRepo */
-    protected $pumpOilRepo;
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->pumpOilRepo = new OilPumpRepo();
-    }
-
     public function index()
     {
 
@@ -30,7 +19,7 @@ class EquipmentController extends Controller
 
     public function buyPumpOil()
     {
-        $pumpOilUpgrader = new PumpOilUpgradeAction($this->pumpOilRepo);
+        $pumpOilUpgrader = new OilPumpUpgradeAction();
 
         $pumpOilUpgrader->upgrade($this->user_id);
 
@@ -40,7 +29,7 @@ class EquipmentController extends Controller
 
     public function upgradePumpOil()
     {
-        $pumpOilUpgrader = new PumpOilUpgradeAction($this->pumpOilRepo);
+        $pumpOilUpgrader = new OilPumpUpgradeAction();
 
         try {
 
@@ -57,7 +46,7 @@ class EquipmentController extends Controller
 
     public function buyOilDistillator()
     {
-        $oilDistillatorUpgrader = new OilDistillatorUpgradeAction($this->pumpOilRepo);
+        $oilDistillatorUpgrader = new OilDistillerUpgradeAction();
 
         $oilDistillatorUpgrader->upgrade($this->user_id);
 
@@ -67,7 +56,7 @@ class EquipmentController extends Controller
 
     public function upgradeOilDistillator()
     {
-        $oilDistillatorUpgrader = new OilDistillatorUpgradeAction($this->pumpOilRepo);
+        $oilDistillatorUpgrader = new OilDistillerUpgradeAction();
 
         try {
 

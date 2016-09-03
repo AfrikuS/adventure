@@ -8,7 +8,7 @@
 @section('center')
 
     <div class="row row-offcanvas">
-        <h4>Заказы-черновики</h4>
+        <h4>Заказы-черновики (don't use)</h4>
         <div class="col-lg-12">
 
             Список заготовок заказов

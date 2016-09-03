@@ -8,7 +8,7 @@ Route::post('/search', 'Battle\Controllers\AttackController@searchOpponent')->na
 Route::post('/attack', 'Battle\Controllers\AttackController@attack')->name('attack_enemy_action');
 
 Route::get('/bodalka', 'Battle\Controllers\BodalkaController@index')->name('bodalka_page');
-Route::post('/bodalka', 'Battle\Controllers\BodalkaController@start')->name('bodalka_start_action');
+Route::post('/bodalka', 'Battle\Controllers\BodalkaController@startWalking')->name('bodalka_start_action');
 
 Route::get('/boss', 'Battle\Controllers\BossController@index')->name('boss_page');
 Route::post('/boss_create', 'Battle\Controllers\BossController@boss_create')->name('boss_create_action');

@@ -75,4 +75,23 @@ class OrderMaterialsRepo
     {
         $this->materialsDao->deleteByOrder($order_id);
     }
+
+    /** @deprecated  */
+    public function deleteSome(array $excessMaterials)
+    {
+        $ids = array_map(function (OrderMaterial $material) {
+            
+            return $material->id;
+        }, $excessMaterials);
+        
+        $this->materialsDao->deleteByIds($ids);
+    }
+
+    public function updateNeedAmount(OrderMaterial $material)
+    {
+        $this->materialsDao->updateNeed(
+            $material->id,
+            $material->need
+        );
+    }
 }

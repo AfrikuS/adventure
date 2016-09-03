@@ -2,71 +2,76 @@
 
 namespace App\Modules\Work\Controllers\Admin\OrderBuilder;
 
-use App\Commands\Work\OrderBuilder\CreateEmptyTeamOrderCommand;
-use App\Commands\Work\OrderBuilder\DeleteTeamOrderDraftCommand;
-use App\Commands\Work\OrderBuilder\ReCheckMaterialsCommand;
-use App\Commands\Work\OrderBuilder\ReCheckSkillsCommand;
-use App\Commands\Work\OrderBuilder\SettingMaterialsValuesCommand;
-use App\Commands\Work\OrderBuilder\SettingOrderDataCommand;
-use App\Commands\Work\OrderBuilder\SettingSkillsValuesCommand;
 use App\Modules\Core\Http\Controller;
 use App\Models\Work\Catalogs\Instrument;
 use App\Models\Work\Catalogs\Material;
 use App\Models\Work\Catalogs\Skill;
-use App\Repositories\Work\Team\TeamOrderRepositoryObj;
+use App\Modules\Work\Commands\Admin\OrderBuilder\ClearMaterialsAction;
+use App\Modules\Work\Commands\Admin\OrderBuilder\CreateOrderDraftAction;
+use App\Modules\Work\Commands\Admin\OrderBuilder\PublishOrderAction;
+use App\Modules\Work\Commands\Admin\OrderBuilder\ReCheckMaterialsCommand;
+use App\Modules\Work\Commands\Admin\OrderBuilder\ReCheckSkillsCommand;
+use App\Modules\Work\Commands\Admin\OrderBuilder\SettingMaterialsValuesCommand;
+use App\Modules\Work\Commands\Admin\OrderBuilder\SettingOrderDataAction;
+use App\Modules\Work\Commands\Order\DeleteOrderAction;
+use App\Modules\Work\Persistence\Repositories\Order\OrderDraftsRepo;
+use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
+use Finite\Exception\StateException;
 use Illuminate\Support\Facades\Input;
 
 class TeamOrderBuilderController extends Controller
 {
-    /** @var TeamOrderRepositoryObj */
-    protected $teamOrderRepo;
+    /** @var OrderDraftsRepo */
+    protected $draftsRepo;
 
-    public function __construct(TeamOrderRepositoryObj $teamOrderRepo)
+    public function __construct(OrderDraftsRepo $draftsRepo)
     {
-        $this->teamOrderRepo = $teamOrderRepo;
+        $this->draftsRepo = $draftsRepo;
         
         parent::__construct();
     }
 
     public function orderDrafts()
     {
-        $draftOrders = $this->teamOrderRepo->getOrdersDrafts();
+        $draftOrders = $this->draftsRepo->get();
 
-        return $this->view('admin.orders.drafts', [
+        return $this->view('work.admin.draft_list', [
             'draftOrders' => $draftOrders,
         ]);
     }
 
     public function createOrderDraft()
     {
-        $cmd = new CreateEmptyTeamOrderCommand($this->teamOrderRepo);
+        $cmd = new CreateOrderDraftAction();
 
-        $draft = $cmd->createEmptyTeamOrder();
+        $draft_id = $cmd->createEmptyTeamOrder();
 
-        return \Redirect::route('teamorder_draft_select_requires_page', ['id' => $draft->id]);
+        return \Redirect::route('teamorder_draft_select_requires_page', ['id' => $draft_id]);
     }
-
 
     public function selectRequirements($id)
     {
-        $orderDraft = $this->teamOrderRepo->findOrderDraft($id);
+        /** @var OrdersRepo $ordersRepo */
+        $ordersRepo = app('OrdersRepo');
 
-        $orderMaterialsCodes = $orderDraft->getMaterialsCodes();
+        $orderDraft = $ordersRepo->findOrderWithMaterialsById($id);
 
-        $orderSkillsCodes = $orderDraft->getSkillsCodes();
+        $orderMaterialsCodes = $orderDraft->materials->getCodes();
+
+//        $orderSkillsCodes = $orderDraft->getSkillsCodes();
         $orderIstrumentsCodes = [];
 
         $materials = Material::get();
         $instruments = Instrument::get();
         $skills = Skill::get();
 
-        return $this->view('admin.orders.select_requires', [
+        return $this->view('work.admin.order_draft.select_requires', [
             'draft' => $orderDraft,
             'materials' => $materials,
             'instruments' => $instruments,
             'skills' => $skills,
             'orderMaterialsCodes' => $orderMaterialsCodes,
-            'orderSkillsCodes' => $orderSkillsCodes,
+            'orderSkillsCodes' => [], //$orderSkillsCodes,
             'orderIstrumentsCodes' => $orderIstrumentsCodes,
             'orderDraft' => $orderDraft,
         ]);
@@ -76,53 +81,56 @@ class TeamOrderBuilderController extends Controller
     {
         $data = Input::all();
         $draft_id = $data['draft_id'];
+        
 
-        $orderDraft = $this->teamOrderRepo->findOrderDraft($draft_id);
-
-        // update/re-check draft-order materials
-        if (isset($data['materials'])) {
+        if (isset($data['materials'])) { // default = []
 
             $checkedMaterialsCodes = $data['materials'];
 
-            $cmd = new ReCheckMaterialsCommand($this->teamOrderRepo);
+            $cmd = new ReCheckMaterialsCommand();
             
-            $cmd->reCheckMaterials($orderDraft, $checkedMaterialsCodes);
+            $cmd->reCheckMaterials($draft_id, $checkedMaterialsCodes);
         }
         else 
         {
-            $this->teamOrderRepo->deleteOrderMaterials($orderDraft);
+            $clearMaterials = new ClearMaterialsAction();
+            
+            $clearMaterials->clearMaterials($draft_id);
         }
 
-        // update/re-check draft-order skills
+/*        // update/re-check draft-order skills
         if (isset($data['skills'])) {
             
             $checkedSkillsCodes = $data['skills'];
 
-            $cmd = new ReCheckSkillsCommand(/*$this->teamOrderRepo*/);
-
-            $cmd->reCheckSkills($orderDraft, $checkedSkillsCodes);
+            $cmd = new ReCheckSkillsCommand();
+        
+            $cmd->reCheckSkills($draft_id, $checkedSkillsCodes);
         }
         else 
         {
-            $this->teamOrderRepo->deleteOrderSkills($orderDraft);
-        }
+            $this->draftsRepo->deleteOrderSkills($draft_id);
+        }*/
 
-        return \Redirect::route('teamorder_draft_setting_page', ['id' => $orderDraft->id]);
+        return \Redirect::route('teamorder_draft_setting_page', ['id' => $draft_id]);
     }
 
 
     public function settingValues($id)
     {
-        $orderDraft = $this->teamOrderRepo->findOrderDraft($id);
+        /** @var OrdersRepo $ordersRepo */
+        $ordersRepo = app('OrdersRepo');
 
-        $draftMaterials = $orderDraft->materials;
-        $draftSkills = $orderDraft->skills;
+        $orderDraft = $ordersRepo->findOrderWithMaterialsById($id);
+
+        $draftMaterials = $orderDraft->materials->materials;
+//        $draftSkills = $orderDraft->skills;
         
         $skills = Skill::get();
 
-        return $this->view('admin.orders.setting_values', [
+        return $this->view('work.admin.order_draft.setting_values', [
             'draftMaterials' => $draftMaterials,
-            'draftSkills' => $draftSkills,
+            'draftSkills' => [], //$draftSkills,
             'orderDraft' => $orderDraft,
             'draftOrder' => $orderDraft,
             
@@ -138,67 +146,81 @@ class TeamOrderBuilderController extends Controller
         $data = Input::all();
         $draft_id = $data['draft_id'];
 
-        $orderDraft = $this->teamOrderRepo->findOrderDraft($draft_id);
+//        $orderDraft = $this->draftsRepo->find($draft_id);
 
         if (isset($data['order'])) {
 
-            $cmd = new SettingOrderDataCommand();
-            $cmd->fillOrderData($orderDraft, $data['order']);
+            $cmd = new SettingOrderDataAction();
+            
+            $cmd->fillOrderData($draft_id, $data['order']);
 
         }
 
         if (isset($data['materials'])) {
-
+//
             $cmd = new SettingMaterialsValuesCommand();
-            $cmd->fillMaterialValues($orderDraft, $data['materials']);
+
+            $cmd->fillMaterialValues($draft_id, $data['materials']);
 
         }
 
-        if (isset($data['skills'])) {
+/*        if (isset($data['skills'])) {
             
             $cmd = new SettingSkillsValuesCommand();
             $cmd->fillSkillsValues($orderDraft, $data['skills']);
 
-        }
+        }*/
 
         return \Redirect::route('teamorder_draft_main_page', ['id' => $draft_id]);
     }
 
     public function mainTeamOrderDraft($id)
     {
-        $orderDraft = $this->teamOrderRepo->findOrderDraft($id);
-        
-        $materials = $orderDraft->materials;
-        $skills = $orderDraft->skills;
+        /** @var OrdersRepo $ordersRepo */
+        $ordersRepo = app('OrdersRepo');
 
-        return $this->view('admin.orders.main', [
+        $orderDraft = $ordersRepo->findOrderWithMaterialsById($id);
+        
+        $materials = $orderDraft->materials->materials;
+//        $skills = $orderDraft->skills;
+
+        return $this->view('work.admin.order_draft.main', [
             'orderDraft' => $orderDraft,
             'materials' => $materials,
-            'skills' => $skills,
+            'skills' => [],//$skills,
         ]);
     }
-
     
     public function publish()
     {
         $data = Input::all();
         $draft_id = $data['draft_id'];
 
-        $orderDraft = $this->teamOrderRepo->findOrderDraft($draft_id);
 
-        $orderDraft->publish();
+        $publishOrder = new PublishOrderAction();
+
+        try {
+
+            $publishOrder->publish($draft_id);
+
+        }
+        catch (StateException $e) {
+
+        }
+
 
         return \Redirect::route('admin_orderdrafts_page');
     }
 
-    // how delete aggregate correct ?
     public function deleteDraft()
     {
         $data = Input::all();
         $draft_id = $data['draft_id'];
 
-        $cmd = new DeleteTeamOrderDraftCommand($this->teamOrderRepo);
-        $cmd->deleteTeamOrder($draft_id);
+        $cmd = new DeleteOrderAction();
+
+        $cmd->deleteOrder($draft_id);
+
 
         return \Redirect::route('admin_orderdrafts_page');
     }

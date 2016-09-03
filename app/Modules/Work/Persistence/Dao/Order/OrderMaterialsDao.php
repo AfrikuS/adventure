@@ -58,7 +58,7 @@ class OrderMaterialsDao
             ->where('id', $id)
             ->update([
                 'stock'  => $stock,
-            ]);
+        ]);
     }
 
     public function findBy($order_id, $code)
@@ -95,6 +95,22 @@ class OrderMaterialsDao
         return \DB::table($this->table)
             ->where('order_id', $order_id)
             ->delete();
+    }
+
+    public function deleteByIds($ids)
+    {
+        return \DB::table($this->table)
+            ->whereIn('id', $ids)
+            ->delete();
+    }
+
+    public function updateNeed($id, $need)
+    {
+        \DB::table($this->table)
+            ->where('id', $id)
+            ->update([
+                'need'  => $need,
+        ]);
     }
 
     /*    public function create($material)

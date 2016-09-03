@@ -2,16 +2,19 @@
 
 namespace App\Modules\Work\Commands\Admin\OrderBuilder;
 
+use App\Entities\Work\TeamOrderDraftEntity;
+use App\Modules\Work\Domain\Entities\Order\Order;
 use App\Modules\Work\Domain\Entities\Order\OrderDraft;
 use App\Modules\Work\Domain\Services\Order\OrderBuilderService;
 use App\Modules\Work\Persistence\Repositories\Order\OrderDraftsRepo;
 use App\Modules\Work\Persistence\Repositories\Order\OrdersRepo;
+use Finite\Exception\StateException;
 
-class ReCheckMaterialsCommand
+class SettingOrderDataAction
 {
     /** @var OrderDraftsRepo */
     private $draftsRepo;
-    
+
     /** @var OrdersRepo */
     private $orders;
 
@@ -20,27 +23,23 @@ class ReCheckMaterialsCommand
         $this->draftsRepo = app('OrderDraftsRepo');
         $this->orders = app('OrdersRepo');
     }
-    
-    public function reCheckMaterials($draft_id, $checkedCodes)
+
+    public function fillOrderData($draft_id, array $orderValues)
     {
         /** @var OrderDraft $order */
-        $order = $this->orders->findOrderWithMaterialsById($draft_id);
-        
-        
+        $order = $this->draftsRepo->find($draft_id);
+
+        $this->validateAction($order);
+
+
         $orderBuilderService = new OrderBuilderService();
 
-        
         \DB::beginTransaction();
         try {
 
 
-            if ($order->materials->isDiffsByCodes($checkedCodes)) {
-                
-                
-                $orderBuilderService->clearMaterials($draft_id);
+            $orderBuilderService->fillOrderData($order, $orderValues);
 
-                $orderBuilderService->createMaterialsByCodes($draft_id, $checkedCodes);
-            }
 
         }
         catch(\Exception $e) {
@@ -49,5 +48,14 @@ class ReCheckMaterialsCommand
         }
 
         \DB::commit();
+
+    }
+
+    private function validateAction(OrderDraft $order)
+    {
+        if (! $order->isDraft()) {
+
+            throw new StateException('Заказ должен быть на стадии черновика');
+        }
     }
 }

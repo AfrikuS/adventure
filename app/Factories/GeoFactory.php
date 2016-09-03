@@ -42,8 +42,4 @@ class GeoFactory
             }
         });
     }
-
-    public static function createVoyage(TravelRoute $route, Ship $ship)
-    {
-    }
 }

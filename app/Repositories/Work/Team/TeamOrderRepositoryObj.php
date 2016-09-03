@@ -33,17 +33,18 @@ class TeamOrderRepositoryObj
         return new TeamOrderEntity($order);
     }
 
-    public function getOrdersDrafts()
+/*    public function getOrdersDrafts()
     {
         return Order::where('status', 'draft')->get();
 
-    }
+    }*/
 
     public function createTeamOrderDraft()
     {
         return Order::create([
             'desc' => '',
-            'kind_work_title' => '',
+            'customer_hero_id' => '8',
+            'domain_id' => 2,
             'price' => 0,
             'acceptor_worker_id' => null,
             'acceptor_team_id' => null,

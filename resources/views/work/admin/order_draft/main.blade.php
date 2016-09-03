@@ -1,4 +1,4 @@
-@extends('admin.orders.layout')
+@extends('work.admin.order_draft._layout')
 
 @section('title', 'Team-Order-Builder. Main Draft Page')
 @section('head')
@@ -45,7 +45,7 @@
             <p>
             <p>'Цена': {{ $orderDraft->price }}
             <p>'Описание': {{ $orderDraft->desc }}
-            <p>'Доп. сведения': {{ $orderDraft->kind_work_title }}
+            {{--<p>'Доп. сведения': {{ $orderDraft->kind_work_title }}--}}
         </div>
 
         <div class="col-lg-6">

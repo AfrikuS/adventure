@@ -48,4 +48,19 @@ class OrderMaterialsCollection
 
         return $remainAmount;
     }
+
+    public function isDiffsByCodes(array $diffCodes)
+    {
+        $codes = $this->getCodes();
+
+        if (count($codes) != count($diffCodes)) {
+
+            return true;
+        }
+
+        
+        $excessCodes = array_diff($codes, $diffCodes);
+        
+        return count($excessCodes) > 0;
+    }
 }
