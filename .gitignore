@@ -14,3 +14,9 @@ storage
 _ide_helper.php
 .phpstorm.meta.php
 *npm-debug.log*
+
+eloquent_helper
+auth_helper
+locations
+maxovik_desc
+phinx_helper
