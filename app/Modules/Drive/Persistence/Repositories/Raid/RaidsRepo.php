@@ -12,19 +12,21 @@ class RaidsRepo
     /** @var RaidsDao */
     private $raidsDao;
 
-    public function __construct()
+    public function __construct(RaidsDao $raidsDao)
     {
-        $this->raidsDao = app('DriveRaidsDao');
+        $this->raidsDao = $raidsDao;
     }
 
     public function createRaid($driver_id, $vehicle_id, string $startTime, $status)
     {
-        $this->raidsDao->create(
-            $driver_id, 
-            $vehicle_id, 
-            $startTime, 
-            $status
-        );
+        return
+            $this->raidsDao->create(
+                $driver_id, 
+                $vehicle_id,
+                $status,
+                $startTime,
+                0
+            );
     }
     
     public function findByDriver($driver_id)
@@ -36,7 +38,7 @@ class RaidsRepo
             return $raid;
         }
 
-        $raidData = $this->raidsDao->findSimpleRaidByDriver($driver_id);
+        $raidData = $this->raidsDao->findBy($driver_id);
 
 
         $raid = new Raid($raidData);
@@ -53,10 +55,9 @@ class RaidsRepo
 
     public function updateRaidData(Raid $raid)
     {
-        $this->raidsDao->updateRaidData(
+        $this->raidsDao->update(
             $raid->id,
             $raid->status,
-            $raid->victim_id,
             $raid->reward
         );
     }

@@ -13,6 +13,7 @@ use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 // extends \GrahamCampbell\Exceptions\ExceptionHandler
 class Handler extends ExceptionHandler
@@ -53,23 +54,23 @@ class Handler extends ExceptionHandler
     {
         if ($e instanceof NotFoundHttpException) {
             Session::flash('message', '404 not found');
-            return redirect()->back();
-//            return response()->view('errors.404', [], 404);
+//            return redirect()->back();
+            return response()->view('errors.404', [], 404);
         }
-        elseif ($e instanceof NotEnoughResourceException) {
+        elseif ($e instanceof NotFoundResourceException) {
             Session::flash('message', 'Nedostatochno денег');
             return redirect()->back();
         }
-        elseif ($e instanceof FatalThrowableError) {
-            Session::flash('message', $e->getMessage());
-            return redirect()->back();
-        }
-        elseif ($e instanceof StateException) {
-            Session::flash('message', 'Недопустимое действие');
-            return redirect()->back();
-        }
+//        elseif ($e instanceof FatalThrowableError) {
+//            Session::flash('message', $e->getMessage());
+//            return redirect()->back();
+//        }
+//        elseif ($e instanceof StateException) {
+//            Session::flash('message', 'Недопустимое действие');
+//            return redirect()->back();
+//        }
         elseif ($e instanceof EntityNotFound_Exception) {
-            Session::flash('message', 'Запись не найдена');
+            Session::flash('message', 'Запись не найдена. '. $e->getMessage());
             return \Redirect::route('profile_page');
         }
 

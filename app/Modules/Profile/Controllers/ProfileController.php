@@ -14,12 +14,11 @@ class ProfileController extends Controller
 {
     public function index()
     {
-
-//        \Schema::table('work_order_skills', function ($table) {
+//        \Schema::table('drive_workroom_equipment', function ($table) {
 //            $table->dropColumn('code');
 //
 //            $table->dropColumn('domain_code');
-//            $table->integer('size')->unsigned()->nullable()->after('mosaic');
+//            $table->integer('repairer_level')->unsigned()->default(0)->after('refueler_level');
 //            $table->integer('domain_id')->unsigned()->after('order_id');
 //            $table->integer('user_id')->unsigned()->default(2);
 //

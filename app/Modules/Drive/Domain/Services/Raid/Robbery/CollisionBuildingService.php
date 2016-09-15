@@ -4,12 +4,12 @@ namespace App\Modules\Drive\Domain\Services\Raid\Robbery;
 
 use App\Modules\Drive\Domain\Entities\Raid\Robbery;
 use App\Modules\Drive\Domain\Lib\Raid\Robbery\Collisions\GatesCollisionProcessor;
-use App\Modules\Drive\Persistence\Repositories\Raid\RobberyRepo;
+use App\Modules\Drive\Persistence\Repositories\Raid\RobberiesRepo;
 use App\Modules\Hero\Persistence\Repositories\BuildingsRepo;
 
 class CollisionBuildingService
 {
-    /** @var RobberyRepo */
+    /** @var RobberiesRepo */
     private $robberyRepo;
 
     /** @var BuildingsRepo */

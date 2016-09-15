@@ -6,16 +6,15 @@ use App\Modules\Drive\Domain\Entities\Raid\Robbery;
 use App\Modules\Drive\Domain\Entities\Raid\RobberyVehicle;
 use App\Modules\Drive\Domain\Entities\Vehicle;
 use App\Modules\Drive\Domain\Services\Raid\Robbery\CollisionBuildingService;
-use App\Modules\Drive\Domain\Services\Raid\RobberyService;
 use App\Modules\Drive\Exceptions\Controllers\CollisionSuccess_Exception;
 use App\Modules\Drive\Exceptions\Controllers\CollisionUnsuccess_Exception;
-use App\Modules\Drive\Persistence\Repositories\Raid\RobberyRepo;
+use App\Modules\Drive\Persistence\Repositories\Raid\RobberiesRepo;
 use App\Modules\Drive\Persistence\Repositories\VehiclesRepo;
 use Finite\Exception\StateException;
 
 class CollisionGatesCommand
 {
-    /** @var RobberyRepo */
+    /** @var RobberiesRepo */
     private $robberyRepo;
 
     /** @var VehiclesRepo */
@@ -59,19 +58,6 @@ class CollisionGatesCommand
             throw $e;
         }
         \DB::commit();
-
-
-
-
-        if ($collisionResult->result == 'success') {
-
-            throw new CollisionSuccess_Exception($collisionResult);
-        }
-
-        else {
-
-            throw new CollisionUnsuccess_Exception($collisionResult, $robberyVehicle);
-        }
     }
 
     private function validateCommand($robbery_id)
@@ -79,7 +65,7 @@ class CollisionGatesCommand
         /** @var Robbery $robbery */
         $robbery = $this->robberyRepo->findByRaid($robbery_id);
 
-        if ($robbery->robbery_status != RobberyService::ROBBERY_STATUS_GATES) {
+        if ($robbery->status != Robbery::STATUS_GATES) {
 
             throw new StateException;
         }

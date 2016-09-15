@@ -591,6 +591,19 @@ CREATE TABLE IF NOT EXISTS `drive_details` (
     FOREIGN KEY (vehicle_id) REFERENCES drive_vehicles(id)
 );
 
+
+CREATE TABLE IF NOT EXISTS `drive_workroom_equipment` (
+    `driver_id` INT UNSIGNED NOT NULL,
+
+    `refueler_level` INT UNSIGNED NOT NULL DEFAULT 0,
+    `lift_level` INT UNSIGNED NOT NULL DEFAULT 0,
+    `recoverer_level` INT UNSIGNED NOT NULL DEFAULT 0,
+
+    PRIMARY KEY (driver_id),
+    FOREIGN KEY (driver_id) REFERENCES drive_drivers(id)
+);
+
+
 -- далее будут структуры для механики разбоя жилищ на тачке
 -- gates - врата, fence - забор\ограда\частокол, resources warehouse
 CREATE TABLE IF NOT EXISTS `hero_buildings` (
@@ -615,28 +628,6 @@ CREATE TABLE IF NOT EXISTS `drive_raids` (
 );
 
 
-
--- нападение разбой - небольшой квестик. механика такая
--- разбивает ворота (если есть) - въезжает во двор, далее разбивает большую дверь,
--- въезжает в малый двор. там три двери (если есть три). выбор в какую биться
--- 1. - ресурсный склад, добыча ресы - нефть бензин
--- 2. - жилище - добыча - золото
--- 3. ресурсный сток, сюда стекаются ресурсы других игроков, к-ые а) сами решили играть по таким правилам
--- и б) проиграли несколько атак и теперь сливают каждый час часть ресурсов этому.
--- так вот взломав дверь сюда - ты можешь узнать путь к одной из жертв\терпил
-
--- разбой\нападение на 1 лицо - robbery -> redis or node socks
-CREATE TABLE IF NOT EXISTS `driver_robberies` (
-    `id` INT UNSIGNED NOT NULL,
-    `vehicle_id` INT UNSIGNED NOT NULL,
-    `victim_id` INT UNSIGNED NOT NULL,
-    `status` VARCHAR(255) NOT NULL,
-    `start_robbery` DATETIME NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (id) REFERENCES drive_drivers(id),
-    FOREIGN KEY (vehicle_id) REFERENCES drive_vehicles(id),
-    FOREIGN KEY (victim_id) REFERENCES hero_resources(id)
-);
 
 CREATE TABLE IF NOT EXISTS `drive_vehicles` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -671,6 +662,40 @@ CREATE TABLE IF NOT EXISTS `drive_raids` (
     FOREIGN KEY (victim_id) REFERENCES hero_resources(id)
 );
 ALTER TABLE `drive_raids` CHANGE `raid_status` `status` VARCHAR(255) NOT NULL;
+
+-- нападение разбой - небольшой квестик. механика такая
+-- разбивает ворота (если есть) - въезжает во двор, далее разбивает большую дверь,
+-- въезжает в малый двор. там три двери (если есть три). выбор в какую биться
+-- 1. - ресурсный склад, добыча ресы - нефть бензин
+-- 2. - жилище - добыча - золото
+-- 3. ресурсный сток, сюда стекаются ресурсы других игроков, к-ые а) сами решили играть по таким правилам
+-- и б) проиграли несколько атак и теперь сливают каждый час часть ресурсов этому.
+-- так вот взломав дверь сюда - ты можешь узнать путь к одной из жертв\терпил
+
+-- разбой\нападение на 1 лицо - robbery -> redis or node socks
+CREATE TABLE IF NOT EXISTS `driver_raid_robberies` (
+    `raid_id` INT UNSIGNED NOT NULL,
+    `vehicle_id` INT UNSIGNED NOT NULL,
+    `victim_id` INT UNSIGNED NOT NULL,
+    `status` VARCHAR(255) NOT NULL,
+    `start_robbery` DATETIME NOT NULL,
+    PRIMARY KEY (raid_id),
+    FOREIGN KEY (raid_id) REFERENCES drive_raids(id),
+    FOREIGN KEY (vehicle_id) REFERENCES drive_raids(vehicle_id),
+    FOREIGN KEY (victim_id) REFERENCES hero_resources(id)
+);
+
+
+CREATE TABLE IF NOT EXISTS `jobs_bodalka_result` (
+    `id` INT UNSIGNED NOT NULL,
+    `gold` INT UNSIGNED NOT NULL,
+    `oil` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (id) REFERENCES users(id)
+);
+
+
+
 
 --CREATE TABLE IF NOT EXISTS `work_build_orders` (
 --    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -833,7 +858,7 @@ CREATE TABLE IF NOT EXISTS `employment_professions` (
 
 
 
-CREATE TABLE IF NOT EXISTS `hero_equipment` (
+CREATE TABLE IF NOT EXISTS `hero_equipment` ( -- hero_base_equipment
     `hero_id` INT UNSIGNED NOT NULL,
 
     `pump_level` INT UNSIGNED NOT NULL,

@@ -2,14 +2,15 @@
 
 namespace App\Modules\Drive\Actions\Raid\Robbery;
 
+use App\Modules\Drive\Domain\Entities\Raid\Robbery;
 use App\Modules\Drive\Domain\Services\Raid\ActiveRaidService;
 use App\Modules\Drive\Domain\Services\Raid\RobberyService;
-use App\Modules\Drive\Persistence\Repositories\Raid\RobberyRepo;
+use App\Modules\Drive\Persistence\Repositories\Raid\RobberiesRepo;
 use Finite\Exception\StateException;
 
 class StartRobberyCommand
 {
-    /** @var RobberyRepo */
+    /** @var RobberiesRepo */
     private $robberyRepo;
 
     public function __construct()
@@ -24,7 +25,7 @@ class StartRobberyCommand
         $this->validateAction($driver_id);
         
         /** @var RobberyService $robberyService */
-        $robberyService = app('RobberyService'); //new RobberyService();
+        $robberyService = new RobberyService();
 
         $raidService = new ActiveRaidService();
         
@@ -50,9 +51,9 @@ class StartRobberyCommand
     {
         $robbery = $this->robberyRepo->findByRaid($raid_id);
 
-        if ($robbery->robbery_status != null) {
+        if ($robbery->status != Robbery::NO_ACTIVE) {
 
-            throw new StateException('Вы участвуете в разбое');
+            throw new StateException('Вы уже участвуете в разбое');
         }
     }
 }

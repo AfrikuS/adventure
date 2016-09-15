@@ -3,8 +3,10 @@
 namespace App\Modules\Drive\Actions\Raid;
 
 use App\Modules\Drive\Domain\Entities\Raid\Raid;
+use App\Modules\Drive\Domain\Entities\Raid\Robbery;
 use App\Modules\Drive\Exceptions\Controllers\SearchSuccess_Exception;
 use App\Modules\Drive\Persistence\Repositories\Raid\RaidsRepo;
+use App\Modules\Drive\Persistence\Repositories\Raid\RobberiesRepo;
 use Finite\Exception\StateException;
 
 class SearchVictimCommand
@@ -12,9 +14,13 @@ class SearchVictimCommand
     /** @var RaidsRepo */
     private $raidRepo;
 
+    /** @var RobberiesRepo */
+    private $robberiesRepo;
+
     public function __construct()
     {
         $this->raidRepo = app('DriveRaidRepo');
+        $this->robberiesRepo = app('DriveRobberyRepo');
     }
 
 
@@ -29,14 +35,19 @@ class SearchVictimCommand
 
         $fond_victim_id = $driver_id;
         
-        $raid->fondVictim($fond_victim_id);
+        $raid->fondVictim();
 
         
         
         $this->raidRepo->updateRaidData($raid);
+
+
+        /** @var Robbery $robbery */
+        $robbery = $this->robberiesRepo->findByRaid($raid->id);
+        $robbery->fondVictim($fond_victim_id);
+        $this->robberiesRepo->updateVictim($robbery);
         
         
-        throw new SearchSuccess_Exception($raid);
     }
 
     private function validateCommand(Raid $raid)

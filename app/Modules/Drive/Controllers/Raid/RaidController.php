@@ -11,6 +11,7 @@ use App\Modules\Drive\Domain\Entities\Raid\Raid;
 use App\Modules\Drive\Exceptions\Controllers\SearchFail_Exception;
 use App\Modules\Drive\Exceptions\Controllers\SearchSuccess_Exception;
 use App\Modules\Drive\Persistence\Repositories\Raid\RaidsRepo;
+use App\Modules\Drive\Persistence\Repositories\Raid\RobberiesRepo;
 use Finite\Exception\StateException;
 use Illuminate\Support\Facades\Input;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -21,6 +22,9 @@ class RaidController extends Controller
     {
         /** @var RaidsRepo $raidRepo */
         $raidRepo = app('DriveRaidRepo');
+        
+        /** @var RobberiesRepo $robberiesRepo */
+        $robberiesRepo = app('DriveRobberyRepo');
 
         $isExistRaid = $raidRepo->isExistRaid($this->user_id);
 
@@ -35,6 +39,7 @@ class RaidController extends Controller
         $raid = $raidRepo->findByDriver($this->user_id);
         $raidStatus = $raid->status;
 
+//        $robbery = $robberiesRepo->findByRaid($raid->id);
         
         switch ($raidStatus)
         {
@@ -63,7 +68,6 @@ class RaidController extends Controller
 
     public function startRaid()
     {
-
         $cmd = new StartRaidCommand();
 
         try {
@@ -105,22 +109,23 @@ class RaidController extends Controller
         $searchVictim = new SearchVictimCommand();
         
         
-        try {
-
-            $searchVictim->searchVictim($this->user_id);
-        }
-        catch (SearchSuccess_Exception $e) {
+        $searchVictim->searchVictim($this->user_id);
 
 
+        return \Redirect::route('drive_raid_search_victim_result_action');
+    }
 
-//            return \Redirect::route('view_victim_page', ['victim_id']);
-            return $this->view('drive.raid.search_results', [
-                'raid' => $e->raid,
-            ]);
-        }
-        catch (SearchFail_Exception $e) {
+    public function searchVictimResult()
+    {
+        if (rand(1, 3) > 1) {
 
             return $this->view('drive.raid.search_empty');
+        }
+        else {
+
+            return $this->view('drive.raid.search_results', [
+                'victim_id' => $this->user_id
+            ]);
         }
 
     }
@@ -129,7 +134,14 @@ class RaidController extends Controller
     {
         $cmd = new CompleteRaidCommand;
 
-        $cmd->completeRaid($this->user_id);
+        try {
+
+            $cmd->completeRaid($this->user_id);
+        }
+        catch (StateException $e) {
+            
+            \Session::flash('message', $e->getMessage());
+        }
 
         
         return \Redirect::route('drive_garage_vehicle_page');

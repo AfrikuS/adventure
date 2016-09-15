@@ -15,10 +15,10 @@ class DriversRepo
     /** @var VehiclesDao */
     private $vehiclesDao;
 
-    public function __construct()
+    public function __construct(DriversDao $driversDao, VehiclesDao $vehiclesDao)
     {
-        $this->driversDao = app('DriveDriversDao');
-        $this->vehiclesDao = app('DriveVehiclesDao');
+        $this->driversDao = $driversDao;
+        $this->vehiclesDao = $vehiclesDao;
     }
 
     public function findById($user_id)
@@ -29,7 +29,6 @@ class DriversRepo
             return $driver;
         }
 
-        
         $driverData = $this->driversDao->find($user_id);
         
         $driver = new Driver($driverData);
@@ -44,6 +43,7 @@ class DriversRepo
         return $this->driversDao->createOnce($user_id);
     }
 
+    /** @deprecated  */
     public function createFirstVehicle($driver_id)
     {
         $this->vehiclesDao->createFirst($driver_id);

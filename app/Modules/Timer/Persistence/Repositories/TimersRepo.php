@@ -36,4 +36,9 @@ class TimersRepo
     {
        return $this->timersDao->delete($timer->id);
     }
+
+    public function isExistBy($user_id, $actionCode)
+    {
+        return $this->timersDao->isExistBy($user_id, $actionCode);
+    }
 }

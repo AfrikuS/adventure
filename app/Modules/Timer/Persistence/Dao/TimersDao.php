@@ -61,4 +61,13 @@ class TimersDao
             \DB::table($this->table)
                 ->delete($id);
     }
+
+    public function isExistBy($user_id, $actionCode)
+    {
+        return
+            \DB::table($this->table)
+                ->where('user_id', $user_id)
+                ->where('action_code', $actionCode)
+                ->exists();
+    }
 }

@@ -12,7 +12,7 @@
     Вы поездили по округе, у вас на примете несколько человек:
     <p></p>
     {!! Form::open(['route' => 'drive_raid_robbery_start_action', 'class' => '']) !!}
-    {!! Form::hidden('victim_id', $raid->victim_id) !!}
+    {!! Form::hidden('victim_id', $victim_id) !!}
     {!! Form::submit('Наехать', array('class' => 'btn btn-primary')) !!}
     {!! Form::close() !!}
     <p></p>

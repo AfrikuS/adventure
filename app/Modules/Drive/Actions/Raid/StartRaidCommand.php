@@ -3,6 +3,7 @@
 namespace App\Modules\Drive\Actions\Raid;
 
 use App\Modules\Drive\Domain\Services\Raid\ActiveRaidService;
+use App\Modules\Drive\Domain\Services\Raid\RobberyService;
 use App\Modules\Drive\Persistence\Repositories\Raid\RaidsRepo;
 use App\Modules\Drive\Persistence\Repositories\VehiclesRepo;
 use Finite\Exception\StateException;
@@ -28,12 +29,17 @@ class StartRaidCommand
         $this->validateAction($driver_id);
         
         $raidService = new ActiveRaidService();
+
+        $robberyService = new RobberyService();
         
         \DB::beginTransaction();
         try {
 
 
             $raidService->startRaid($vehicle);
+
+            $robberyService->initRobbery($driver_id, $vehicle->id);
+
 
         }
         catch(\Exception $e) {

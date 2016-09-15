@@ -10,3 +10,7 @@ _ide_helper.php
 storage
 /bootstrap/cache
 *.zip
+.env
+_ide_helper.php
+.phpstorm.meta.php
+*npm-debug.log*

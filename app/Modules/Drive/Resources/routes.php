@@ -30,6 +30,13 @@ Route::post('/drive/workroom/recovery', 'Drive\Controllers\Garage\WorkroomContro
 Route::post('/drive/workroom/refuel', 'Drive\Controllers\Garage\WorkroomController@refuel')->name('drive_workroom_refuel_action');
 
 
+Route::post('/drive/workroom/buy_refueler', 'Drive\Controllers\Garage\WorkroomController@buyRefueler')->name('drive_workroom_buy_refueler_action');
+Route::post('/drive/workroom/upgrade_refueler', 'Drive\Controllers\Garage\WorkroomController@upgradeRefueler')->name('drive_workroom_upgrade_refueler_action');
+
+Route::post('/drive/workroom/buy_repairer', 'Drive\Controllers\Garage\WorkroomController@buyRepairer')->name('drive_workroom_buy_repairer_action');
+Route::post('/drive/workroom/upgrade_repairer', 'Drive\Controllers\Garage\WorkroomController@upgradeRepairer')->name('drive_workroom_upgrade_repairer_action');
+
+
 Route::group(['middleware' => 'drive_driver'], function () {
 
 
@@ -43,6 +50,10 @@ Route::group(['middleware' => 'drive_driver'], function () {
 
         Route::post('/drive/start_raid', 'Drive\Controllers\Raid\RaidController@startRaid')->name('drive_raid_start_action');
         Route::post('/drive/raid/search_victim', 'Drive\Controllers\Raid\RaidController@searchVictim')->name('drive_raid_search_victim_action');
+
+        Route::get('/drive/raid/search_victim_result', 'Drive\Controllers\Raid\RaidController@searchVictimResult')->name('drive_raid_search_victim_result_action');
+        
+        
         Route::post('/drive/raid/start_robbery', 'Drive\Controllers\Raid\RaidController@startRobbery')->name('drive_raid_robbery_start_action');
 
         Route::get('/drive/raid', 'Drive\Controllers\Raid\RaidController@index')->name('drive_raid_page');
@@ -64,7 +75,11 @@ Route::group(['middleware' => 'drive_driver'], function () {
         Route::post('/drive/robbery/drivein_ambar', 'Drive\Controllers\Raid\Robbery\CollisionController@driveInAmbar')->name('drive_robbery_drivein_ambar_action');
         Route::post('/drive/robbery/drivein_house', 'Drive\Controllers\Raid\Robbery\CollisionController@driveInHouse')->name('drive_robbery_drivein_house_action');
         Route::post('/drive/robbery/drivein_warehouse', 'Drive\Controllers\Raid\Robbery\CollisionController@driveInWarehouse')->name('drive_robbery_drivein_warehouse_action');
+        
+        Route::get('/drive/robbery/collision_result', 'Drive\Controllers\Raid\Robbery\CollisionController@collisionResult')->name('drive_robbery_collision_result_action');
 
+        
+        
         Route::post('/drive/robbery/finish', 'Drive\Controllers\Raid\RobberyController@finish')->name('drive_robbery_finish_action');
         Route::post('/drive/robbery/abort', 'Drive\Controllers\Raid\RobberyController@abort')->name('drive_robbery_abort_action');
 

@@ -2,53 +2,62 @@
 
 namespace App\Modules\Drive\Domain\Entities\Raid;
 
-use App\Modules\Drive\Domain\Services\Raid\RobberyService;
-
 class Robbery
 {
+    const STATUS_GATES = 'gates';
+    const STATUS_FENCE = 'fence';
+    const STATUS_HOUSE = 'house';
+    const ROBBERY_STATUS_AMBAR = 'ambar';
+    const ROBBERY_STATUS_WAREHOUSE = 'warehouse';
+    const STATUS_COURTYARD = 'courtyard';
+    const NO_ACTIVE = 'no_active';
+
     public $id;
     public $status;
-    public $robbery_status;
     public $victim_id;
     public $vehicle_id;
 
     public function __construct(\stdClass $robberyData)
     {
-        $this->id = $robberyData->id;
+        $this->id = $robberyData->raid_id;
         $this->status = $robberyData->status;
-        $this->robbery_status = $robberyData->robbery_status;
         $this->victim_id = $robberyData->victim_id;
         $this->vehicle_id = $robberyData->vehicle_id;
     }
 
-    public function complete()
+    public function fondVictim($victim_id)
     {
-        $this->status = RobberyService::RAID_STATUS_SWITCH;
+        $this->victim_id = $victim_id;
     }
-
+    
     public function driveInFence()
     {
-        $this->robbery_status = RobberyService::ROBBERY_STATUS_COURTYARD;
+        $this->status = self::STATUS_COURTYARD;
     }
 
     public function driveInAmbar()
     {
-        $this->robbery_status = RobberyService::ROBBERY_STATUS_AMBAR;
+        $this->status = self::ROBBERY_STATUS_AMBAR;
     }
 
     public function driveInWarehouse()
     {
-        $this->robbery_status = RobberyService::ROBBERY_STATUS_WAREHOUSE;
+        $this->status = self::ROBBERY_STATUS_WAREHOUSE;
     }
 
     public function driveInHouse()
     {
-        $this->robbery_status = RobberyService::ROBBERY_STATUS_HOUSE;
+        $this->status = self::STATUS_HOUSE;
     }
 
     public function driveInGates()
     {
-        $this->robbery_status = RobberyService::ROBBERY_STATUS_FENCE;
+        $this->status = self::STATUS_FENCE;
     }
 
+    public function abort()
+    {
+        $this->status = self::NO_ACTIVE;
+        $this->victim_id = null;
+    }
 }

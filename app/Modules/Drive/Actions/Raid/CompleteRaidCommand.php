@@ -4,6 +4,7 @@ namespace App\Modules\Drive\Actions\Raid;
 
 use App\Models\Core\Hero;
 use App\Modules\Drive\Domain\Services\Raid\ActiveRaidService;
+use App\Modules\Drive\Domain\Services\Raid\RobberyService;
 use App\Modules\Drive\Persistence\Repositories\Raid\RaidsRepo;
 use App\Repositories\Drive\RaidRepository;
 use App\Repositories\HeroRepositoryObj;
@@ -26,12 +27,16 @@ class CompleteRaidCommand
         
         
         $raidService = new ActiveRaidService();
+        
+        $robberyService = new RobberyService();
      
         
         \DB::beginTransaction();
         try {
 
-            
+
+            $robberyService->completeRaid($raid_id);
+
             $raidService->completeRaid($raid_id);
 
 
@@ -44,14 +49,13 @@ class CompleteRaidCommand
         \DB::commit();
     }
 
-    /** @deprecated  */ // redo
     private function validateCommand($raid_id)
     {
-        $raid = $this->raidRepo->findByDriver($raid_id);
+        $isExistRaid = $this->raidRepo->isExistRaid($raid_id);
         
-        if (null === $raid) {
+        if (! $isExistRaid) {
 
-            throw new StateException;
+            throw new StateException('Вы не участвуете в рейде');
         }
     }
 }

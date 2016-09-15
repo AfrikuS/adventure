@@ -4,6 +4,7 @@
 
 @section('center')
 
+{{--
     От такого удара {{ $result->building }} раскрылась.
     <p></p>
     Сила удара тачки  : <b>{{ $result->vehiclePower }}</b>
@@ -19,8 +20,11 @@
     <p></p>
 
     Вы получаете {{ $result->reward }} золота
-    {{--Стойкость {{ $result->building }} стостовляет {{ $result->buildingDamage }}--}}
+    --}}
+{{--Стойкость {{ $result->building }} стостовляет {{ $result->buildingDamage }}--}}{{--
+
     <p></p>
+--}}
     <h2>Добро пожаловать !!!</h2>
     <p></p>
     {{--<h3>*Забор после ворот*</h3>--}}

@@ -8,8 +8,6 @@ use App\Modules\Drive\Actions\Raid\Robbery\Collision\CollisionGatesCommand;
 use App\Modules\Drive\Actions\Raid\Robbery\Collision\CollisionHouseDoorCommand;
 use App\Modules\Drive\Actions\Raid\Robbery\Collision\CollisionWarehouseDoorCommand;
 use App\Modules\Drive\Controllers\Raid\RobberyController;
-use App\Modules\Drive\Exceptions\Controllers\CollisionSuccess_Exception;
-use App\Modules\Drive\Exceptions\Controllers\CollisionUnsuccess_Exception;
 use Finite\Exception\StateException;
 
 class CollisionController extends RobberyController
@@ -26,18 +24,7 @@ class CollisionController extends RobberyController
 
             return \Redirect::route('drive_robbery_page');
         }
-        catch (CollisionSuccess_Exception $e) {
-
-            return $this->view('drive.raid.robbery.crush_result_success', [
-                'result' => $e->collisionResult,
-            ]);
-        }
-        catch (CollisionUnsuccess_Exception $e) {
-
-            return $this->view('drive.raid.robbery.crush_result_fail', [
-                'result' => $e->collisionResult,
-            ]);
-        }
+        return \Redirect::route('drive_robbery_collision_result_action');
     }
 
     public function driveInFence()
@@ -52,18 +39,7 @@ class CollisionController extends RobberyController
 
             return \Redirect::route('drive_robbery_page');
         }
-        catch (CollisionSuccess_Exception $e) {
-
-            return $this->view('drive.raid.robbery.crush_result_success', [
-                'result' => $e->collisionResult,
-            ]);
-        }
-        catch (CollisionUnsuccess_Exception $e) {
-
-            return $this->view('drive.raid.robbery.crush_result_fail', [
-                'result' => $e->collisionResult,
-            ]);
-        }
+        return \Redirect::route('drive_robbery_collision_result_action');
     }
     
     public function driveInHouse()
@@ -78,18 +54,7 @@ class CollisionController extends RobberyController
 
             return \Redirect::route('drive_robbery_page');
         }
-        catch (CollisionSuccess_Exception $e) {
-
-
-            return $this->view('drive.raid.robbery.house', [
-            ]);
-        }
-        catch (CollisionUnsuccess_Exception $e) {
-
-            return $this->view('drive.raid.robbery.crush_result_fail', [
-                'result' => $e->collisionResult,
-            ]);
-        }
+        return \Redirect::route('drive_robbery_collision_result_action');
     }
 
     public function driveInAmbar()
@@ -104,18 +69,8 @@ class CollisionController extends RobberyController
 
             return \Redirect::route('drive_robbery_page');
         }
-        catch (CollisionSuccess_Exception $e) {
 
-
-            return $this->view('drive.raid.robbery.ambar', [
-            ]);
-        }
-        catch (CollisionUnsuccess_Exception $e) {
-
-            return $this->view('drive.raid.robbery.crush_result_fail', [
-                'result' => $e->collisionResult,
-            ]);
-        }
+        return \Redirect::route('drive_robbery_collision_result_action');
     }
 
     public function driveInWarehouse()
@@ -130,19 +85,20 @@ class CollisionController extends RobberyController
 
             return \Redirect::route('drive_robbery_page');
         }
-        catch (CollisionSuccess_Exception $e) {
 
-            return $this->view('drive.raid.robbery.warehouse', [
+        return \Redirect::route('drive_robbery_collision_result_action');
+    }
+
+    public function collisionResult()
+    {
+        if (rand(1, 3) > 1) {
+
+            return $this->view('drive.raid.robbery.collisions.crush_result_success', [
             ]);
-//            return $this->view('drive.raid.robbery.crush_result_success', [
-//                'result' => $e->collisionResult,
-//            ]);
-
         }
-        catch (CollisionUnsuccess_Exception $e) {
+        else {
 
-            return $this->view('drive.raid.robbery.crush_result_fail', [
-                'result' => $e->collisionResult,
+            return $this->view('drive.raid.robbery.collisions.crush_result_fail', [
             ]);
         }
     }

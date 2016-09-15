@@ -13,7 +13,7 @@
     <p></p>
     <p></p>
     {!! Form::open(['route' => 'drive_raid_search_victim_action', 'class' => '']) !!}
-    {!! Form::hidden('victim_id', $victim_id) !!}
+    {{--{!! Form::hidden('victim_id', $victim_id) !!}--}}
     {!! Form::submit('Искать ещё', array('class' => 'btn btn-primary')) !!}
     {!! Form::close() !!}
 

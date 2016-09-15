@@ -6,67 +6,42 @@ class RaidsDao
 {
     private $table = 'drive_raids';
     // id = driver_id
-    
-    
-    public function findSimpleRaidByDriver($driver_id)
-    {
-        $raidData =
-            \DB::table($this->table)
+/*`id` INT UNSIGNED NOT NULL,
+`vehicle_id` INT UNSIGNED NOT NULL,
+`status` VARCHAR(255) NOT NULL,
 
-                ->select(['id', 'vehicle_id', 'status', 'reward', 'start_raid', 'victim_id'])
-                ->find($driver_id);
+`victim_id` INT UNSIGNED,
+`robbery_status` VARCHAR(255),
 
-        return $raidData;
-    }
+`reward` INT UNSIGNED NOT NULL,
+`start_raid` DATETIME NOT NULL,
+PRIMARY KEY (id),
+FOREIGN KEY (id) REFERENCES drive_drivers(id),
+FOREIGN KEY (vehicle_id) REFERENCES drive_vehicles(id),
+FOREIGN KEY (victim_id) REFERENCES hero_resources(id)*/
 
-    public function create($driver_id, $vehicle_id, $startTime, $status)
+
+    public function create($driver_id, $vehicle_id, $status, $startedAt, $reward = 0)
     {
         $raid_id =
-            \DB::table($this->table)->insertGetId([
+            \DB::table($this->table)->insert([
                 'id' => $driver_id,
                 'vehicle_id' => $vehicle_id,
                 'status'     => $status,
-                'reward'     => 0,
-                'start_raid' => $startTime,
-
-                'victim_id'      => null,
-                'robbery_status' => null,
+                'start_raid' => $startedAt,
+                'reward' => $reward,
             ]);
 
         return $raid_id;
     }
-
-    public function findRobbery($raid_id)
-    {
-        $robberyData =
-            \DB::table($this->table)
-                ->select(['id', 'status', 'robbery_status', 'victim_id', 'vehicle_id'])
-                ->find($raid_id);
-
-        return $robberyData;
-    }
-
-    public function updateRobberyData($id, $status, $robberyStatus, $victim_id)
+    
+    public function update($id, $status, $reward)
     {
         return
             \DB::table($this->table)
                 ->where('id', $id)
                 ->update([
                     'status' => $status,
-                    'robbery_status' => $robberyStatus,
-                    
-                    'victim_id' => $victim_id,
-                ]);
-    }
-
-    public function updateRaidData($id, $status, $victim_id, $reward)  
-    {
-        return
-            \DB::table($this->table)
-                ->where('id', $id)
-                ->update([
-                    'status' => $status,
-                    'victim_id' => $victim_id,
                     'reward' => $reward,
                 ]);
     }
@@ -77,17 +52,6 @@ class RaidsDao
             \DB::table($this->table)->delete($raid_id);
     }
 
-    public function deleteRobbery($robbery_id)
-    {
-        return
-            \DB::table($this->table)
-                ->where('id', $robbery_id)
-                ->update([
-                    'victim_id' => null,
-                    'robbery_status' => null,
-                ]);
-    }
-
     public function isExistRaid($id)
     {
         $exist = 
@@ -96,5 +60,15 @@ class RaidsDao
                 ->exists();
 
         return $exist;
+    }
+
+    public function findBy($driver_id)
+    {
+        $raidData =
+            \DB::table($this->table)
+                ->select(['id', 'status', 'vehicle_id', 'start_raid', 'reward'])
+                ->find($driver_id);
+
+        return $raidData;
     }
 }

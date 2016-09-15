@@ -8,6 +8,7 @@ use App\Modules\Drive\Domain\Entities\Raid\Raid;
 use App\Modules\Drive\Domain\Entities\Vehicle;
 use App\Modules\Drive\Persistence\Repositories\DriversRepo;
 use App\Modules\Drive\Persistence\Repositories\Raid\RaidsRepo;
+use App\Modules\Drive\Persistence\Repositories\Raid\RobberiesRepo;
 use App\Modules\Hero\Domain\Commands\Resources\IncrementGold;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Bus;
@@ -24,24 +25,6 @@ class ActiveRaidService
     {
         $this->raidRepo = app('DriveRaidRepo');
         $this->driversRepo = app('DriveDriversRepo');
-    }
-
-    public function completeRaid($raid_id)
-    {
-        $raid = $this->raidRepo->findByDriver($raid_id);
-        
-        $driver_id = $raid->id;
-
-        
-
-        $getReward = new IncrementGold($driver_id, $raid->reward);
-        
-        Bus::dispatch($getReward);
-
-        
-        $deleteRaid = new FinishRaid($raid->id);
-
-        Bus::dispatch($deleteRaid);
     }
 
     public function startRobbery($raid_id)
@@ -84,4 +67,23 @@ class ActiveRaidService
         
         $this->driversRepo->updateStatus($driver);
     }
+
+    public function completeRaid($raid_id)
+    {
+        $raid = $this->raidRepo->findByDriver($raid_id);
+
+        $driver_id = $raid->id;
+
+
+
+        $getReward = new IncrementGold($driver_id, $raid->reward);
+
+        Bus::dispatch($getReward);
+
+
+        $deleteRaid = new FinishRaid($raid->id);
+
+        Bus::dispatch($deleteRaid);
+    }
+
 }

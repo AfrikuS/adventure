@@ -3,16 +3,16 @@
 namespace App\Modules\Drive\Providers;
 
 use App\Modules\Drive\Domain\Services\Raid\RobberyService;
-use App\Modules\Drive\Persistence\Dao\DriversDao;
-use App\Modules\Drive\Persistence\Dao\Raid\RaidsDao;
-use App\Modules\Drive\Persistence\Dao\VehiclesDao;
 use App\Modules\Drive\Persistence\Repositories\CatalogsRepo;
 use App\Modules\Drive\Persistence\Repositories\DriversRepo;
 use App\Modules\Drive\Persistence\Repositories\Raid\RaidsRepo;
-use App\Modules\Drive\Persistence\Repositories\Raid\RobberyRepo;
+use App\Modules\Drive\Persistence\Repositories\Raid\RobberiesRepo;
 use App\Modules\Drive\Persistence\Repositories\ShopRepo;
 use App\Modules\Drive\Persistence\Repositories\Vehicle\DetailsRepo;
 use App\Modules\Drive\Persistence\Repositories\VehiclesRepo;
+use App\Modules\Drive\Persistence\Repositories\Workroom\EquipmentsRepo;
+use App\Modules\Drive\Persistence\Repositories\Workroom\RefuelerRepo;
+use App\Modules\Drive\Persistence\Repositories\Workroom\RepairerRepo;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoriesProvider extends ServiceProvider
@@ -24,7 +24,6 @@ class RepositoriesProvider extends ServiceProvider
      */
 //    protected $defer = true;
 
-//    protected $defer = true;
     /**
      * Register the service provider.
      *
@@ -56,15 +55,27 @@ class RepositoriesProvider extends ServiceProvider
         );
 
 
-        $this->app->singleton(
-            'DriveDriversDao', DriversDao::class
-        );
+//        $this->app->singleton(
+//            'DriveDriversDao', DriversDao::class
+//        );
         $this->app->singleton(
             'DriveVehiclesRepo', VehiclesRepo::class
         );
-            $this->app->singleton(
-                'DriveVehiclesDao', VehiclesDao::class
-            );
+
+
+
+        $this->app->singleton(
+            'RefuelerRepo', RefuelerRepo::class
+        );
+
+        $this->app->singleton(
+            'RepairerRepo', RepairerRepo::class
+        );
+
+        
+        $this->app->singleton(
+            'DriveEquipmentsRepo', EquipmentsRepo::class
+        );
 
 //        $this->app->singleton(
 //            'DriveVehiclesRepo', VehiclesRepo::class
@@ -102,11 +113,11 @@ class RepositoriesProvider extends ServiceProvider
         $this->app->singleton(
             'DriveRaidRepo', RaidsRepo::class
         );
+//        $this->app->singleton(
+//            'DriveRaidsDao', RaidsDao::class
+//        );
         $this->app->singleton(
-            'DriveRaidsDao', RaidsDao::class
-        );
-        $this->app->singleton(
-            'DriveRobberyRepo', RobberyRepo::class
+            'DriveRobberyRepo', RobberiesRepo::class
         );
     }
 

@@ -3,38 +3,29 @@
 namespace App\Modules\Drive\Controllers\Raid;
 
 use App\Modules\Drive\Actions\Raid\Robbery\FinishRobberyCommand;
-use App\Modules\Drive\Domain\Services\Raid\RobberyService;
-use App\Modules\Drive\Persistence\Repositories\Raid\RobberyRepo;
+use App\Modules\Drive\Domain\Entities\Raid\Robbery;
+use App\Modules\Drive\Persistence\Repositories\Raid\RobberiesRepo;
 use App\Modules\Hero\Domain\Entities\Buildings;
-use App\Modules\Hero\Domain\Entities\Hero;
 use Illuminate\Support\Facades\Redirect;
 
 class RobberyController extends RaidController
 {
-    /** @var RobberyRepo */
-    protected $robberyRepo;
-
-//    /** @var Hero */
-//    protected $victim;
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->robberyRepo = app('DriveRobberyRepo');
-    }
-
     public function show()
     {
-
         $buildingsRepo = app('BuildingsRepo');
 
+        $robberyRepo = app('DriveRobberyRepo');
+
+        /** @var Robbery $robbery */
+        $robbery = $robberyRepo->findByRaid($this->user_id);
+
         /** @var Buildings $victimBuildings */
-        $victimBuildings = $buildingsRepo->getByHero($this->user_id);
+        $victimBuildings = $buildingsRepo->getByHero($robbery->victim_id);
 
-        $robbery = $this->robberyRepo->findByRaid($this->user_id);
 
-        switch ($robbery->robbery_status) {
+
+
+        switch ($robbery->status) {
 
             case 'far_gates':
 
@@ -47,13 +38,13 @@ class RobberyController extends RaidController
                 return $this->view('drive.raid.robbery.detail_view_gates', [
                 ]);
 
-            case RobberyService::ROBBERY_STATUS_GATES: //'gates': // выбор действий при взломе ворот
+            case Robbery::STATUS_GATES: //'gates': // выбор действий при взломе ворот
 
                 return $this->view('drive.raid.robbery.gates_near', [
                     'gates_durability' => $victimBuildings->gatesLevel,
                 ]);
 
-            case RobberyService::ROBBERY_STATUS_FENCE: //'fence':  // забор, выбор действий
+            case Robbery::STATUS_FENCE: //'fence':  // забор, выбор действий
 
                 return $this->view('drive.raid.robbery.fence_near', [
                 ]);

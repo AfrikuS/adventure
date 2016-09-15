@@ -5,17 +5,16 @@ namespace App\Modules\Drive\Actions\Raid\Robbery\Collision;
 use App\Modules\Drive\Domain\Entities\Garage\RepairVehicle;
 use App\Modules\Drive\Domain\Entities\Raid\Robbery;
 use App\Modules\Drive\Domain\Lib\Raid\Robbery\Collisions\GatesCollisionProcessor;
-use App\Modules\Drive\Domain\Services\Raid\RobberyService;
 use App\Modules\Drive\Exceptions\Controllers\CollisionSuccess_Exception;
 use App\Modules\Drive\Exceptions\Controllers\CollisionUnsuccess_Exception;
-use App\Modules\Drive\Persistence\Repositories\Raid\RobberyRepo;
+use App\Modules\Drive\Persistence\Repositories\Raid\RobberiesRepo;
 use App\Modules\Hero\Domain\Entities\Buildings;
 use App\Modules\Hero\Persistence\Repositories\BuildingsRepo;
 use Finite\Exception\StateException;
 
 class CollisionHouseDoorCommand
 {
-    /** @var RobberyRepo */
+    /** @var RobberiesRepo */
     private $robberyRepo;
 
     /** @var BuildingsRepo */
@@ -64,23 +63,13 @@ class CollisionHouseDoorCommand
             throw $e;
         }
         \DB::commit();
-
-        if ($collisionResult->result == 'success') {
-
-//            $raid->addReward($this->collisionResult->reward);
-
-            throw new CollisionSuccess_Exception($collisionResult);
-        } else {
-
-            throw new CollisionUnsuccess_Exception($collisionResult, $robberyVehicle);
-        }
     }
 
     private function validateCommand($robbery_id)
     {
         $robbery = $this->robberyRepo->findByRaid($robbery_id);
 
-        if ($robbery->robbery_status != RobberyService::ROBBERY_STATUS_COURTYARD) {
+        if ($robbery->status != Robbery::STATUS_COURTYARD) {
 
             throw new StateException;
         }

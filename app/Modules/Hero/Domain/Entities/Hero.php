@@ -2,8 +2,6 @@
 
 namespace App\Modules\Hero\Domain\Entities;
 
-use App\Exceptions\NotEnoughResourceException;
-use App\Persistence\Models\DataObject;
 use Finite\Exception\StateException;
 
 class Hero

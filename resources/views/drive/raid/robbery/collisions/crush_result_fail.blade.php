@@ -4,6 +4,7 @@
 
 @section('center')
 
+{{--
     Несмотря на сильный удар {{ $result->building }} устоял[а]
     <p></p>
 
@@ -17,6 +18,7 @@
     Урон нанесенный {{ $result->building }} составил {{ $result->buildingDamage }} единиц
     <p></p>
     Машине нанесено {{ $result->vehicleDamage }} урона
+--}}
     <p></p>
     <h3>ТЫ не пройдешь!!!</h3>
     <p></p>

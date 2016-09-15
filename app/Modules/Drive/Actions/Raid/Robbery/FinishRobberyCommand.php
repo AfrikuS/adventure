@@ -2,35 +2,33 @@
 
 namespace App\Modules\Drive\Actions\Raid\Robbery;
 
-use App\Entities\Drive\RobberyEntity;
-use App\Models\Drive\Robbery;
+use App\Modules\Drive\Domain\Entities\Raid\Robbery;
 use App\Modules\Drive\Domain\Services\Raid\ActiveRaidService;
 use App\Modules\Drive\Domain\Services\Raid\RobberyService;
-use App\Modules\Drive\Persistence\Repositories\Raid\RaidsRepo;
-use App\Repositories\Drive\RaidRepository;
+use App\Modules\Drive\Persistence\Repositories\Raid\RobberiesRepo;
 
 class FinishRobberyCommand
 {
-    /** @var RaidsRepo */
-    private $raidRepo;
+    /** @var RobberiesRepo */
+    private $robberiesRepo;
 
     public function __construct()
     {
-        $this->raidRepo = app('DriveRaidRepo');
+        $this->robberiesRepo = app('DriveRobberyRepo');
     }
 
     public function finishRobbery($robbery_id)
     {
-
-        $this->validateCommand($robbery_id);
+        $robbery = $this->robberiesRepo->findByRaid($robbery_id);
+        $this->validateCommand($robbery);
 
 
         $raidService = new ActiveRaidService();
         
-//        $raid = $this->raidRepo->findRaidById($robbery_id);
+//        $raid = $this->robberiesRepo->findRaidById($robbery_id);
 
         /** @var RobberyService $robberyService */
-        $robberyService = app('RobberyService');
+        $robberyService = new RobberyService;
 
 
         \DB::beginTransaction();
@@ -39,7 +37,7 @@ class FinishRobberyCommand
 
             $raidService->completeRobbery($robbery_id);
 
-            $robberyService->completeRobbery($robbery_id);
+            $robberyService->abort($robbery);
 
         }
         catch(\Exception $e) {
@@ -50,8 +48,8 @@ class FinishRobberyCommand
         \DB::commit();
     }
 
-    private function validateCommand($robbery_id)
+    private function validateCommand(Robbery $robbery)
     {
-//        $raid = $this->raidRepo->findRaidById($robbery_id);
+//        $raid = $this->robberiesRepo->findRaidById($robbery_id);
     }
 }

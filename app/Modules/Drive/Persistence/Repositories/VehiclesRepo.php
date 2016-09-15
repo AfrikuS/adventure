@@ -18,10 +18,10 @@ class VehiclesRepo
     /** @var DriversRepo */
     private $driversRepo;
 
-    public function __construct(DetailsRepo $detailsRepo, VehiclesDao $vehicles)
+    public function __construct(VehiclesDao $vehicles)
     {
-        $this->detailsRepo = $detailsRepo;
         $this->vehiclesDao = $vehicles;
+        $this->detailsRepo = app('DriveDetailsRepo');
         $this->driversRepo = app('DriveDriversRepo');
     }
 

@@ -5,7 +5,6 @@ namespace App\Modules\Profile\Controllers;
 use App\Modules\Core\Http\Controller;
 use App\Modules\Oil\Actions\Equipment\OilDistillerUpgradeAction;
 use App\Modules\Oil\Actions\Equipment\OilPumpUpgradeAction;
-use App\Modules\Oil\Persistence\Repositories\OilPumpRepo;
 
 class EquipmentController extends Controller
 {
@@ -70,5 +69,4 @@ class EquipmentController extends Controller
 
         return \Redirect::route('profile_resource_stores_page');
     }
-
 }
