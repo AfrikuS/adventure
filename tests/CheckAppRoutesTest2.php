@@ -1,8 +1,7 @@
 <?php
 
-use App\Models\User;
 
-class CheckAppRoutesTest  extends TestCase
+class CheckAppRoutesTest2  extends TestCase
 {
     protected $admin;
 

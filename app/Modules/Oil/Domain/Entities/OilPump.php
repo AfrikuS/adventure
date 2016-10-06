@@ -22,6 +22,9 @@ class OilPump
 
     public function upgradeLevel()
     {
-        $this->level++;
+        if (! $this->isFullUpgrade()) {
+
+            $this->level++;
+        }
     }
 }

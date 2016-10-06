@@ -27,8 +27,7 @@ class OilPumpUpgradeAction
         
         $equipmentService = new EquipmentService();
 
-        $equipmentService->upgradeOilPump($hero_id);
-        
+        $equipmentService->upgradeOilPump($oilPump);
     }
 
     private function validateAction(OilPump $oilPump)
