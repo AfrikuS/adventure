@@ -52,7 +52,7 @@ class CreateBuildOrderCmd extends Job implements ShouldQueue
 
 
         $resultDao = new BodalkaResultDao();
-        $result = $resultDao->create($this->user_id, 1, 1);
+        $result = $resultDao->create($this->user_id, 10, 1);
 
     }
 }

@@ -21,6 +21,7 @@ class LocationsController extends Controller
 
     public function locations()
     {
+        return;
         $locationsColl = $this->locationsRepo->getLocationsWithNexts();
 
         $nodes = array_map(function ($item, $key) {

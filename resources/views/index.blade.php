@@ -11,10 +11,10 @@ hello word
     <p></p>
 
 <p></p>
-    StartSum - {{ $startSum }}
+    {{--StartSum - {{ $startSum }}--}}
 <p></p>
 <p></p>
-    ResultSum - {{ $resultSum }}
+    {{--ResultSum - {{ $resultSum }}--}}
 <p></p>
 
     {{--{{ var_dump($obj) }}--}}

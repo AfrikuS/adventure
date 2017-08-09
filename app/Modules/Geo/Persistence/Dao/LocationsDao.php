@@ -9,24 +9,8 @@ class LocationsDao
     private $table = 'geo_locations';
     private $relationsTable = 'geo_location_paths';
 
-    public function getByHero($hero_id)
-    {
-//        $buildings =
-//            \DB::table($this->table)
-//                ->select(['id', 'gates_level', 'fence_level', 'door_house_level',
-//                    'door_ambar_level', 'door_resource_warehause_level'])
-//                ->find($hero_id);
-//
-//        return $buildings;
-    }
-
     public function getLocations()
     {
-//        return
-//            Location::select('id', 'title')->with(['locationsTo' => function($query) {
-//                $query->select('geo_locations.title', 'geo_locations.id');
-//            }])->get();
-
         $locationsData =
             \DB::table($this->table)
                 ->select(['id', 'title'])
@@ -55,15 +39,16 @@ class LocationsDao
         return $locationData;
     }
 
-    public function getNextIdsBy($id)
-    {
-        $next_ids =
-            \DB::table($this->relationsTable)
-                ->where('from_id', $id)
-                ->pluck('to_id AS id');
-        
-        return $next_ids;
-    }
+//    /** @deprecated */
+//    public function getNextIdsBy($id)
+//    {
+//        $next_ids =
+//            \DB::table($this->relationsTable)
+//                ->where('from_id', $id)
+//                ->pluck('to_id AS id');
+//
+//        return $next_ids;
+//    }
 
     public function getExcludeIds($id) // exlude self_id
     {
@@ -75,6 +60,7 @@ class LocationsDao
         return $ids;
     }
 
+    /** @deprecated */
     public function createRelation($from_id, $to_id)
     {
         $relation_id =
@@ -86,6 +72,7 @@ class LocationsDao
         return $relation_id;
     }
 
+    /** @deprecated */
     public function removeRelation($from_id, $to_id)
     {
         return

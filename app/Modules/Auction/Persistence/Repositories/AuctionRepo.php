@@ -2,7 +2,6 @@
 
 namespace App\Modules\Auction\Persistence\Repositories;
 
-
 use App\Modules\Auction\Domain\Entities\Lot;
 use App\Modules\Auction\Domain\Entities\Thing;
 use App\Modules\Auction\Persistence\Dao\LotDao;

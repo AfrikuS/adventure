@@ -2,8 +2,6 @@
 
 namespace App\Modules\Hero\Persistence\Dao;
 
-use App\Persistence\Models\Hero;
-
 class HeroDao
 {
     private $table = 'hero_resources';

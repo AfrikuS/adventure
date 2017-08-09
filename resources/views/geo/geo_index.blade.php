@@ -36,47 +36,47 @@
 
     <script type="javascript">
 
-    //alert();
-    var some_data =
-    {
-    "nodes": [
-    {
-    "id": 1
-    },
-    {
-    "id": 2
-    },
-    {
-    "id": 3
-    }
-    ],
-    "edges": [
-    {
-    "source": 1,
-    "target": 2
-    },
-    {
-    "source": 1,
-    "target": 3,
-    }
-    ]
-    };
+//    //alert();
+//    var some_data =
+//    {
+//    "nodes": [
+//    {
+//    "id": 1
+//    },
+//    {
+//    "id": 2
+//    },
+//    {
+//    "id": 3
+//    }
+//    ],
+//    "edges": [
+//    {
+//    "source": 1,
+//    "target": 2
+//    },
+//    {
+//    "source": 1,
+//    "target": 3,
+//    }
+//    ]
+//    };
 
-    var data =
-    {
-    "nodes":
-    [
-    {"id":2,"caption":"о-в Нави"},
-    {"id":5,"caption":"Большая земля"},
-    {"id":6,"caption":"о-в Невезения (старт)"},
-    {"id":7,"caption":"край Светы"},
-    {"id":8,"caption":"о-в Надежды"}
-    ],
-    "edges":
-    [
-    {"source":2,"target":5},{"source":5,"target":2},{"source":5,"target":6},{"source":6,"target":2},{"source":6,"target":5},{"source":6,"target":8},{"source":7,"target":6},{"source":7,"target":8},{"source":8,"target":7}
-    ]
-    };
+//    var data =
+//    {
+//    "nodes":
+//    [
+//    {"id":2,"caption":"о-в Нави"},
+//    {"id":5,"caption":"Большая земля"},
+//    {"id":6,"caption":"о-в Невезения (старт)"},
+//    {"id":7,"caption":"край Светы"},
+//    {"id":8,"caption":"о-в Надежды"}
+//    ],
+//    "edges":
+//    [
+//    {"source":2,"target":5},{"source":5,"target":2},{"source":5,"target":6},{"source":6,"target":2},{"source":6,"target":5},{"source":6,"target":8},{"source":7,"target":6},{"source":7,"target":8},{"source":8,"target":7}
+//    ]
+//    };
 
     {{--$.getJSON('/api/geo/locations', function(data) {--}}
 
@@ -84,7 +84,7 @@
     var config = {
     dataSource: '/api/geo/locations',
     forceLocked: true,
-    directedEdges: false,
+//    directedEdges: false,
     edgeStyle: {
     "all": {
     "width": 5

@@ -18,7 +18,6 @@ class HarbourController extends Controller
 
 //        $locationsTableRows = $locationsRepo->geoListLocationsPage($locations);
 //        $locationsCollection = $locations;
-
         return $this->view('geo.geo_index', [
 //            'locationsCollection'  => $locationsCollection->locations,
 //            'locationsTableRows'  => $locationsTableRows,

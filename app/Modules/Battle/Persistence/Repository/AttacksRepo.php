@@ -38,19 +38,4 @@ class AttacksRepo
         
         return $attacksData;
     }
-
-
-    /** @deprecated */
-    public function getAttackedIdsByUserId($user_id)
-    {
-        $attackedUsersIds = \DB::table('event_attacks')
-            ->select('defense_user_id')
-            ->where('attack_user_id', $user_id)
-            ->where(\DB::raw('TIMESTAMPDIFF(SECOND, now(), event_attacks.attack_moment)'), '>', 0)
-//            ->addSelect(DB::raw('TIMESTAMPDIFF(SECOND, now(), event_attacks.attack_moment) AS duration_seconds'))
-//            ->havingRaw('duration_seconds > 0')
-            ->get();
-
-        return $attackedUsersIds;
-    }
 }

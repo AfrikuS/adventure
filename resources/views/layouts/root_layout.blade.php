@@ -102,7 +102,7 @@
                 </li>
 
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Railway<span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggusle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Railway<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>{{ link_to_route('railway_director_page', 'Director') }}</li>
                     </ul>
@@ -111,7 +111,7 @@
 
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="{{ Auth::user()->id }}" class="navbar-link">{{ Auth::user()->name }} ({{ Auth::user()->id }})</a></li>
-                <li>{{ link_to_route('logout_action', 'Выйти', ['class' => 'navbar-link']) }}</li>
+                <li>{{ link_to_route('logout_action', 'Выйти') }}</li>
             </ul>
         </div>
     </div>

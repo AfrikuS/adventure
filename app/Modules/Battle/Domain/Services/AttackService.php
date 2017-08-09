@@ -21,27 +21,4 @@ class AttackService
         
         $this->attacksRepo->addAttackEvent($atacker_id, $defenser_id, $timeout);
     }
-
-/*    public function insertAttackEvent($atacker_id, $defenser_id, Carbon $moment)
-    {
-        $attackExist = \DB::table('event_attacks')
-            ->whereExists(function($query) use($atacker_id, $defenser_id)
-            {
-
-                $query->select(DB::raw(1))
-                    ->from('event_attacks')
-                    ->where('defense_user_id', $defenser_id)
-                    ->where('attack_user_id', $atacker_id);
-            })
-            ->get();
-
-        if ($attackExist) {
-            
-            $this->attacksRepo->addAttackEvent($atacker_id, , )
-        }
-        else {
-            create
-        }
-    }*/
-
 }

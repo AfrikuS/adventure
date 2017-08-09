@@ -79,6 +79,13 @@
             @else
                 Локаций нет
             @endif
+
+            <p></p>
+
+            {!! Form::open(['route' => 'admin_fill_redis_locations_data_action', 'class' => '']) !!}
+            {!! Form::submit('Fill locations relations to Redis') !!}
+            {!! Form::close() !!}
+
         </div>
     </div>
 

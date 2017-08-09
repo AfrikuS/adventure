@@ -6,26 +6,19 @@ use App\Modules\Core\Facades\EntityStore;
 use App\Modules\Geo\Domain\Entities\Location;
 use App\Modules\Geo\Persistence\Catalogs\LocationsCollection;
 use App\Modules\Geo\Persistence\Dao\LocationsDao;
+use App\Modules\Geo\Persistence\Dao\Redis\RedisLocationsRelationsDao;
 use Illuminate\Support\Collection;
 
 class LocationsRepo
 {
     private $locationsDao;
+    private $redisLocsRelsDao;
 
-    public function __construct(LocationsDao $locationsDao)
+    public function __construct(LocationsDao $locationsDao, RedisLocationsRelationsDao $redisLocsRelsDao)
     {
         $this->locationsDao = $locationsDao;
+        $this->redisLocsRelsDao = $redisLocsRelsDao;
     }
-
-/*    public function getByHero($hero_id)
-    {
-        $buildings = EntityStore::get(Buildings::class, 'hero' . $hero_id);
-
-        if (null != $buildings) {
-
-            return $buildings;
-        }
-    }*/
 
     public function getLocationsWithNexts()
     {
@@ -35,10 +28,11 @@ class LocationsRepo
             return $worldMap;
         }
 
+        // get locations from db
         $locationsData = $this->locationsDao->getLocations();
 
+        // create entities Locations and filling it data
         $worldMap = new LocationsCollection();
-        
         
         // collection of simple locations
         foreach ($locationsData as $locationData) {
@@ -47,12 +41,14 @@ class LocationsRepo
 
             $worldMap->addLocation($location);
         }
+        
 
         // adding next locations
         /** @var Location $locationItem */
         foreach ($worldMap->locations as $locationItem) {
             
-            $nextIds = $this->locationsDao->getNextIdsBy($locationItem->id);
+//            $nextIds = $this->locationsDao->getNextIdsBy($locationItem->id);
+            $nextIds = $this->redisLocsRelsDao->getNextsByLocation($locationItem->id);
 
             foreach ($nextIds as $nextId) {
                 
@@ -117,14 +113,16 @@ class LocationsRepo
 
     public function bindLocations($from_id, $to_id)
     {
-        return
-            $this->locationsDao->createRelation($from_id, $to_id);
+        $this->locationsDao->createRelation($from_id, $to_id);
+
+        $this->redisLocsRelsDao->addByLocation($from_id, $to_id);
     }
 
     public function removePath($from_id, $to_id)
     {
-        return
-            $this->locationsDao->removeRelation($from_id, $to_id);
+        $this->locationsDao->removeRelation($from_id, $to_id);
+
+        $this->redisLocsRelsDao->removeRelation($from_id, $to_id);
     }
 
 }

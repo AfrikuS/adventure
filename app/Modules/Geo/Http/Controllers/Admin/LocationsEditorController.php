@@ -6,10 +6,13 @@ use App\Modules\Core\Http\Controller;
 use App\Modules\Geo\Actions\BindLocationsCommand;
 use App\Modules\Geo\Actions\CreateLocationCommand;
 use App\Modules\Geo\Actions\RemovePathAction;
+use App\Modules\Geo\Persistence\Dao\LocationsDao;
+use App\Modules\Geo\Persistence\Dao\Redis\RedisLocationsRelationsDao;
 use App\Modules\Geo\Persistence\Repositories\LocationsRepo;
 use App\Modules\Geo\View\Models\PotentialNextLocations;
 use Finite\Exception\StateException;
 use Illuminate\Support\Facades\Input;
+use Redis;
 
 class LocationsEditorController extends Controller
 {
@@ -87,4 +90,34 @@ class LocationsEditorController extends Controller
         return \Redirect::route('admin_locations_page');
     }
 
+    public function fillRedisData()
+    {
+        $data = Input::all();
+
+
+        $locationsDao = new LocationsDao();
+        $locations = $locationsDao->getLocations();
+
+        $locationsRels = [];
+        foreach ($locations as $location) {
+
+            $next_ids = $locationsDao->getNextIdsBy($location->id);
+            $locationsRels[$location->id] = $next_ids;
+        }
+
+        // move data to redis
+
+        $redisLocationsDao = new RedisLocationsRelationsDao();
+
+        foreach ($locationsRels as $locationId => $nextArr) {
+
+            foreach ($nextArr as $next_id) {
+
+                $redisLocationsDao->addByLocation($locationId, $next_id);
+            }
+        }
+
+
+        return \Redirect::route('admin_locations_page');
+    }
 }

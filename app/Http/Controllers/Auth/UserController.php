@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Commands\Application\CreateAccountCommand;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterUserRequest;
+use App\Modules\Core\Http\Controller;
 use App\Repositories\Core\UserRepository;
 use App\Repositories\HeroRepositoryObj;
 use App\Services\AuthService;
