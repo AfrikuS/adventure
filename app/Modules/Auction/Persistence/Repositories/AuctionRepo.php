@@ -21,10 +21,11 @@ class AuctionRepo
     /** @var ThingsDao */
     private $thingsDao;
 
-    public function __construct(LotDao $lotsDao, ThingsDao $things)
+    public function __construct(LotDao $lotsDao, ThingsDao $things, RedisLotsDao $redisLotsDao)
     {
         $this->lotsDao = $lotsDao;
         $this->thingsDao = $things;
+        $this->redisLotsDao = $redisLotsDao;
     }
 
     public function findLotById($id)
